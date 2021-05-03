@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -119,7 +120,7 @@ public class Multiplex extends Processor
     }
 
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       if (!m_outputQueues[0].isEmpty())
       {
@@ -141,7 +142,7 @@ public class Multiplex extends Processor
     }
 
     @Override
-    public Object pull()
+    public @Nullable Object pull()
     {
       if (!m_outputQueues[0].isEmpty())
       {

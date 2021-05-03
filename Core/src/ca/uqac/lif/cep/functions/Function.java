@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.azrael.ObjectPrinter;
 import ca.uqac.lif.azrael.ObjectReader;
 import ca.uqac.lif.azrael.PrintException;
@@ -61,7 +62,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          function
    */
   /*@ pure @*/ public void evaluate(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context)
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context)
   {
     evaluate(inputs, outputs, context, null);
   }
@@ -85,8 +86,8 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          This argument is optional and may be null.
    */
   /*@ pure @*/ public abstract void evaluate(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context,
-      /*@ null@ */ EventTracker tracker);
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context,
+      /*@ null @*/ @Nullable EventTracker tracker);
 
   /**
    * Evaluates the outputs of the function, given some inputs
@@ -123,7 +124,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          value, <tt>false</tt> otherwise
    */
   /*@ pure @*/ public boolean evaluatePartial(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context)
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context)
   {
     // Defer the call to evaluate if all the inputs are non-null
     for (int i = 0; i < inputs.length; i++)
@@ -258,7 +259,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * (including <tt>null</tt>)
    * @since 0.10.2
    */
-  protected Object printState()
+  protected @Nullable Object printState()
   {
     return null;
   }

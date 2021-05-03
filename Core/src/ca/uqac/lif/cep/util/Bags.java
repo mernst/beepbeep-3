@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.Context;
@@ -564,7 +565,7 @@ public class Bags
     }
 
     @Override
-    public Object getValue(Collection x)
+    public @Nullable Object getValue(Collection x)
     {
       Object o = null;
       for (Object o2 : x)
@@ -647,7 +648,7 @@ public class Bags
    * @return An array, or <tt>null</tt> if the object could not be converted into
    *         an array.
    */
-  public static Object[] toObjectArray(Object o)
+  public static Object @Nullable [] toObjectArray(Object o)
   {
     if (o.getClass().isArray())
     {

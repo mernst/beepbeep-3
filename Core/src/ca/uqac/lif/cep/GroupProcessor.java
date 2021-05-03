@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.tmf.Source;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -41,22 +43,22 @@ public class GroupProcessor extends Processor
   /**
    * The set of processors included in the group
    */
-  private HashSet<Processor> m_processors = null;
+  private HashSet<Processor> m_processors;
 
   /**
    * The set of sources included in the group
    */
-  private HashSet<Source> m_sources = null;
+  private HashSet<Source> m_sources;
 
   /**
    * The {@link Pushable}s associated to each of the processor's input traces
    */
-  private transient List<Pushable> m_inputPushables = null;
+  private transient List<Pushable> m_inputPushables;
 
   /**
    * The {@link Pullable}s associated to each of the processor's output traces
    */
-  private transient List<Pullable> m_outputPullables = null;
+  private transient List<Pullable> m_outputPullables;
 
   /**
    * Whether to notify the QueueSource objects in the group to push an event when
@@ -81,7 +83,7 @@ public class GroupProcessor extends Processor
   /**
    * An inner event tracker for the group
    */
-  protected EventTracker m_innerTracker;
+  protected @Nullable EventTracker m_innerTracker;
 
   /**
    * Crate a group processor
@@ -160,6 +162,7 @@ public class GroupProcessor extends Processor
     /**
      * No-args constructor. Used only for serialization and deserialization.
      */
+    @SuppressWarnings("nullness")  // used only for serialization
     protected ProcessorAssociation()
     {
       super();
@@ -254,7 +257,7 @@ public class GroupProcessor extends Processor
   }
 
   @Override
-  public final synchronized void setPullableInput(int i, Pullable p)
+  public final synchronized void setPullableInput(@KeyFor("m_inputPullableAssociations") int i, Pullable p)
   {
     ProcessorAssociation a = m_inputPullableAssociations.get(i);
     a.m_processor.setPullableInput(a.m_ioNumber, p);
@@ -265,8 +268,9 @@ public class GroupProcessor extends Processor
     m_outputPushableAssociations.put(i, new GroupProcessor.ProcessorAssociation(j, p));
   }
 
+  @SuppressWarnings("keyfor:override.param.invalid")  // refers to local state
   @Override
-  public final synchronized void setPushableOutput(int i, Pushable p)
+  public final synchronized void setPushableOutput(@KeyFor("m_outputPushableAssociations") int i, Pushable p)
   {
     ProcessorAssociation a = m_outputPushableAssociations.get(i);
     a.m_processor.setPushableOutput(a.m_ioNumber, p);
@@ -311,15 +315,17 @@ public class GroupProcessor extends Processor
     }
   }
 
+  @SuppressWarnings("keyfor:override.param.invalid")  // refers to local state
   @Override
-  public final synchronized Pushable getPushableOutput(int index)
+  public final synchronized Pushable getPushableOutput(@KeyFor("m_outputPushableAssociations") int index)
   {
     ProcessorAssociation a = m_outputPushableAssociations.get(index);
     return a.m_processor.getPushableOutput(a.m_ioNumber);
   }
 
+  @SuppressWarnings("keyfor:override.param.invalid")  // refers to local state
   @Override
-  public final synchronized Pullable getPullableInput(int index)
+  public final synchronized Pullable getPullableInput(@KeyFor("m_inputPullableAssociations") int index)
   {
     ProcessorAssociation a = m_inputPullableAssociations.get(index);
     return a.m_processor.getPullableInput(a.m_ioNumber);
@@ -359,6 +365,7 @@ public class GroupProcessor extends Processor
     associateEndpoints(group, new_procs);
     // Re-pipe the internal processors like in the original group
     CopyCrawler cc = new CopyCrawler(new_procs);
+    // POSSIBLE NullPointerException.
     cc.crawl(start);
     return new_procs;
   }
@@ -493,7 +500,7 @@ public class GroupProcessor extends Processor
   }
 
   @Override
-  public synchronized void setContext(Context context)
+  public synchronized void setContext(@Nullable Context context)
   {
     super.setContext(context);
     for (Processor p : m_processors)
@@ -503,7 +510,7 @@ public class GroupProcessor extends Processor
   }
 
   @Override
-  public synchronized void setContext(String key, Object value)
+  public synchronized void setContext(String key, @Nullable Object value)
   {
     super.setContext(key, value);
     for (Processor p : m_processors)
@@ -524,19 +531,20 @@ public class GroupProcessor extends Processor
     }
 
     @Override
-    public synchronized Object pullSoft()
+    public synchronized @Nullable Object pullSoft()
     {
       return m_pullable.pullSoft();
     }
 
     @Override
-    public synchronized Object pull()
+    public synchronized @Nullable Object pull()
     {
       return m_pullable.pull();
     }
 
+    @SuppressWarnings("nullness")  // BUG: code violates Iterator contract
     @Override
-    public synchronized Object next()
+    public synchronized @Nullable Object next()
     {
       return m_pullable.next();
     }
@@ -777,7 +785,7 @@ public class GroupProcessor extends Processor
    * @return The processor, or <tt>null</tt> if no processor is associated to this
    *         index
    */
-  public Processor getAssociatedInput(int index)
+  public @Nullable Processor getAssociatedInput(int index)
   {
     if (!m_inputPullableAssociations.containsKey(index))
     {
@@ -838,7 +846,9 @@ public class GroupProcessor extends Processor
   /**
    * @since 0.10.2
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked",
+          "nullness" // serialization
+          })
   @Override
   public GroupProcessor readState(Object o) throws ProcessorException
   {
@@ -918,7 +928,7 @@ public class GroupProcessor extends Processor
   }
 
   @Override
-  public final Processor setEventTracker(/* @Null */ EventTracker tracker)
+  public final Processor setEventTracker(/* @Null */ @Nullable EventTracker tracker)
   {
     super.setEventTracker(tracker);
     if (tracker != null)

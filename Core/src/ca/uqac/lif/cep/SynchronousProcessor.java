@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -308,7 +309,7 @@ public abstract class SynchronousProcessor extends Processor
     }
 
     @Override
-    public synchronized Object pullSoft()
+    public synchronized @Nullable Object pullSoft()
     {
       if (hasNextSoft() != NextStatus.YES)
       {
@@ -328,7 +329,7 @@ public abstract class SynchronousProcessor extends Processor
     }
 
     @Override
-    public synchronized Object pull()
+    public synchronized @Nullable Object pull()
     {
       if (!hasNext())
       {

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.functions.UnaryFunction;
 import java.util.Collection;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class Size extends UnaryFunction<Object, Integer>
   }
 
   @Override
-  public Integer getValue(Object x)
+  public Integer getValue(@Nullable Object x)
   {
     if (x == null)
     {

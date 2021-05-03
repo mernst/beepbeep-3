@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.UniformProcessor;
 
@@ -91,7 +92,7 @@ public class ApplyFunctionLambda extends UniformProcessor
       m_binary = e;
     }
     
-    public Object[] evaluate(Object ... inputs)
+    public Object @Nullable [] evaluate(Object ... inputs)
     {
       if (m_unary != null)
       {

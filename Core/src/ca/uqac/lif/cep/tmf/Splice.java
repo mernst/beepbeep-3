@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
@@ -86,7 +87,7 @@ public class Splice extends Source
   }
 
   @Override
-  public void setContext(Context context)
+  public void setContext(@Nullable Context context)
   {
     super.setContext(context);
     for (Processor p : m_processors)
@@ -96,7 +97,7 @@ public class Splice extends Source
   }
 
   @Override
-  public void setContext(String key, Object value)
+  public void setContext(String key, @Nullable Object value)
   {
     super.setContext(key, value);
     for (Processor p : m_processors)

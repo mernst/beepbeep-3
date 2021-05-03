@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,7 +35,7 @@ public class CommandRunner extends Thread
 {
   protected String[] m_command;
 
-  protected byte[] m_stdin;
+  protected byte @Nullable [] m_stdin;
 
   protected volatile boolean m_stop = false;
 
@@ -53,7 +54,7 @@ public class CommandRunner extends Thread
    *          If not set to null, this array of bytes will be sent to the stdin of
    *          the command being run
    */
-  public CommandRunner(String[] command, byte[] stdin)
+  public CommandRunner(String[] command, byte @Nullable [] stdin)
   {
     super();
     m_command = command;

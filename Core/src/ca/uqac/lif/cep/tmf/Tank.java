@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -105,7 +106,7 @@ public class Tank extends Processor
     }
 
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       synchronized (m_inputQueues[0])
       {
@@ -114,7 +115,7 @@ public class Tank extends Processor
     }
 
     @Override
-    public Object pull()
+    public @Nullable Object pull()
     {
       synchronized (m_inputQueues[0])
       {

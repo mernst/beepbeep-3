@@ -219,7 +219,7 @@
   </target>
   
   <!-- Target: check-nullness
-       Compiles the main project
+       Does pluggoble type-checking on the main project
   -->
   <target name="check-nullness" depends="init,junit,check-rt,download-deps" description="Run the Nullness Checker">
     <mkdir dir="${build.bindir}"/>
@@ -230,6 +230,7 @@
       includeantruntime="false">
       <classpath refid="build.classpath"/>
       <compilerarg line="-processor org.checkerframework.checker.nullness.NullnessChecker"/>
+      <compilerarg value="-AassumeKeyFor"/>
       <compilerarg line="-Xmaxerrs 10000"/>
     </cf.javac>
     <copy todir="${build.bindir}" includeemptydirs="false">

@@ -114,7 +114,7 @@ public class MultiplexTest
       }
       
       @Override
-      public synchronized Object pull()
+      public synchronized @Nullable Object pull()
       {
         Object o = super.pull();
         if (o == null)

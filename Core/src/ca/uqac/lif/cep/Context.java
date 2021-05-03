@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ import java.util.Map;
  * @since 0.3
  *
  */
-public class Context extends HashMap<String, Object>
+public class Context extends HashMap<String, @Nullable Object>
 {
   /**
    * Dummy UID
@@ -58,29 +60,31 @@ public class Context extends HashMap<String, Object>
   }
 
   @Override
-  @SuppressWarnings("squid:S1185")
-  public synchronized void putAll(Map<? extends String, ? extends Object> o)
+  @SuppressWarnings({"squid:S1185",
+          "nullness" // type inference failure
+          })
+  public synchronized void putAll(@UnknownInitialization(Context.class) Context this, Map<? extends String, ? extends @Nullable Object> o)
   {
     super.putAll(o);
   }
 
   @Override
   @SuppressWarnings("squid:S1185")
-  public synchronized Object get(Object key)
+  public synchronized @Nullable Object get(@Nullable Object key)
   {
     return super.get(key);
   }
 
   @Override
   @SuppressWarnings("squid:S1185")
-  public synchronized Object put(String key, Object value)
+  public synchronized @Nullable Object put(String key, @Nullable Object value)
   {
     return super.put(key, value);
   }
 
   @Override
   @SuppressWarnings("squid:S1185")
-  public synchronized boolean containsKey(Object key)
+  public synchronized boolean containsKey(@Nullable Object key)
   {
     return super.containsKey(key);
   }

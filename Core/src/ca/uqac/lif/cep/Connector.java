@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -121,7 +122,7 @@ public class Connector
    *          The input number of the second processor
    * @return A reference to processor p2
    */
-  public static Processor connect(EventTracker tracker, Processor p1, int i, Processor p2, int j)
+  public static Processor connect(@Nullable EventTracker tracker, Processor p1, int i, Processor p2, int j)
   {
     // First check for type compatibility
     if (s_checkForTypes)
@@ -217,7 +218,7 @@ public class Connector
    *          The list of processors
    * @return The last processor of the chain
    */
-  public static Processor connect(EventTracker tracker, Processor ... procs)
+  public static Processor connect(@Nullable EventTracker tracker, Processor ... procs)
   {
     if (procs.length == 1)
     {
@@ -572,7 +573,7 @@ public class Connector
     }
     
     @Override
-    public boolean equals(Object o)
+    public boolean equals(@Nullable Object o)
     {
       if (o == null || !(o instanceof Connection))
       {

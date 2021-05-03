@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.petitpoucet.NodeFunction;
 
 /**
@@ -153,7 +154,7 @@ public class Cumulate extends ApplyFunction
     }
 
     @Override
-    public NodeFunction dependsOn()
+    public @Nullable NodeFunction dependsOn()
     {
       // This is normal. This function is a leaf node in the dependency
       // tree, so its dependency is null.

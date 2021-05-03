@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.UniformProcessor;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,7 @@ public class Freeze extends UniformProcessor
    * @since 0.10.2
    */
   @Override
-  public Object printState()
+  public @Nullable Object printState()
   {
     if (m_output != null)
     {

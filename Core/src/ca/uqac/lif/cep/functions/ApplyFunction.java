@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -200,7 +201,7 @@ public class ApplyFunction extends UniformProcessor
     }
 
     @Override
-    public ProvenanceNode getProvenanceTree(int proc_id, int stream_index, int stream_pos)
+    public @Nullable ProvenanceNode getProvenanceTree(int proc_id, int stream_index, int stream_pos)
     {
       return null;
     }

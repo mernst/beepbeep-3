@@ -318,7 +318,7 @@ public class SliceTest
 		}
 
 		@Override
-		public Object getValue(Number x) 
+		public @Nullable Object getValue(Number x) 
 		{
 			if (x.intValue() == 2)
 			{

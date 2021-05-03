@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 
@@ -93,7 +94,7 @@ public class StreamVariable extends Variable
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (o == null || !(o instanceof StreamVariable))
     {

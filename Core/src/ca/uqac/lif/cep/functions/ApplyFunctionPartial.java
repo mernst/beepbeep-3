@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -223,27 +224,31 @@ public class ApplyFunctionPartial extends Processor
       return this;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       // TODO Auto-generated method stub
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
-    public Object pull()
+    public @Nullable Object pull()
     {
       // TODO Auto-generated method stub
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
-    public Object next()
+    public @Nullable Object next()
     {
       // TODO Auto-generated method stub
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public NextStatus hasNextSoft() 
     {

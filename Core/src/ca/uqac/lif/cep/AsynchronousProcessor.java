@@ -122,6 +122,7 @@ public abstract class AsynchronousProcessor extends Processor
       m_index = index;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Pushable push(Object o)
     {
@@ -168,6 +169,7 @@ public abstract class AsynchronousProcessor extends Processor
       m_index = index;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Iterator<Object> iterator()
     {
@@ -175,6 +177,7 @@ public abstract class AsynchronousProcessor extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Object pullSoft() 
     {
@@ -182,6 +185,7 @@ public abstract class AsynchronousProcessor extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Object pull() 
     {
@@ -189,6 +193,7 @@ public abstract class AsynchronousProcessor extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Object next()
     {
@@ -196,6 +201,7 @@ public abstract class AsynchronousProcessor extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public NextStatus hasNextSoft()
     {
@@ -210,6 +216,7 @@ public abstract class AsynchronousProcessor extends Processor
       return false;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Processor getProcessor() 
     {

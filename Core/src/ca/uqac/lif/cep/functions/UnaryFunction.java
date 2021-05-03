@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.Set;
@@ -62,7 +63,7 @@ public abstract class UnaryFunction<T, U> extends Function
   @Override
   /* @ requires inputs.length == 1 */
   public void evaluate(/* @NonNull */ Object[] inputs, Object[] outputs, 
-      /*@ null @*/ Context context, /*@ null @*/ EventTracker tracker)
+      /*@ null @*/ @Nullable Context context, /*@ null @*/ @Nullable EventTracker tracker)
   {
     T in = (T) inputs[0];
     outputs[0] = getValue(in);

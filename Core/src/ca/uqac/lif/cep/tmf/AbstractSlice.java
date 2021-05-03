@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -219,7 +220,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
         slices_to_process.add(slice_id);
       }
       @SuppressWarnings("unchecked")
-      Future<Pushable>[] futures = new Future[slices_to_process.size()];
+      @Nullable Future<Pushable>[] futures = new Future[slices_to_process.size()];
       for (Object s_id : slices_to_process)
       {
         // Find processor corresponding to that slice
@@ -357,6 +358,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
     }
   }
 
+  @SuppressWarnings("nullness")  // Auto-generated method stub
   @Override
   public Processor duplicate(boolean with_state)
   {

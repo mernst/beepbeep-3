@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.Set;
@@ -73,7 +74,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
   @Override
   /* @ requires inputs.length == 2 */
   public void evaluate(/* @NonNull */ Object[] inputs, Object[] outputs,
-      /*@ null @*/ Context context, EventTracker tracker)
+      /*@ null @*/ @Nullable Context context, EventTracker tracker)
   {
     outputs[0] = getValue((T) inputs[0], (V) inputs[1]);
     if (tracker != null)
@@ -130,7 +131,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
    * 
    * @return A start value
    */
-  public U getStartValue()
+  public @Nullable U getStartValue()
   {
     return null;
   }

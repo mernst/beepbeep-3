@@ -42,6 +42,7 @@ public class Constant extends Function
   /**
    * The value to return by this constant
    */
+  // TODO: I think this can be null (later code tests against null).
   private final Object m_value;
 
   /**

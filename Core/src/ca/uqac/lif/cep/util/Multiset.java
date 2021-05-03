@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -107,7 +108,7 @@ public class Multiset implements Set<Object>
    * about what element of the multiset you get, as long as you get one.
    * @return An element of the multiset, or null if the multiset is empty
    */
-  public Object getAnyElement()
+  public @Nullable Object getAnyElement()
   {
     Set<Object> objects = m_map.keySet();
     for (Object o : objects)
@@ -376,6 +377,7 @@ public class Multiset implements Set<Object>
     return m_map.values().toArray();
   }
 
+  @SuppressWarnings("nullness")  // Auto-generated method stub
   @Override
   public <T> T[] toArray(T[] arg0) 
   {

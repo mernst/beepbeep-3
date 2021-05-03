@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -193,19 +194,19 @@ public class Divert extends Processor
     }
 
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       return m_inputPullables[0].pullSoft();
     }
 
     @Override
-    public Object pull()
+    public @Nullable Object pull()
     {
       return m_inputPullables[0].pull();
     }
 
     @Override
-    public Object next()
+    public @Nullable Object next()
     {
       return m_inputPullables[0].next();
     }
