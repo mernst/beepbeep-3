@@ -44,6 +44,7 @@ public class Slice extends AbstractSlice
    * Creates a dummy slice processor. This constructor is only used for
    * deserialization purposes.
    */
+  @SuppressWarnings("nullness") // serialization
   protected Slice()
   {
     super();

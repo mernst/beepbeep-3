@@ -104,7 +104,7 @@ public class StreamVariable extends Variable
   }
 
   @Override
-  public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
   {
     outputs[0] = inputs[m_index];
     if (tracker != null)
@@ -114,7 +114,7 @@ public class StreamVariable extends Variable
   }
   
   @Override
-  public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+  public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
   {
     if (inputs[m_index] != null)
     {

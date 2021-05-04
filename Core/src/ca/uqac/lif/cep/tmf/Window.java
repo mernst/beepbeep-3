@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -70,6 +71,7 @@ public class Window extends AbstractWindow
 
   @SuppressWarnings("unchecked")
   @Override
+  @EnsuresNonNull("m_innerInputs")
   public void reset()
   {
     super.reset();

@@ -74,7 +74,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
   @Override
   /* @ requires inputs.length == 2 */
   public void evaluate(/*@ non_null @*/ Object[] inputs, Object[] outputs,
-      /*@ null @*/ @Nullable Context context, EventTracker tracker)
+      /*@ null @*/ @Nullable Context context, @Nullable EventTracker tracker)
   {
     outputs[0] = getValue((T) inputs[0], (V) inputs[1]);
     if (tracker != null)

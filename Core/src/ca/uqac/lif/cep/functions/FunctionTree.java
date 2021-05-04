@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class FunctionTree extends Function
   }
 
   @Override
-  public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
   {
     Object[] values = new Object[m_children.length];
     for (int i = 0; i < values.length; i++)
@@ -122,7 +123,7 @@ public class FunctionTree extends Function
   }
 
   @Override
-  public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+  public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
   {
     Object[] values = new Object[m_children.length];
     for (int i = 0; i < values.length; i++)

@@ -106,6 +106,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
    * Creates a dummy abstract slice. This constructor is only used for
    * deserialization purposes.
    */
+  @SuppressWarnings("nullness")  // serialization
   protected AbstractSlice()
   {
     super(1, 1);

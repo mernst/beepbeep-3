@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
 import ca.uqac.lif.cep.SynchronousProcessor;
@@ -251,12 +253,12 @@ public class Lists
     /**
      * The timer that will send events at periodic interval
      */
-    protected Timer m_timer;
+    protected @MonotonicNonNull Timer m_timer;
 
     /**
      * The thread that will execute the timer
      */
-    protected Thread m_timerThread;
+    protected @MonotonicNonNull Thread m_timerThread;
 
     /**
      * Creates a new list packer.
@@ -293,6 +295,7 @@ public class Lists
     }
 
     @Override
+    @EnsuresNonNull({"m_timer", "m_timerThread"})
     public void start()
     {
       m_timer = new Timer();

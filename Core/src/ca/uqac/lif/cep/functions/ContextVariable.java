@@ -75,7 +75,7 @@ public class ContextVariable extends Variable
 
   @Override
   @SuppressWarnings("squid:S1168")
-  public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
   {
     if (context == null || !context.containsKey(m_name))
     {

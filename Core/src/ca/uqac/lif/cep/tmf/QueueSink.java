@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class QueueSink extends Sink
 
   @SuppressWarnings("unchecked")
   @Override
+  @EnsuresNonNull("m_queues")
   public void reset()
   {
     super.reset();

@@ -324,7 +324,7 @@ public class Bags
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       Object[] out = new Object[inputs.length];
       for (int i = 0; i < inputs.length; i++)
@@ -358,7 +358,7 @@ public class Bags
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       List<Object> out = new ArrayList<Object>(inputs.length);
       for (int i = 0; i < inputs.length; i++)
@@ -396,7 +396,7 @@ public class Bags
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       Set<Object> out = new HashSet<Object>(inputs.length);
       for (int i = 0; i < inputs.length; i++)
@@ -602,7 +602,7 @@ public class Bags
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       Object[] ins = (Object[]) inputs[0];
       for (int i = 0; i < ins.length; i++)

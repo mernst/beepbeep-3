@@ -38,7 +38,7 @@ public class Freeze extends UniformProcessor
   /**
    * The event front to freeze
    */
-  protected transient Object[] m_output;
+  protected transient Object @Nullable [] m_output;
 
   /**
    * Creates a new freeze processor

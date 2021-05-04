@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.functions.BinaryFunction;
@@ -87,7 +88,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+    public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == false)
       {
@@ -135,7 +136,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+    public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == false)
       {
@@ -219,7 +220,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+    public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == true)
       {
