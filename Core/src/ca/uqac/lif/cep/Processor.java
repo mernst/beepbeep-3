@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2018 Sylvain Hallé
+    Copyright (C) 2008-2021 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -80,7 +80,7 @@ public abstract class Processor implements DuplicableProcessor,
   /**
    * A string used to identify the program's version
    */
-  public static final transient String s_versionString = "0.7";
+  public static final transient String s_versionString = "0.10.5";
 
   /**
    * An array of input event queues. This is where the input events will be stored
@@ -256,7 +256,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/* @Null */ @Nullable Context context)
+  public synchronized void setContext(/*@ null @*/ @Nullable Context context)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -640,7 +640,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @return The event tracker, or <tt>null</tt> of no event tracker is associated
    *         to this processor
    */
-  public final /* @Null */ @Nullable EventTracker getEventTracker()
+  public final /*@ null @*/ @Nullable EventTracker getEventTracker()
   {
     return m_eventTracker;
   }
@@ -653,7 +653,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          existing tracker
    * @return This processor
    */
-  public Processor setEventTracker(/* @Null */ @Nullable EventTracker tracker)
+  public Processor setEventTracker(/*@ null @*/ @Nullable EventTracker tracker)
   {
     m_eventTracker = tracker;
     return this;
@@ -842,7 +842,7 @@ public abstract class Processor implements DuplicableProcessor,
     p.m_outputCount = ((Number) contents.get("output-count")).intValue();
     try
     {
-      ObjectReader.setField(p, "m_uniqueId", ((Number) contents.get("id")).intValue());
+      reader.setField(p, "m_uniqueId", ((Number) contents.get("id")).intValue());
     }
     catch (ReadException e)
     {

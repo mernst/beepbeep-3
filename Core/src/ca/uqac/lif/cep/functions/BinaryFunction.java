@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2021 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -73,7 +73,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
   @SuppressWarnings("unchecked")
   @Override
   /* @ requires inputs.length == 2 */
-  public void evaluate(/* @NonNull */ Object[] inputs, Object[] outputs,
+  public void evaluate(/*@ non_null @*/ Object[] inputs, Object[] outputs,
       /*@ null @*/ @Nullable Context context, EventTracker tracker)
   {
     outputs[0] = getValue((T) inputs[0], (V) inputs[1]);
@@ -107,8 +107,8 @@ public abstract class BinaryFunction<T, V, U> extends Function
    */
   protected void trackAssociations(T x, V y, U z, EventTracker tracker)
   {
-    tracker.associateToOutput(-1, 0, 0, 0, 0);
-    tracker.associateToOutput(-1, 1, 0, 0, 0);
+    tracker.associateToInput(-1, 0, 0, 0, 0);
+    tracker.associateToInput(-1, 1, 0, 0, 0);
   }
 
   @Override
@@ -159,7 +159,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
   }
 
   @Override
-  public final void getInputTypesFor(/* @NotNull */ Set<Class<?>> classes, int index)
+  public final void getInputTypesFor(/*@ non_null @*/ Set<Class<?>> classes, int index)
   {
     if (index == 0)
     {

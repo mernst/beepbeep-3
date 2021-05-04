@@ -192,7 +192,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * @param index
    *          The index of the input to query
    */
-  /*@ pure @*/ public abstract void getInputTypesFor(/* @NotNull */ Set<Class<?>> classes, 
+  /*@ pure @*/ public abstract void getInputTypesFor(/*@ non_null @*/ Set<Class<?>> classes, 
       int index);
 
   /**

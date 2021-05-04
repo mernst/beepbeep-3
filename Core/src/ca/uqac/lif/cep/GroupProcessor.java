@@ -928,7 +928,7 @@ public class GroupProcessor extends Processor
   }
 
   @Override
-  public final Processor setEventTracker(/* @Null */ @Nullable EventTracker tracker)
+  public final Processor setEventTracker(/*@ null @*/ @Nullable EventTracker tracker)
   {
     super.setEventTracker(tracker);
     if (tracker != null)
