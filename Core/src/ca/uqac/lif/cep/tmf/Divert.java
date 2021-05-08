@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
@@ -64,13 +65,13 @@ public class Divert extends Processor
   /**
    * The {@link Pushable} connected to the upstream processor
    */
-  protected Pushable m_inputPushable;
+  protected @MonotonicNonNull Pushable m_inputPushable;
   
   /**
    * The instance of the special {@link Pullable} given to all
    * downstream processors
    */
-  protected Pullable m_outputPullable;
+  protected @MonotonicNonNull Pullable m_outputPullable;
   
   /**
    * The index of the flow the input stream will be diverted to
@@ -200,7 +201,7 @@ public class Divert extends Processor
     }
 
     @Override
-    public @Nullable Object pull()
+    public Object pull()
     {
       return m_inputPullables[0].pull();
     }

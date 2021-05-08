@@ -116,7 +116,7 @@ public class Tank extends Processor
     }
 
     @Override
-    public @Nullable Object pull()
+    public Object pull()
     {
       synchronized (m_inputQueues[0])
       {

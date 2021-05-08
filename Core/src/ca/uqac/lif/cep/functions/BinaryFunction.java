@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
@@ -35,7 +36,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.3
  */
-public abstract class BinaryFunction<T, V, U> extends Function
+public abstract class BinaryFunction<T, V, U extends @NonNull Object> extends Function
 {
   /**
    * The class of the first input

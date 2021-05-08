@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.azrael.ObjectPrinter;
 import ca.uqac.lif.azrael.ObjectReader;
@@ -123,7 +124,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * @return <tt>true</tt> if the function succeeded in producing an output
    *          value, <tt>false</tt> otherwise
    */
-  /*@ pure @*/ public boolean evaluatePartial(/*@ non_null @*/ Object[] inputs, 
+  /*@ pure @*/ public boolean evaluatePartial(/*@ non_null @*/ @Nullable Object[] inputs, 
       /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context)
   {
     // Defer the call to evaluate if all the inputs are non-null
@@ -134,7 +135,9 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
         return false;
       }
     }
-    evaluate(inputs, outputs, context);
+    @SuppressWarnings("nullness") // inputs now contains non-null elements
+    Object[] inputsNn = inputs;
+    evaluate(inputsNn, outputs, context);
     return true;
   }
 
@@ -239,11 +242,13 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
   @Override
   public Object print(ObjectPrinter<?> printer)
   {
-    Map<String,Object> map = new HashMap<String,Object>();
+    Map<String,@Nullable Object> map = new HashMap<String,@Nullable Object>();
     map.put("contents", printState());
     try
     {
-      return printer.print(map);
+      @SuppressWarnings("nullness") // Azrael is not yet annotated for nullness
+      @NonNull Object result = printer.print(map);
+      return result;
     }
     catch (PrintException e)
     {

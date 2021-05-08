@@ -283,7 +283,7 @@ public abstract class UniformProcessor extends SynchronousProcessor
     }
 
     @Override
-    public @Nullable Object pull()
+    public Object pull()
     {
       if (!m_inputQueues[0].isEmpty())
       {

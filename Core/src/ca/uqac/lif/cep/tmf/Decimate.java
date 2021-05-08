@@ -18,6 +18,7 @@
 
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
@@ -62,7 +63,7 @@ public abstract class Decimate extends SynchronousProcessor
    * The last inputs processed by {@link #processInputs(Object[])} stored (in case
    * of EOT processing mode).
    */
-  protected Object[] m_lastProcessedInputs;
+  protected Object @Nullable [] m_lastProcessedInputs;
 
   /**
    * Creates a new Decimate processor.

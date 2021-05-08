@@ -36,11 +36,6 @@ import ca.uqac.lif.petitpoucet.NodeFunction;
  */
 public class Cumulate extends ApplyFunction
 {
-  private Cumulate()
-  {
-    super(null);
-  }
-  
   public Cumulate(CumulativeFunction<?> f)
   {
     super(f);
@@ -153,6 +148,7 @@ public class Cumulate extends ApplyFunction
       return m_index;
     }
 
+    @SuppressWarnings("nullness")  // petitpoucet is not annotated
     @Override
     public @Nullable NodeFunction dependsOn()
     {

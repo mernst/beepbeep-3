@@ -329,7 +329,7 @@ public abstract class SynchronousProcessor extends Processor
     }
 
     @Override
-    public synchronized @Nullable Object pull()
+    public synchronized Object pull()
     {
       if (!hasNext())
       {
@@ -510,7 +510,7 @@ public abstract class SynchronousProcessor extends Processor
         int i = 0;
         for (Pullable p : m_inputPullables)
         {
-          inputs[i] = p.pullSoft();
+          inputs[i] = p.pull();
           i++;
         }
       }

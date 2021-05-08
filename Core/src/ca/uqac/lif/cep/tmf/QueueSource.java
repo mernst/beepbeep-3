@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.petitpoucet.DirectValue;
 import ca.uqac.lif.petitpoucet.NodeFunction;
@@ -259,7 +260,7 @@ public class QueueSource extends Source
     }
 
     @Override
-    public NodeFunction dependsOn()
+    public @Nullable NodeFunction dependsOn()
     {
       return DirectValue.instance;
     }

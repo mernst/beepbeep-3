@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
@@ -97,7 +99,8 @@ public class FunctionTree extends Function
    *          The function
    * @return This tree
    */
-  public FunctionTree setChild(int index, Function f)
+  @RequiresNonNull("m_children")
+  public FunctionTree setChild(@UnknownInitialization(Function.class) FunctionTree this, int index, Function f)
   {
     m_children[index] = f;
     return this;
@@ -123,7 +126,7 @@ public class FunctionTree extends Function
   }
 
   @Override
-  public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
+  public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
   {
     Object[] values = new Object[m_children.length];
     for (int i = 0; i < values.length; i++)

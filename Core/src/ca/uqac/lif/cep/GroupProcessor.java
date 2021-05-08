@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.tmf.Source;
@@ -257,9 +258,13 @@ public class GroupProcessor extends Processor
   }
 
   @Override
-  public final synchronized void setPullableInput(@KeyFor("m_inputPullableAssociations") int i, Pullable p)
+  public final synchronized void setPullableInput(int i, Pullable p)
   {
     ProcessorAssociation a = m_inputPullableAssociations.get(i);
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", i, m_inputPullableAssociations.keySet()));
+    }
     a.m_processor.setPullableInput(a.m_ioNumber, p);
   }
 
@@ -268,11 +273,14 @@ public class GroupProcessor extends Processor
     m_outputPushableAssociations.put(i, new GroupProcessor.ProcessorAssociation(j, p));
   }
 
-  @SuppressWarnings("keyfor:override.param.invalid")  // refers to local state
   @Override
-  public final synchronized void setPushableOutput(@KeyFor("m_outputPushableAssociations") int i, Pushable p)
+  public final synchronized void setPushableOutput(int i, Pushable p)
   {
     ProcessorAssociation a = m_outputPushableAssociations.get(i);
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", i, m_inputPullableAssociations.keySet()));
+    }
     a.m_processor.setPushableOutput(a.m_ioNumber, p);
   }
 
@@ -315,19 +323,25 @@ public class GroupProcessor extends Processor
     }
   }
 
-  @SuppressWarnings("keyfor:override.param.invalid")  // refers to local state
   @Override
-  public final synchronized Pushable getPushableOutput(@KeyFor("m_outputPushableAssociations") int index)
+  public final synchronized Pushable getPushableOutput(int index)
   {
     ProcessorAssociation a = m_outputPushableAssociations.get(index);
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", index, m_inputPullableAssociations.keySet()));
+    }
     return a.m_processor.getPushableOutput(a.m_ioNumber);
   }
 
-  @SuppressWarnings("keyfor:override.param.invalid")  // refers to local state
   @Override
-  public final synchronized Pullable getPullableInput(@KeyFor("m_inputPullableAssociations") int index)
+  public final synchronized Pullable getPullableInput(int index)
   {
     ProcessorAssociation a = m_inputPullableAssociations.get(index);
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", index, m_inputPullableAssociations.keySet()));
+    }
     return a.m_processor.getPullableInput(a.m_ioNumber);
   }
 
@@ -366,6 +380,9 @@ public class GroupProcessor extends Processor
     // Re-pipe the internal processors like in the original group
     CopyCrawler cc = new CopyCrawler(new_procs);
     // POSSIBLE NullPointerException.
+    if (start == null) {
+      throw new Error("No processor with non-zero output arity in " + m_processors);
+    }
     cc.crawl(start);
     return new_procs;
   }
@@ -537,7 +554,7 @@ public class GroupProcessor extends Processor
     }
 
     @Override
-    public synchronized @Nullable Object pull()
+    public synchronized Object pull()
     {
       return m_pullable.pull();
     }
@@ -704,6 +721,10 @@ public class GroupProcessor extends Processor
       for (int i = 0; i < m_outputPushables.length; i++)
       {
         ProcessorAssociation pa = m_outputPushableAssociations.get(i);
+        if (pa == null) {
+          throw new IndexOutOfBoundsException(
+              String.format("setPullableInput(%s): %s", i, m_outputPushableAssociations.keySet()));
+        }
         Pushable p = pa.m_processor.getPushableOutput(pa.m_ioNumber);
         if (p == null)
         {
@@ -791,7 +812,9 @@ public class GroupProcessor extends Processor
     {
       return null;
     }
-    return m_inputPullableAssociations.get(index).m_processor;
+    @SuppressWarnings("assignment")  // just tested containsKey
+    @NonNull ProcessorAssociation pa = m_inputPullableAssociations.get(index);
+    return pa.m_processor;
   }
 
   @Override

@@ -88,7 +88,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
+    public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == false)
       {
@@ -136,7 +136,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
+    public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == false)
       {
@@ -220,7 +220,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, @Nullable Context context)
+    public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == true)
       {

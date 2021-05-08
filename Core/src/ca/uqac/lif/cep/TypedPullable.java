@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Iterator;
 
 /**
@@ -40,7 +42,7 @@ import java.util.Iterator;
  * @param <T> The type of the output objects
  */
 @SuppressWarnings("unchecked")
-public class TypedPullable<T> implements Pullable
+public class TypedPullable<T extends @NonNull Object> implements Pullable
 {
   /**
    * The actual pullable this class is wrapping
@@ -61,9 +63,9 @@ public class TypedPullable<T> implements Pullable
   }
 
   @Override
-  public T pullSoft()
+  public @Nullable T pullSoft()
   {
-    return (T) m_pullable.pullSoft();
+    return (@Nullable T) m_pullable.pullSoft();
   }
 
   @Override

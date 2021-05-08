@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;
@@ -179,7 +180,7 @@ public abstract class AsynchronousProcessor extends Processor
 
     @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
-    public Object pullSoft() 
+    public @Nullable Object pullSoft() 
     {
       // TODO Auto-generated method stub
       return null;

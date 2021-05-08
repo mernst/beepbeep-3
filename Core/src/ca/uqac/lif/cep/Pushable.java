@@ -138,7 +138,7 @@ public interface Pushable
    */
   public static class PushNotSupported implements Pushable
   {
-    protected @Nullable Processor m_processor;
+    protected Processor m_processor;
 
     protected int m_position;
 
@@ -148,7 +148,7 @@ public interface Pushable
      * @param position The index of the input stream for which the push
      * operation is not supported
      */
-    public PushNotSupported(@Nullable Processor p, int position)
+    public PushNotSupported(Processor p, int position)
     {
       super();
       m_processor = p;

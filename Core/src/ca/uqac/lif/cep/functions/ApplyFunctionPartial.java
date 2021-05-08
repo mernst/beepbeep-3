@@ -67,7 +67,7 @@ public class ApplyFunctionPartial extends Processor
    * An array containing the events received so far in the current
    * input front
    */
-  protected Object[] m_inputFront;
+  protected @Nullable Object[] m_inputFront;
 
   /**
    * Creates a new lazy application processor.
@@ -234,7 +234,7 @@ public class ApplyFunctionPartial extends Processor
 
     @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
-    public @Nullable Object pull()
+    public Object pull()
     {
       // TODO Auto-generated method stub
       return null;
@@ -311,7 +311,7 @@ public class ApplyFunctionPartial extends Processor
       front_nb.add(m_frontNumber[i]);
     }
     contents.put("front-nb", front_nb);
-    List<Object> front = new ArrayList<Object>(m_inputFront.length);
+    List<@Nullable Object> front = new ArrayList<@Nullable Object>(m_inputFront.length);
     for (int i = 0; i < m_inputFront.length; i++)
     {
       front.add(m_inputFront[i]);

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Set;
 
@@ -29,9 +30,9 @@ import ca.uqac.lif.cep.EventTracker;
  */
 public class FunctionLambda extends Function
 {
-  UnaryLambdaEvaluable m_unary = null;
+  @MonotonicNonNull UnaryLambdaEvaluable m_unary = null;
   
-  BinaryLambdaEvaluable m_binary = null;
+  @MonotonicNonNull BinaryLambdaEvaluable m_binary = null;
   
   protected Class<?> m_returnType = Object.class;
   

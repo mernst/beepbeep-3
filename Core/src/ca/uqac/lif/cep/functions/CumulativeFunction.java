@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import java.util.List;
  * @author Sylvain Hallé
  * @since 0.1
  */
-public class CumulativeFunction<T> extends UnaryFunction<T, T>
+public class CumulativeFunction<T extends @NonNull Object> extends UnaryFunction<T, T>
 {
   /**
    * The last value returned by the function

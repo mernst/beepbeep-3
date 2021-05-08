@@ -142,7 +142,7 @@ public class Multiplex extends Processor
     }
 
     @Override
-    public @Nullable Object pull()
+    public Object pull()
     {
       if (!m_outputQueues[0].isEmpty())
       {

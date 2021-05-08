@@ -102,7 +102,7 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
    * @return An event
    * @throws NoSuchElementException if the iteration has no more elements
    */
-  public @Nullable Object pull();
+  public Object pull();
 
   /**
    * Synonym of {@link #pull()}.
@@ -269,7 +269,7 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
     }
 
     @Override
-    public @Nullable Object pull()
+    public Object pull()
     {
       throw new UnsupportedOperationException();
     }
