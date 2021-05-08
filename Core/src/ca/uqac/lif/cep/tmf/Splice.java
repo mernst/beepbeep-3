@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.Processor;
@@ -65,7 +66,7 @@ public class Splice extends Source
     setPullablesTo(0);
   }
 
-  protected void setPullablesTo(int index)
+  protected void setPullablesTo(@UnknownInitialization(Splice.class) Splice this, int index)
   {
     Processor p = m_processors[index];
     for (int i = 0; i < m_pullables.length; i++)

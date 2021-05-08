@@ -65,13 +65,13 @@ public class Divert extends Processor
   /**
    * The {@link Pushable} connected to the upstream processor
    */
-  protected @MonotonicNonNull Pushable m_inputPushable;
+  protected @MonotonicNonNull Pushable m_inputPushable = null;
   
   /**
    * The instance of the special {@link Pullable} given to all
    * downstream processors
    */
-  protected @MonotonicNonNull Pullable m_outputPullable;
+  protected @MonotonicNonNull Pullable m_outputPullable = null;
   
   /**
    * The index of the flow the input stream will be diverted to
@@ -85,8 +85,6 @@ public class Divert extends Processor
   {
     super(1, 1);
     m_downstreamPushables = new ArrayList<Pushable>();
-    m_inputPushable = null;
-    m_outputPullable = null;
   }
   
   /**
@@ -207,7 +205,7 @@ public class Divert extends Processor
     }
 
     @Override
-    public @Nullable Object next()
+    public Object next()
     {
       return m_inputPullables[0].next();
     }

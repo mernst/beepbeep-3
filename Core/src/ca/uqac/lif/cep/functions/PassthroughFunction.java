@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
@@ -56,7 +57,7 @@ public abstract class PassthroughFunction extends Function
    * 
    * @return The function
    */
-  public abstract Function getFunction();
+  public abstract Function getFunction(@UnknownInitialization(PassthroughFunction.class) PassthroughFunction this);
 
   @Override
   public final void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context,

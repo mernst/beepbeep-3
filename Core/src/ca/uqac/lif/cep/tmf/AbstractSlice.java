@@ -67,17 +67,17 @@ public abstract class AbstractSlice extends SynchronousProcessor
   /**
    * The slicing function
    */
-  protected Function m_slicingFunction = null;
+  protected Function m_slicingFunction;
 
   /**
    * The internal processor
    */
-  protected Processor m_processor = null;
+  protected Processor m_processor;
 
   /**
    * The cleaning function
    */
-  protected Function m_cleaningFunction = null;
+  protected @Nullable Function m_cleaningFunction;
 
   /**
    * A map associating slice IDs to the instance of processor associated to them
@@ -124,7 +124,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
    *          The cleaning function
    */
   public AbstractSlice(/* @ non_null @ */ Function func, /* @ non_null @ */ Processor proc,
-      Function clean_func)
+      @Nullable Function clean_func)
   {
     super(proc.getInputArity(), proc.getOutputArity());
     m_processor = proc;

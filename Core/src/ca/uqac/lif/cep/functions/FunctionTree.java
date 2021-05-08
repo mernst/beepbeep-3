@@ -128,7 +128,7 @@ public class FunctionTree extends Function
   @Override
   public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
   {
-    Object[] values = new Object[m_children.length];
+    @Nullable Object[] values = new Object[m_children.length];
     for (int i = 0; i < values.length; i++)
     {
       Object[] val = new Object[1];

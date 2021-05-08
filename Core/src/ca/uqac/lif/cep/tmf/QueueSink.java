@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class QueueSink extends Sink
   @SuppressWarnings("unchecked")
   @Override
   @EnsuresNonNull("m_queues")
-  public void reset()
+  public void reset(@UnknownInitialization(QueueSink.class) QueueSink this)
   {
     super.reset();
     int arity = getInputArity();
@@ -106,9 +108,9 @@ public class QueueSink extends Sink
    * 
    * @return A vector containing the first event of all queues, or null
    */
-  public Object[] remove()
+  public @Nullable Object[] remove()
   {
-    Object[] out = new Object[m_queues.length];
+    @Nullable Object[] out = new Object[m_queues.length];
     for (int i = 0; i < m_queues.length; i++)
     {
       Queue<Object> q = m_queues[i];

@@ -259,6 +259,7 @@ public class QueueSource extends Source
       return getDataPointId();
     }
 
+    @SuppressWarnings("nullness:override.return")  // petitpoucet is not annotated
     @Override
     public @Nullable NodeFunction dependsOn()
     {

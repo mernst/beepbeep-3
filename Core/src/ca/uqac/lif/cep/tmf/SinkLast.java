@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Queue;
 
 /**
@@ -32,12 +33,12 @@ public class SinkLast extends Sink
   /**
    * The last event (or array of events) received
    */
-  protected Object[] m_last;
+  protected Object @Nullable [] m_last = null;
 
   /**
    * The number of events received so far
    */
-  protected int m_eventCounter;
+  protected int m_eventCounter = 0;
 
   /**
    * Creates a new sink last processor
@@ -45,8 +46,6 @@ public class SinkLast extends Sink
   public SinkLast()
   {
     super();
-    m_last = null;
-    m_eventCounter = 0;
   }
 
   /**
@@ -56,8 +55,6 @@ public class SinkLast extends Sink
   public SinkLast(int in_arity)
   {
     super(in_arity);
-    m_last = null;
-    m_eventCounter = 0;
   }
 
   @Override

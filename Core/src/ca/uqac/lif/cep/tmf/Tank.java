@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
@@ -45,12 +46,12 @@ public class Tank extends Processor
   /**
    * A pushable
    */
-  protected QueuePushable m_pushable = null;
+  protected @MonotonicNonNull QueuePushable m_pushable = null;
 
   /**
    * A pullable
    */
-  protected QueuePullable m_pullable = null;
+  protected @MonotonicNonNull QueuePullable m_pullable = null;
 
   /**
    * Creates a new empty tank

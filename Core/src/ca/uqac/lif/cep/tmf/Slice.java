@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -58,7 +59,7 @@ public class Slice extends AbstractSlice
    * @param clean_func The cleaning function
    */
   public Slice(/*@ non_null @*/ Function func, /*@ non_null @*/ Processor proc,
-      Function clean_func)
+      @Nullable Function clean_func)
   {
     super(func, proc, clean_func);
     m_lastValues = new HashMap<Object, Object>();

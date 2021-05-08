@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
@@ -55,7 +56,7 @@ public class Window extends AbstractWindow
   /**
    * The sink that will receive the events produced by the inner processor
    */
-  protected SinkLast m_sink = null;
+  protected SinkLast m_sink;
 
   /**
    * Creates a new window processor
@@ -72,7 +73,7 @@ public class Window extends AbstractWindow
   @SuppressWarnings("unchecked")
   @Override
   @EnsuresNonNull("m_innerInputs")
-  public void reset()
+  public void reset(@UnknownInitialization(Window.class) Window this)
   {
     super.reset();
     int arity = getInputArity();

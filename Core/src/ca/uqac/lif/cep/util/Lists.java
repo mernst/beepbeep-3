@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import ca.uqac.lif.cep.Pullable;
@@ -176,7 +177,7 @@ public class Lists
      * 
      * @return The list
      */
-    protected List<Object> newList()
+    protected List<Object> newList(@UnknownInitialization AbstractPack this)
     {
       return new LinkedList<Object>();
     }
