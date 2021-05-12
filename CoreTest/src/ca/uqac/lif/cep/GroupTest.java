@@ -753,6 +753,7 @@ public class GroupTest
 		}
 		
 		@Override
+                @SideEffectFree
 		public PassthroughIn duplicate(boolean with_state)
 		{
 			return new PassthroughIn(getInputArity());
@@ -769,6 +770,7 @@ public class GroupTest
 		}
 		
 		@Override
+                @SideEffectFree
 		public GroupIn duplicate(boolean with_state)
 		{
 			GroupIn in = new GroupIn(getInputArity(), getOutputArity());

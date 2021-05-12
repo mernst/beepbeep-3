@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
@@ -99,6 +100,7 @@ public class Divert extends Processor
   }
 
   @Override
+  @SideEffectFree
   public Divert duplicate(boolean with_state)
   {
     return new Divert();

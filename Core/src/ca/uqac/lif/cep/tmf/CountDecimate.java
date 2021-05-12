@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,6 +113,7 @@ public class CountDecimate extends Decimate
   }
 
   @Override
+  @SideEffectFree
   public CountDecimate duplicate(boolean with_state)
   {
     return new CountDecimate(m_interval, m_shouldProcessLastInputs);

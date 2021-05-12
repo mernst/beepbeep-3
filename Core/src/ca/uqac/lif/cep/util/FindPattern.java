@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 import java.util.regex.Matcher;
@@ -70,6 +71,7 @@ public class FindPattern extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public FindPattern duplicate(boolean with_state)
   {
     FindPattern fp = new FindPattern(m_pattern);
@@ -102,7 +104,15 @@ public class FindPattern extends SynchronousProcessor
     int last_end = 0;
     while (mat.find())
     {
-      String matched = (mat.groupCount() > 0) ? mat.group(1) : mat.group(0);
+      String matched;
+      if (mat.groupCount() > 0) {
+        matched = mat.group(1);
+        if (matched == null) {
+          throw new Error("Capturing group 1 in "+m_pattern+"did not match in " + m_contents);
+        }
+      } else {
+        matched = mat.group();
+      }
       if (m_trim)
       {
         matched = matched.trim();

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.Processor;
@@ -89,6 +90,7 @@ public class ApplyFunction extends UniformProcessor
   }
 
   @Override
+  @SideEffectFree
   public synchronized ApplyFunction duplicate(boolean with_state)
   {
     ApplyFunction out = new ApplyFunction(m_function.duplicate(with_state));
@@ -188,7 +190,7 @@ public class ApplyFunction extends UniformProcessor
     @Override
     public @Nullable ProvenanceNode getProvenanceTree(int proc_id, int stream_index, int stream_pos)
     {
-      throw new Exception("ShiftTracker.getProvenanceTree should not be called");
+      throw new Error("ShiftTracker.getProvenanceTree should not be called");
     }
 
     @Override

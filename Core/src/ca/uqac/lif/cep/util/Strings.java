@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
@@ -104,6 +106,7 @@ public class Strings
     }
 
     @Override
+    @SideEffectFree
     public Processor duplicate(boolean with_state)
     {
       BuildString bs = new BuildString();
@@ -321,7 +324,7 @@ public class Strings
   }
 
   /**
-   * Finds all substrings that match a regular expression.
+   * Finds all substrings that match capturing group 1 of a regular expression.
    * @author Sylvain Hallé
    */
   @SuppressWarnings("rawtypes")
@@ -348,6 +351,7 @@ public class Strings
       m_pattern = Pattern.compile(regex);
     }
 
+    @SuppressWarnings("nullness")  // uses raw types
     @Override
     public Set getValue(String s)
     {

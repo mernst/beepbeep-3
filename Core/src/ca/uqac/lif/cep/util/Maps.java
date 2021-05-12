@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.Function;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -76,6 +77,7 @@ public class Maps
     public Collection<?> getValue(Map x)
     {
       Collection<?> col = x.values();
+      // remove is allowed to throw NullPointerException if the collection doesn't support null
       col.remove(null);
       return col;
     }
@@ -87,7 +89,7 @@ public class Maps
    * well.
    * @since 0.10.3
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({"rawtypes", "nullness"})
   public static class MultiValues extends UnaryFunction<Map, Collection>
   {
     /**
@@ -171,6 +173,7 @@ public class Maps
     }
 
     @Override
+    @SideEffectFree
     public PutInto duplicate(boolean with_state)
     {
       return new PutInto();
@@ -220,6 +223,7 @@ public class Maps
     }
 
     @Override
+    @SideEffectFree
     public MapPutInto duplicate(boolean with_state)
     {
       return new MapPutInto();
@@ -350,6 +354,7 @@ public class Maps
     }
 
     @Override
+    @SideEffectFree
     public MergeMaps duplicate(boolean with_state)
     {
       MergeMaps mm = new MergeMaps();

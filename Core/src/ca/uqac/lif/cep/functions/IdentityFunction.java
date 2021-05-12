@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.Context;
@@ -89,6 +90,7 @@ public final class IdentityFunction extends Function
   }
 
   @Override
+  @SideEffectFree
   public IdentityFunction duplicate(boolean with_state)
   {
     return new IdentityFunction(m_inArity);

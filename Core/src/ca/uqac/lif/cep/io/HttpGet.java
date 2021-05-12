@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.tmf.Source;
@@ -111,6 +112,7 @@ public class HttpGet extends Source
   }
 
   @Override
+  @SideEffectFree
   public HttpGet duplicate(boolean with_state)
   {
     return new HttpGet(m_url);

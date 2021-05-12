@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.UniformProcessor;
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class Call extends UniformProcessor
   }
 
   @Override
+  @SideEffectFree
   public Call duplicate(boolean with_state)
   {
     return new Call(m_command);

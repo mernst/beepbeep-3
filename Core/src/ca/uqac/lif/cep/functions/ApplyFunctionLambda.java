@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
@@ -60,6 +61,7 @@ public class ApplyFunctionLambda extends UniformProcessor
   }
 
   @Override
+  @SideEffectFree
   public Processor duplicate(boolean with_state)
   {
     return this;

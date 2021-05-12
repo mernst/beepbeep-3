@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 
 /**
@@ -61,6 +62,7 @@ public class Passthrough extends UniformProcessor
   }
 
   @Override
+  @SideEffectFree
   public Passthrough duplicate(boolean with_state)
   {
     return new Passthrough(getInputArity());

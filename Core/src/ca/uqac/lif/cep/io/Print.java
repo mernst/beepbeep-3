@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.tmf.Sink;
 import java.io.PrintStream;
 import java.util.Queue;
@@ -280,6 +281,7 @@ public class Print extends Sink
   }
 
   @Override
+  @SideEffectFree
   public /*@ non_null @*/ Print duplicate(boolean with_state)
   {
     Print print = new Print(getInputArity(), m_out);

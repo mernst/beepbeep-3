@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.petitpoucet.NodeFunction;
 
@@ -164,6 +165,7 @@ public class Cumulate extends ApplyFunction
   }
   
   @Override
+  @SideEffectFree
   public Cumulate duplicate(boolean with_state)
   {
     Cumulate c = new Cumulate((CumulativeFunction<?>) m_function.duplicate(with_state));

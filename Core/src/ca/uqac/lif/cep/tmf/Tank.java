@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
@@ -62,6 +63,7 @@ public class Tank extends Processor
   }
 
   @Override
+  @SideEffectFree
   public Tank duplicate(boolean with_state)
   {
     Tank t = new Tank();

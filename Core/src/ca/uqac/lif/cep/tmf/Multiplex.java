@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
@@ -88,6 +89,7 @@ public class Multiplex extends Processor
   }
 
   @Override
+  @SideEffectFree
   public Multiplex duplicate(boolean with_state)
   {
     return new Multiplex(getInputArity());

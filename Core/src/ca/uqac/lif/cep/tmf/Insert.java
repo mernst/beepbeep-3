@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -87,6 +88,7 @@ public class Insert extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public Insert duplicate(boolean with_state)
   {
     return new Insert(m_times, m_pad);

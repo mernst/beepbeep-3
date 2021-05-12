@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import java.util.HashSet;
@@ -99,6 +100,7 @@ public class Sets
     }
 
     @Override
+    @SideEffectFree
     public PutInto duplicate(boolean with_state)
     {
       PutInto pi = new PutInto();

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
@@ -56,6 +57,7 @@ public class Stutter extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public Processor duplicate(boolean with_state)
   {
     return new Stutter(m_numReps);

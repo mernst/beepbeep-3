@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.azrael.ObjectPrinter;
@@ -228,12 +229,14 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
   }
 
   @Override
+  @SideEffectFree
   /*@ pure non_null @*/ public final Function duplicate()
   {
     return duplicate(false);
   }
 
   @Override
+  @SideEffectFree
   /*@ pure non_null @*/ public abstract Function duplicate(boolean with_state);
 
   /**

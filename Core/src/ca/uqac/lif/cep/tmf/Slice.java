@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
@@ -81,7 +82,7 @@ public class Slice extends AbstractSlice
   @Override
   public Object printState()
   {
-    Map<String,Object> contents = new HashMap<String,Object>();
+    Map<String,@Nullable Object> contents = new HashMap<String,@Nullable Object>();
     contents.put("cleaning-function", m_cleaningFunction);
     contents.put("explode-arrays", m_explodeArrays);
     contents.put("last-values", m_lastValues);
@@ -123,6 +124,7 @@ public class Slice extends AbstractSlice
   }
 
   @Override
+  @SideEffectFree
   public Slice duplicate(boolean with_state)
   {
     Slice s = null;

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
@@ -487,6 +488,7 @@ public class Numbers
     }
 
     @Override
+    @SideEffectFree
     public NumberCast duplicate(boolean with_state)
     {
       return this;

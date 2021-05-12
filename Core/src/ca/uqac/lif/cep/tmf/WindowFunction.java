@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.Function;
@@ -113,6 +114,7 @@ public class WindowFunction extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public WindowFunction duplicate(boolean with_state)
   {
     WindowFunction wf = new WindowFunction(m_function.duplicate());

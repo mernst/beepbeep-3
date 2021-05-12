@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -448,6 +450,7 @@ public class GroupProcessor extends Processor
   }
 
   @Override
+  @SideEffectFree
   public synchronized GroupProcessor duplicate(boolean with_state)
   {
     GroupProcessor group = new GroupProcessor(getInputArity(), getOutputArity());

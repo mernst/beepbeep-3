@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Pushable;
 
 /**
@@ -36,6 +37,7 @@ public class TankLast extends Tank
   }
 
   @Override
+  @SideEffectFree
   public TankLast duplicate(boolean with_state)
   {
     TankLast t = new TankLast();

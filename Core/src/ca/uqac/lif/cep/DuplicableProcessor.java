@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * An override on the return type of {@link Duplicable} that enforces the
  * return of a processor.
@@ -26,5 +28,6 @@ package ca.uqac.lif.cep;
 public interface DuplicableProcessor extends Duplicable
 {
   @Override
+  @SideEffectFree
   public /*@ non_null @*/ Processor duplicate();
 }

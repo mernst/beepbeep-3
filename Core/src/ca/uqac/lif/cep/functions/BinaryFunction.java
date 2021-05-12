@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
@@ -144,6 +145,7 @@ public abstract class BinaryFunction<T, V, U extends @NonNull Object> extends Fu
   }
 
   @Override
+  @SideEffectFree
   public BinaryFunction<T, V, U> duplicate(boolean with_state)
   {
     return this;

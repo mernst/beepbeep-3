@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
@@ -100,6 +101,7 @@ public class Constant extends Function
   }
 
   @Override
+  @SideEffectFree
   public Constant duplicate(boolean with_state)
   {
     return new Constant(m_value);

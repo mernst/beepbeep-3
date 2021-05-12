@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
@@ -151,6 +152,7 @@ public class Splice extends Source
   }
 
   @Override
+  @SideEffectFree
   public Splice duplicate(boolean with_state)
   {
     return new Splice(m_processors);

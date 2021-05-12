@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 import java.util.Set;
 
@@ -57,6 +58,7 @@ public class TurnInto extends UniformProcessor
   }
 
   @Override
+  @SideEffectFree
   public synchronized TurnInto duplicate(boolean with_state)
   {
     TurnInto out = new TurnInto(m_event);

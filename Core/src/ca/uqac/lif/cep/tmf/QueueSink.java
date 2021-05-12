@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
@@ -52,7 +53,7 @@ public class QueueSink extends Sink
   @SuppressWarnings("unchecked")
   @Override
   @EnsuresNonNull("m_queues")
-  public void reset(@UnknownInitialization(QueueSink.class) QueueSink this)
+  public void reset(@UnknownInitialization(Sink.class) QueueSink this)
   {
     super.reset();
     int arity = getInputArity();
@@ -128,6 +129,7 @@ public class QueueSink extends Sink
   }
 
   @Override
+  @SideEffectFree
   public QueueSink duplicate(boolean with_state)
   {
     QueueSink qs = new QueueSink(getInputArity());

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.petitpoucet.DirectValue;
@@ -199,6 +200,7 @@ public class QueueSource extends Source
   }
 
   @Override
+  @SideEffectFree
   public QueueSource duplicate(boolean with_state)
   {
     QueueSource out = new QueueSource(getOutputArity());

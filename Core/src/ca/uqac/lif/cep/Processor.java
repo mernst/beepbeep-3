@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.azrael.ObjectPrinter;
@@ -873,12 +875,14 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
+  @SideEffectFree
   /*@ non_null @*/ public final Processor duplicate()
   {
     return duplicate(false);
   }
 
   @Override
+  @SideEffectFree
   /*@ non_null @*/ public abstract Processor duplicate(boolean with_state);
   
   /**

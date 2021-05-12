@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import ca.uqac.lif.cep.Connector;
@@ -197,6 +198,7 @@ public class Window extends AbstractWindow
   }
 
   @Override
+  @SideEffectFree
   public Window duplicate(boolean with_state)
   {
     Window w = new Window(m_processor.duplicate(), m_width);

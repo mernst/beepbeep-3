@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.Context;
@@ -46,6 +47,7 @@ public class ApplyFunctionArgument extends Function
   }
 
   @Override
+  @SideEffectFree
   public ApplyFunctionArgument duplicate(boolean with_state)
   {
     return this;

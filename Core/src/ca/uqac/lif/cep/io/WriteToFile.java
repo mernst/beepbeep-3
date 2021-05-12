@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.tmf.Sink;
@@ -97,6 +98,7 @@ public class WriteToFile extends Sink
   }
 
   @Override
+  @SideEffectFree
   public Processor duplicate(boolean with_state)
   {
     throw new UnsupportedOperationException();

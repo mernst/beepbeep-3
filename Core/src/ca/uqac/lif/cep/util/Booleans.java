@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
@@ -305,7 +306,7 @@ public class Booleans
       }
       if (o instanceof Collection)
       {
-        Collection<?> a = (Collection<?>) o;
+        Collection<@NonNull ?> a = (Collection<@NonNull ?>) o;
         for (Object e : a)
         {
           if (!parseBoolValue(e))
@@ -350,7 +351,7 @@ public class Booleans
       }
       if (o instanceof Collection)
       {
-        Collection<?> a = (Collection<?>) o;
+        Collection<@NonNull ?> a = (Collection<@NonNull ?>) o;
         for (Object e : a)
         {
           if (parseBoolValue(e))

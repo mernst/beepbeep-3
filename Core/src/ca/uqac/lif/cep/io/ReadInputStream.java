@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.tmf.Source;
 import java.io.InputStream;
 
@@ -109,6 +110,7 @@ public abstract class ReadInputStream extends Source
   }
 
   @Override
+  @SideEffectFree
   public ReadInputStream duplicate(boolean with_state)
   {
     // By default, it does not make sense to duplicate such a processor

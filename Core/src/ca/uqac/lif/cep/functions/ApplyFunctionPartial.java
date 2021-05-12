@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
@@ -105,6 +106,7 @@ public class ApplyFunctionPartial extends Processor
   }
 
   @Override
+  @SideEffectFree
   public ApplyFunctionPartial duplicate(boolean with_state)
   {
     return new ApplyFunctionPartial(m_function.duplicate(with_state));

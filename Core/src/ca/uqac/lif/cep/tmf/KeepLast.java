@@ -1,5 +1,6 @@
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -25,6 +26,7 @@ public class KeepLast extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public KeepLast duplicate(boolean with_state)
   {
     return new KeepLast(m_inputArity);

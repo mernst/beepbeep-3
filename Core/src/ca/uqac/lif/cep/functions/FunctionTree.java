@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -186,6 +187,7 @@ public class FunctionTree extends Function
   }
 
   @Override
+  @SideEffectFree
   public synchronized FunctionTree duplicate(boolean with_state)
   {
     FunctionTree out = new FunctionTree(m_function.duplicate(with_state));

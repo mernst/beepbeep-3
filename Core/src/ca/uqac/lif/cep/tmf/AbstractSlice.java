@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
@@ -361,6 +362,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
 
   @SuppressWarnings("nullness")  // Auto-generated method stub
   @Override
+  @SideEffectFree
   public Processor duplicate(boolean with_state)
   {
     // TODO Auto-generated method stub

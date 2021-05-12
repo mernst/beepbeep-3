@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Connector.Variant;
@@ -143,7 +145,7 @@ public class Bags
       {
         throw new InvalidArgumentException(this, 0);
       }
-      for (Object o : (Collection<?>) x)
+      for (Object o : (Collection<@NonNull ?>) x)
       {
         Object[] in = new Object[1];
         in[0] = o;
@@ -219,7 +221,7 @@ public class Bags
       }
       else
       {
-        for (Object o : (Collection<?>) inputs[0])
+        for (Object o : (Collection<@NonNull ?>) inputs[0])
         {
           m_pushable.push(o);
         }
@@ -238,6 +240,7 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public RunOn duplicate(boolean with_state)
     {
       return new RunOn(m_processor.duplicate(with_state));
@@ -313,6 +316,7 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public ToArray duplicate(boolean with_state)
     {
       return new ToArray(m_types);
@@ -347,6 +351,7 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public ToList duplicate(boolean with_state)
     {
       return new ToList(m_types);
@@ -385,6 +390,7 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public ToSet duplicate(boolean with_state)
     {
       return new ToSet(m_types);
@@ -473,7 +479,7 @@ public class Bags
       if (x instanceof List)
       {
         List<Object> out = new ArrayList<Object>(((List<?>) x).size());
-        for (Object o : (List<?>) x)
+        for (Object o : (List<@NonNull ?>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -486,7 +492,7 @@ public class Bags
       if (x instanceof Set)
       {
         Set<Object> out = new HashSet<Object>();
-        for (Object o : (Set<?>) x)
+        for (Object o : (Set<@NonNull ?>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -546,7 +552,7 @@ public class Bags
    * Returns any element of a collection. If the collection is empty, returns
    * <tt>null</tt>.
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({"rawtypes", "nullness"})
   public static class AnyElement extends UnaryFunction<Collection, @Nullable Object>
   {
     private AnyElement()
@@ -586,6 +592,7 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public Explode duplicate(boolean with_state)
     {
       return new Explode(m_classes);
@@ -646,7 +653,7 @@ public class Bags
     }
     if (o instanceof Collection<?>)
     {
-      Collection<?> c = (Collection<?>) o;
+      Collection<@NonNull ?> c = (Collection<@NonNull ?>) o;
       Object[] a = new Object[c.size()];
       int i = 0;
       for (Object obj : c)

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pushable;
@@ -81,6 +82,7 @@ public class ResetLast extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public ResetLast duplicate(boolean with_state)
   {
     ResetLast res = new ResetLast(m_processor.duplicate(with_state));

@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.tmf.Sink;
 import java.io.IOException;
@@ -96,6 +97,7 @@ public class WriteOutputStream extends Sink
   }
 
   @Override
+  @SideEffectFree
   public WriteOutputStream duplicate(boolean with_state)
   {
     // By default, it does not make sense to duplicate such a processor

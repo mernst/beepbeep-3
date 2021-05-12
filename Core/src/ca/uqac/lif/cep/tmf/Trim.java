@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -75,6 +76,7 @@ public class Trim extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public Trim duplicate(boolean with_state)
   {
     Trim t = new Trim(getDelay());

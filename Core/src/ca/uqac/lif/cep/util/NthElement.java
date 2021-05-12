@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.functions.FunctionException;
 import ca.uqac.lif.cep.functions.InvalidArgumentException;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -56,6 +57,7 @@ public class NthElement extends UnaryFunction<Object, Object>
     this(0);
   }
 
+  @SuppressWarnings("nullness")  // casts from Object to collection; and not used
   @Override
   public Object getValue(Object x)
   {
@@ -87,6 +89,7 @@ public class NthElement extends UnaryFunction<Object, Object>
   }
 
   @Override
+  @SideEffectFree
   public NthElement duplicate(boolean with_state)
   {
     return new NthElement(m_n);

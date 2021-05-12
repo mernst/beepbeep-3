@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Set;
@@ -61,6 +62,7 @@ public class FunctionLambda extends Function
   }
 
   @Override
+  @SideEffectFree
   public FunctionLambda duplicate(boolean with_state)
   {
     return this;

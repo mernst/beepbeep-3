@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.Function;
@@ -93,6 +94,7 @@ public class SimpleFilter extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public SimpleFilter duplicate(boolean with_state)
   {
     return new SimpleFilter(getInputArity(), m_condition.duplicate());

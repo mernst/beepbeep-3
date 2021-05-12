@@ -296,6 +296,7 @@ public class ConnectorTest
     }
 
     @Override
+    @SideEffectFree
     public Apples duplicate(boolean with_state) 
     {
       return new Apples();
@@ -342,6 +343,7 @@ public class ConnectorTest
     }
 
     @Override
+    @SideEffectFree
     public Oranges duplicate(boolean with_state) 
     {
       return new Oranges();
@@ -389,6 +391,7 @@ public class ConnectorTest
     }
 
     @Override
+    @SideEffectFree
     public Variants duplicate(boolean with_state) 
     {
       return new Variants();

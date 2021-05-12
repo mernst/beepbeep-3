@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -94,6 +96,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public PutInto duplicate(boolean with_state)
     {
       PutInto pi = new PutInto();
@@ -128,6 +131,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public PutIntoNew duplicate(boolean with_state)
     {
       PutIntoNew pi = new PutIntoNew();
@@ -208,6 +212,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public Pack duplicate(boolean with_state)
     {
       Pack p = new Pack();
@@ -289,7 +294,9 @@ public class Lists
      *          The interval, in milliseconds
      * @return This processor
      */
-    public TimePack setInterval(long interval)
+    @SuppressWarnings("nullness")  // need @PolyInitialized annotation
+    @EnsuresNonNull("m_outputInterval")
+    public TimePack setInterval(@UnknownInitialization(AbstractPack.class) TimePack this, long interval)
     {
       m_outputInterval = interval;
       return this;
@@ -304,6 +311,8 @@ public class Lists
       m_timerThread.start();
     }
 
+    @SuppressWarnings("contracts.precondition.override")  // TODO: variable only exists in this subclass
+    @RequiresNonNull("m_timer")
     @Override
     public void stop()
     {
@@ -363,6 +372,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public TimePack duplicate(boolean with_state)
     {
       TimePack tp = new TimePack();
@@ -417,6 +427,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public Unpack duplicate(boolean with_state)
     {
       Unpack up = new Unpack();

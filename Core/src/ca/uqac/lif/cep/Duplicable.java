@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * Interface indicating that an object can be duplicated. Note that while
  * duplication looks very similar to cloning, it is actually different. A
@@ -37,6 +39,7 @@ public interface Duplicable
    * 
    * @return Another object
    */
+  @SideEffectFree
   public Object duplicate();
 
   /**
@@ -48,6 +51,7 @@ public interface Duplicable
    *          to create a new copy in the initial state.
    * @return Another object
    */
+  @SideEffectFree
   public Object duplicate(boolean with_state);
 
 }

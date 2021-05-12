@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Duplicable;
 
 /**
@@ -27,5 +28,6 @@ import ca.uqac.lif.cep.Duplicable;
 public interface DuplicableFunction extends Duplicable
 {
   @Override
+  @SideEffectFree
   public Function duplicate();
 }
