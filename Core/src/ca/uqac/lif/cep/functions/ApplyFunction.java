@@ -185,11 +185,10 @@ public class ApplyFunction extends UniformProcessor
       // Nothing to do
     }
 
-    @SuppressWarnings("nullness")  // true positive: superclass declared as returning non-null
     @Override
     public @Nullable ProvenanceNode getProvenanceTree(int proc_id, int stream_index, int stream_pos)
     {
-      return null;
+      throw new Exception("ShiftTracker.getProvenanceTree should not be called");
     }
 
     @Override
