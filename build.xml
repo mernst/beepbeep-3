@@ -233,6 +233,7 @@
       includeantruntime="false">
       <classpath refid="build.classpath"/>
       <compilerarg line="-processor org.checkerframework.checker.nullness.NullnessChecker"/>
+      <compilerarg value="-AwarnUnneededSuppressions"/>
       <compilerarg value="-AassumeKeyFor"/>
       <compilerarg line="-Xmaxerrs 10000"/>
     </cf.javac>

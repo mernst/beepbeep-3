@@ -105,10 +105,12 @@ public class FindPattern extends SynchronousProcessor
     while (mat.find())
     {
       String matched;
-      if (mat.groupCount() > 0) {
+      if (mat.groupCount() > 0)
+      {
         matched = mat.group(1);
-        if (matched == null) {
-          throw new Error("Capturing group 1 in "+m_pattern+"did not match in " + m_contents);
+        if (matched == null)
+        {
+          throw new Error("Capturing group 1 of " + m_pattern + "did not match in " + m_contents);
         }
       } else {
         matched = mat.group();
