@@ -337,13 +337,143 @@
     <!-- Fail if some test has failed -->
     <fail if="test.failed"/>
   </target>
-  
+
+  <!-- Target: run-daikon
+  Run Daikon on entire beepbeep3 test suite.
+  -->
+  <target name="run-daikon" depends="compile-tests, check-daikon-classpath" description="Run Daikon on the test classes">
+    <foreach target="run-daikon-path" param="File">
+      <path>
+        <fileset dir="${build.test.srcdir}">
+          <include name="${build.test.filenamepattern}"/>
+        </fileset>
+      </path>
+    </foreach>
+  </target>
+
+  <!-- Target: run-daikon-test
+  Run Daikon on single test from ant command line:  ant run-daikon-test -DTestName=<fully quallified test name>
+  -->
+  <target name="run-daikon-test" depends="compile-tests, check-daikon-classpath" description="Run Daikon on a single test class">
+    <echo>TestName is ${TestName}</echo>
+  <echoproperties>
+    <propertyset>
+      <propertyref builtin="commandline"/>
+    </propertyset>
+  </echoproperties>
+    <antcall target="run-daikon-file">
+      <param name="param1" value="${TestName}"/>
+    </antcall>
+  </target>
+
+  <target name="run-daikon-path">
+    <path id="rel.path">
+      <pathelement location="${File}"/>
+    </path>
+    <!-- strip off leading directories -->
+    <pathconvert targetos="unix" property="path2" refid="rel.path">
+      <map from="${basedir}/${build.test.srcdir}/" to=""/>
+    </pathconvert>
+    <!-- change '/'s to '.'s -->
+    <propertyregex property="path3"
+      input="${path2}"
+      regexp="/"
+      replace="."
+      global="true" />
+    <!-- remove trailing '.java' -->
+    <propertyregex property="path4"
+      input="${path3}"
+      regexp=".java"
+      replace="" />
+
+    <antcall target="run-daikon-file">
+      <param name="param1" value="${path4}"/>
+    </antcall>
+  </target>
+
+  <!-- Target: run-daikon-file
+  Run Daikon on single beepbeep3 test case
+    param1 has been set to a fully quallified test name; e.g.: ca.uqac.lig.cep.AdderTest
+    param2 will be set to corresponding simple test name; e.g.: AdderTest
+  -->
+  <target name="run-daikon-file">
+    <!-- get simple test case name -->
+    <echo>param1 is ${param1}</echo>
+    <propertyregex property="param2"
+      input="${param1}"
+      regexp="^.*\."
+      replace="" />
+    <echo>param2 is ${param2}</echo>
+    <echo>Test name is ${param2}</echo>
+
+    <antcall target="runDynComp">
+    </antcall>
+
+    <antcall target="runChicory">
+    </antcall>
+
+    <antcall target="runDaikon">
+    </antcall>
+    <fail/>
+  </target>
+
+  <path id="daikon.test.classpath">
+    <pathelement path="${env.DAIKON_CLASSPATH}/daikon.jar"/>
+    <pathelement location="${build.bindir}"/>
+    <fileset dir="${build.depdir}">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${build.libdir}">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${build.test.bindir}"/>
+  </path>
+
+  <target name="check-daikon-classpath">
+    <pathconvert property="classpathProp" refid="daikon.test.classpath"/>
+    <echo>Classpath is ${classpathProp}</echo>
+  </target>
+
+  <target name="runDynComp" >
+    <java classname="daikon.DynComp"
+          fork="true"
+          failonerror="true">
+      <arg value="--decl-file=${param2}.decls"/>
+      <arg value="--ppt-omit-pattern=org.junit"/>
+      <arg value="org.junit.runner.JUnitCore"/>
+      <arg value="${param1}"/>
+      <classpath refid="daikon.test.classpath"/>
+    </java>
+  </target>
+
+  <target name="runChicory" >
+    <java classname="daikon.Chicory"
+          fork="true"
+          failonerror="true">
+      <arg value="--comparability-file=${param2}.decls"/>
+      <arg value="--dtrace-file=${param2}.dtrace.gz"/>
+      <arg value="--ppt-omit-pattern=org.junit"/>
+      <arg value="org.junit.runner.JUnitCore"/>
+      <arg value="${param1}"/>
+      <classpath refid="daikon.test.classpath"/>
+    </java>
+  </target>
+
+  <target name="runDaikon" >
+    <java classname="daikon.Daikon"
+          fork="true">
+        <!--  failonerror="true" -->
+      <arg value="${param2}.dtrace.gz"/>
+      <classpath refid="daikon.test.classpath"/>
+    </java>
+  </target>
+
   <!-- Target: all
        Downloads deps, compiles, runs tests, creates JAR
   -->
   <target name="all" depends="init,test,jar" description="Setup, compile, run tests, create JAR">
   </target>
-  
+
   <!-- Target: install-deps
        Copies whatever was fetched by the download-deps task into the
        system's extension folder. This task should probably be run as
@@ -354,7 +484,7 @@
       <fileset dir="${build.depdir}" includes="*.jar" />
     </copy>
   </target>
-  
+
   <!-- Target: wipe
        Wipes any temporary files or directories
   -->
@@ -370,7 +500,7 @@
     <delete dir="${coverage.reportdir}"/>
     <delete file="jacoco.exec"/>
   </target>
-  
+
   <!-- Target: clean
        Deletes compiled files and test reports
   -->
