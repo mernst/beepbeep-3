@@ -808,9 +808,6 @@ public abstract class Processor implements DuplicableProcessor,
    * @return The serialized processor
    * @throws ProcessorException If the read operation failed for some reason
    */
-  @SuppressWarnings({"unchecked",
-          "nullness" // serialization
-          })
   @Override
   public final Processor read(ObjectReader<?> reader, Object o) throws ProcessorException
   {
