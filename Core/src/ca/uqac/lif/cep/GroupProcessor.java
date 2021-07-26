@@ -674,7 +674,7 @@ public class GroupProcessor extends Processor
     public synchronized Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(GroupProcessor.this);
     }
 
     /**
@@ -872,9 +872,6 @@ public class GroupProcessor extends Processor
   /**
    * @since 0.10.2
    */
-  @SuppressWarnings({"unchecked",
-          "nullness" // serialization
-          })
   @Override
   public GroupProcessor readState(Object o) throws ProcessorException
   {

@@ -148,7 +148,7 @@ public abstract class SynchronousProcessor extends Processor
     public final synchronized Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(SynchronousProcessor.this);
     }
 
     @Override

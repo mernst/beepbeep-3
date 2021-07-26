@@ -308,7 +308,7 @@ public class SliceTest
 	 * is equal to 1, and <tt>true</tt> or <tt>false</tt> for the remaining
 	 * numbers, depending on whether they are even or odd.  
 	 */
-	public static class EvenAll extends UnaryFunction<Number,Object>
+	public static class EvenAll extends UnaryFunction<Number,@Nullable Object>
 	{
 		public static final EvenAll instance = new EvenAll();
 

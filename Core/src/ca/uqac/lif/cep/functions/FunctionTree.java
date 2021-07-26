@@ -101,7 +101,7 @@ public class FunctionTree extends Function
    * @return This tree
    */
   @RequiresNonNull("m_children")
-  public FunctionTree setChild(@UnknownInitialization(Function.class) FunctionTree this, int index, Function f)
+  public @UnknownInitialization FunctionTree setChild(@UnknownInitialization(Function.class) FunctionTree this, int index, Function f)
   {
     m_children[index] = f;
     return this;

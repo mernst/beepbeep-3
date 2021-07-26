@@ -18,13 +18,14 @@
 package ca.uqac.lif.cep.tmf;
 
 import ca.uqac.lif.cep.ProcessorException;
-import ca.uqac.lif.cep.Pushable;
 import ca.uqac.lif.cep.Pushable.PushableException;
+import ca.uqac.lif.cep.Pushable;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Produces output events from no input. In other words, a source is a processor
@@ -55,7 +56,9 @@ public abstract class Source extends SynchronousProcessor
     Queue<Object[]> output = new ArrayDeque<Object[]>(1);
     try
     {
-      compute(null, output);
+      @SuppressWarnings("nullness:assignment") // this `compute()` does not read its input
+       Object @NonNull []  dummy_null  = null;
+      compute(dummy_null, output);
     }
     catch (ProcessorException e)
     {

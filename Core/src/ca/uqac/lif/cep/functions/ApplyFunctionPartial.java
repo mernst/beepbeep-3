@@ -185,7 +185,7 @@ public class ApplyFunctionPartial extends Processor
     public Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(ApplyFunctionPartial.this);
     }
 
     @Override
@@ -226,7 +226,6 @@ public class ApplyFunctionPartial extends Processor
       return this;
     }
 
-    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public @Nullable Object pullSoft()
     {

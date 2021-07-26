@@ -133,9 +133,9 @@ public abstract class BinaryFunction<T, V, U extends @NonNull Object> extends Fu
    * 
    * @return A start value
    */
-  public @Nullable U getStartValue()
+  public U getStartValue()
   {
-    return null;
+    throw new Error("getStartValue was not overridden for a cumulative function");
   }
 
   @Override

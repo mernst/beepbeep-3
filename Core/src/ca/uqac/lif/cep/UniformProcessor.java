@@ -194,7 +194,7 @@ public abstract class UniformProcessor extends SynchronousProcessor
     public synchronized Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(UniformProcessor.this);
     }
 
     @Override

@@ -35,7 +35,7 @@ import java.util.Map;
  * @since 0.3
  */
 @SuppressWarnings("rawtypes")
-public class Size extends UnaryFunction<Object, Integer>
+public class Size extends UnaryFunction<@Nullable Object, Integer>
 {
   public static final transient Size instance = new Size();
 

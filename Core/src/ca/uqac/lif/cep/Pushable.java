@@ -190,6 +190,7 @@ public interface Pushable
    * A dummy {@link Future} object that will be returned on all calls to
    * {@link Pushable#pushFast(Object)}.
    */
-  public static final FutureDone<Pushable> NULL_FUTURE = new FutureDone<Pushable>(
-      new PushNotSupported(null, 0));
+  public static FutureDone<Pushable> nullFuture(Processor p) {
+    return new FutureDone<Pushable>(new PushNotSupported(p, 0));
+  }
 }

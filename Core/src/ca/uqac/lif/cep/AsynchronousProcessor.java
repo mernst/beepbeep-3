@@ -136,7 +136,7 @@ public abstract class AsynchronousProcessor extends Processor
     public Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(AsynchronousProcessor.this);
     }
 
     @Override
@@ -179,7 +179,6 @@ public abstract class AsynchronousProcessor extends Processor
       return null;
     }
 
-    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public @Nullable Object pullSoft() 
     {
