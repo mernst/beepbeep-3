@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Queue;
 
 /**
@@ -35,7 +36,7 @@ public class Prefix extends Trim
 
   @Override
   @SuppressWarnings("squid:S1168")
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     m_inputCount++;
     if (m_inputCount <= getDelay())

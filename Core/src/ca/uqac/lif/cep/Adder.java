@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.Queue;
 
@@ -68,7 +69,7 @@ public class Adder extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     outputs.add(new Object[]{((Integer) inputs[0]) + ((Integer) inputs[1])});
     return true;

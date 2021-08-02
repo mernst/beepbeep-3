@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.Function;
@@ -180,7 +181,7 @@ public class Maps
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Object[] outputs)
+    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
     {
       m_map.put(inputs[0], inputs[1]);
       outputs[0] = m_map;
@@ -230,7 +231,7 @@ public class Maps
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Object[] outputs)
+    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
     {
       m_map.put(((Object[]) inputs[0])[0], ((Object[]) inputs[0])[1]);
       outputs[0] = m_map;
@@ -307,7 +308,7 @@ public class Maps
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Object[] outputs)
+    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
     {
       Map<?,?> m = (Map<?,?>) inputs[0];
       for (Object m_o : m.entrySet())

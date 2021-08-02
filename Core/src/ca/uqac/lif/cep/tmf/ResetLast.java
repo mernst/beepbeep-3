@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
@@ -64,7 +65,7 @@ public class ResetLast extends SynchronousProcessor
   }
   
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     boolean b = (Boolean) inputs[1];
     m_pushable.push(inputs[0]);

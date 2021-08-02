@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.Function;
@@ -57,7 +58,7 @@ public class FilterOn extends SynchronousProcessor
 
   @Override
   @SuppressWarnings("squid:S3516")
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     Object o = inputs[0];
     Object[] f_cond_out = new Object[1];

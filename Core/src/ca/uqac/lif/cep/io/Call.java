@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.UniformProcessor;
@@ -52,7 +53,7 @@ public class Call extends UniformProcessor
   protected static long s_waitInterval = 100;
 
   @Override
-  protected boolean compute(Object[] inputs, Object[] outputs)
+  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
   {
     // Pass the event (as is) to the standard input of the command
     try

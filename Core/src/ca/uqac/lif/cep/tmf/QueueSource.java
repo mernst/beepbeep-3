@@ -143,7 +143,7 @@ public class QueueSource extends Source
 
   @Override
   @SuppressWarnings("squid:S1168")
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     int size = m_events.size();
     if (m_index >= size)

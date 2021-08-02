@@ -85,7 +85,7 @@ public abstract class Decimate extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs) throws ProcessorException
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs) throws ProcessorException
   {
     m_inputCount++;
     if (shouldOutput())

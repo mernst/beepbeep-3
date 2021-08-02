@@ -57,7 +57,7 @@ public class Freeze extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Object[] outputs)
+  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
   {
     if (m_output == null)
     {

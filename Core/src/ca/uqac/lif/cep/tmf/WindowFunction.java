@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.SynchronousProcessor;
@@ -77,7 +78,7 @@ public class WindowFunction extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     m_window.add(inputs[0]);
     int size = m_window.size();

@@ -110,7 +110,7 @@ public class Splice extends Source
 
   @Override
   @SuppressWarnings("squid:S1168")
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     if (m_processorIndex >= m_processors.length)
     {

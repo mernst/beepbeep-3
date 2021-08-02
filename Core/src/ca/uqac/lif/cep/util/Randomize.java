@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 import java.util.Random;
@@ -89,7 +90,7 @@ public class Randomize extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Object[] outputs)
+  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
   {
     for (int i = 0; i < getOutputArity(); i++)
     {

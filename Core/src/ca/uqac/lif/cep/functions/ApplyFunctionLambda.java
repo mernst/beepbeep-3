@@ -54,7 +54,7 @@ public class ApplyFunctionLambda extends UniformProcessor
   }
   
   @Override
-  protected boolean compute(Object[] inputs, Object[] outputs)
+  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
   {
     outputs[0] = m_evaluable.evaluate(inputs);
     return true;

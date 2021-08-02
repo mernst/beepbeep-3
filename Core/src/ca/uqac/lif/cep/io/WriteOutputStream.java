@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.tmf.Sink;
@@ -54,7 +55,7 @@ public class WriteOutputStream extends Sink
 
   @Override
   @SuppressWarnings({ "squid:S1168", "squid:S3516" })
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     try
     {

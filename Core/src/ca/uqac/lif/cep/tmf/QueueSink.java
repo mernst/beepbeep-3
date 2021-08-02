@@ -53,7 +53,7 @@ public class QueueSink extends Sink
   @SuppressWarnings("unchecked")
   @Override
   @EnsuresNonNull("m_queues")
-  public void reset(@UnknownInitialization(Sink.class) QueueSink this)
+  public void reset(@UnknownInitialization QueueSink this)
   {
     super.reset();
     int arity = getInputArity();
@@ -66,7 +66,7 @@ public class QueueSink extends Sink
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     for (int i = 0; i < m_queues.length; i++)
     {

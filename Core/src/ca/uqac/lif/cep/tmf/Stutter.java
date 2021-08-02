@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.SynchronousProcessor;
@@ -47,7 +48,7 @@ public class Stutter extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     for (int i = 0; i < m_numReps; i++)
     {

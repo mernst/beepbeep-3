@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
@@ -112,7 +113,7 @@ public class Sets
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Object[] outputs)
+    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
     {
       m_set.add(inputs[0]);
       outputs[0] = m_set;
@@ -145,7 +146,7 @@ public class Sets
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Object[] outputs)
+    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
     {
       m_set.add(inputs[0]);
       HashSet<Object> new_set = new HashSet<Object>();

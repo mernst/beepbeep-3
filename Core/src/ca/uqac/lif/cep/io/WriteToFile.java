@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -68,7 +69,7 @@ public class WriteToFile extends Sink
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     String new_filename = createFilename();
     m_outputCount++;

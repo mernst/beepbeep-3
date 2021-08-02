@@ -125,7 +125,7 @@ public class Multiset implements Set<Object>
    * @param o The element
    * @return true if the element is contained at least once, false otherwise
    */
-  public boolean contains(Object o)
+  public boolean contains(@Nullable Object o)
   {
     if (!m_map.containsKey(o))
     {
@@ -458,7 +458,7 @@ public class Multiset implements Set<Object>
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+    protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
     {
       m_set.add(inputs[0]);
       outputs.add(new Object[] {m_set});

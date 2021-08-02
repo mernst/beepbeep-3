@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.UniformProcessor;
 import java.util.Set;
@@ -51,7 +52,7 @@ public class TurnInto extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Object[] outputs)
+  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
   {
     outputs[0] = m_event;
     return true;

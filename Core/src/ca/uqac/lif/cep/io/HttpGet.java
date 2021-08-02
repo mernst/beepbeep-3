@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -65,7 +66,7 @@ public class HttpGet extends Source
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     try
     {
@@ -82,7 +83,7 @@ public class HttpGet extends Source
         response = s.next();
       }
       s.close();
-      outputs.add(new Object[] { response });
+      outputs.add(new @Nullable Object[] { response });
     }
     catch (IOException e)
     {

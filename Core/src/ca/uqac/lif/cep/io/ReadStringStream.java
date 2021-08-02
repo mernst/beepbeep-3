@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.ProcessorException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class ReadStringStream extends ReadInputStream
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     if (m_hasReadEot)
     {

@@ -33,7 +33,7 @@ import java.util.Set;
  * 
  * @since 0.2.1
  */
-public abstract class UnaryFunction<T, U> extends Function
+public abstract class UnaryFunction<T extends Object, U extends Object> extends Function
 {
   /**
    * The class of the input
@@ -75,13 +75,12 @@ public abstract class UnaryFunction<T, U> extends Function
   }
 
   /**
-   * Evaluates the function
+   * Evaluates the function.
+   * Throws any exception occurring during the evaluation of the underlying function.
    * 
    * @param x
    *          The argument
    * @return The return value of the function
-   * @throws Exception throws any exception occurring during the
-   *         evaluation of the underlying function
    */
   public abstract U getValue(T x);
 

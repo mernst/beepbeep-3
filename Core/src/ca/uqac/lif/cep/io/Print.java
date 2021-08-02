@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.tmf.Sink;
 import java.io.PrintStream;
@@ -169,7 +170,7 @@ public class Print extends Sink
 
   @Override
   @SuppressWarnings("squid:S1168")
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<Object[]> outputs)
   {
     beforeEvent(m_out);
     m_out.print(m_prefix);

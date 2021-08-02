@@ -93,7 +93,7 @@ public class Strings
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Object[] outputs)
+    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
     {
       if (m_inputCount > 0)
       {

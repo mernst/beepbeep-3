@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -54,7 +55,7 @@ public class Fork extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Object[] outputs)
+  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
   {
     int arity = getOutputArity();
     for (int i = 0; i < arity; i++)

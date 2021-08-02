@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Queue;
@@ -100,7 +101,7 @@ public class ReadLines extends ReadInputStream
 
   @Override
   @SuppressWarnings("squid:S1168")
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     if (m_scanner.hasNextLine())
     {

@@ -221,7 +221,7 @@ public class Tank extends Processor
     public Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.nullFuture(Tank.this);;
+      return Pushable.nullFuture(Tank.this);
     }
 
     @Override

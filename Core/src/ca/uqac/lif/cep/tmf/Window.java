@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
@@ -73,7 +74,7 @@ public class Window extends AbstractWindow
 
   @SuppressWarnings("unchecked")
   @Override
-  @EnsuresNonNull("m_innerInputs")
+  @EnsuresNonNull({"m_innerInputs", "m_window"})
   public void reset(@UnknownInitialization(Window.class) Window this)
   {
     super.reset();
@@ -92,7 +93,7 @@ public class Window extends AbstractWindow
 
   @Override
   @SuppressWarnings("squid:S3516")
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     // Add the inputs to each window
     m_inputCount++;

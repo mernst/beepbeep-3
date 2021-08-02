@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
@@ -97,7 +98,7 @@ public class FindPattern extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     m_contents += (String) inputs[0];
     Matcher mat = m_pattern.matcher(m_contents);

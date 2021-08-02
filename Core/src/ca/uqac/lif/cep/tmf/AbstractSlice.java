@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
@@ -150,7 +151,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
   }
   
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
   {
     int output_arity = getOutputArity();
     Object[] f_value = new Object[1];
@@ -180,7 +181,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
         Collection<?> col = (Collection<?>) slice_ids;
         slice_vals = new Object[col.size()];
         int i = 0;
-        for (Object o : col)
+        for (@NonNull Object o : col)
         {
           slice_vals[i] = o;
           i++;
@@ -233,6 +234,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
           QueueSink sink_p = m_sinks.get(s_id);
           if (m_eventTracker != null)
           {
+            // m_sliceIndices has the same keys as m_sinks, and s_id is a key for m_sinks
             m_sliceIndices.get(s_id).add(m_inputCount);
           }
           // Push the input into the processor

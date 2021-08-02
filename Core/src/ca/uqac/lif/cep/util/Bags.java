@@ -209,7 +209,7 @@ public class Bags
     }
 
     @Override
-    protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+    protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
     {
       m_processor.reset();
       if (inputs[0].getClass().isArray())

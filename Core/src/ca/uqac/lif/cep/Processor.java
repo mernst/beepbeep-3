@@ -450,7 +450,7 @@ public abstract class Processor implements DuplicableProcessor,
    * 
    * @return The arity
    */
-  /*@ pure @*/ public final int getInputArity()
+  /*@ pure @*/ public final int getInputArity(@UnknownInitialization(Processor.class) Processor this)
   {
     return m_inputArity;
   }
