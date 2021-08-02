@@ -71,3 +71,11 @@ out/
 
 beepbeep*.zip
 /cache/
+
+# Daikon output files
+*.dtrace.gz
+*.inv.gz
+
+# Randoop output files
+ErrorTest*.java
+RegressionTest*.java
