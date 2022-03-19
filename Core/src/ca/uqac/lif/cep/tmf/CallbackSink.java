@@ -38,7 +38,7 @@ public class CallbackSink extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     processEvents(inputs);
     return true;

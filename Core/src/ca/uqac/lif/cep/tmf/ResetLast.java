@@ -65,7 +65,7 @@ public class ResetLast extends SynchronousProcessor
   }
   
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     boolean b = (Boolean) inputs[1];
     m_pushable.push(inputs[0]);
@@ -74,7 +74,7 @@ public class ResetLast extends SynchronousProcessor
       Object[] last = m_sink.getLast();
       if (last != null)
       {
-        outputs.add(new Object[] {m_sink.getLast()[0]});
+        outputs.add(new Object[] {last[0]});
       }
       m_sink.reset();
       m_processor.reset();

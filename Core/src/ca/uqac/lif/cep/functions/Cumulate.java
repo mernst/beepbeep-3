@@ -43,7 +43,7 @@ public class Cumulate extends ApplyFunction
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+  protected boolean compute(Object[] inputs, Object[] outputs)
   {
     // We override compute() from FunctionProcessor, only to complete the
     // association between input and output events (each output event depends on

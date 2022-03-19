@@ -69,7 +69,7 @@ public class WriteToFile extends Sink
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     String new_filename = createFilename();
     m_outputCount++;

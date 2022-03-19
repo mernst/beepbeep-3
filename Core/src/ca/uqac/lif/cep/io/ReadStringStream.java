@@ -58,7 +58,7 @@ public class ReadStringStream extends ReadInputStream
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     if (m_hasReadEot)
     {

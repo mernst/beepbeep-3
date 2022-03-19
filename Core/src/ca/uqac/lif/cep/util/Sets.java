@@ -113,7 +113,7 @@ public class Sets
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+    protected boolean compute(Object[] inputs, Object[] outputs)
     {
       m_set.add(inputs[0]);
       outputs[0] = m_set;
@@ -146,7 +146,7 @@ public class Sets
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+    protected boolean compute(Object[] inputs, Object[] outputs)
     {
       m_set.add(inputs[0]);
       HashSet<Object> new_set = new HashSet<Object>();

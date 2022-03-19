@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Queue;
@@ -67,12 +68,13 @@ public class SinkLast extends Sink
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     m_last = inputs;
     return true;
   }
 
+  @Pure
   public Object @Nullable [] getLast()
   {
     return m_last;

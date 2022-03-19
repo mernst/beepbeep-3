@@ -181,7 +181,7 @@ public class Maps
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+    protected boolean compute(Object[] inputs, Object[] outputs)
     {
       m_map.put(inputs[0], inputs[1]);
       outputs[0] = m_map;
@@ -231,7 +231,7 @@ public class Maps
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+    protected boolean compute(Object[] inputs, Object[] outputs)
     {
       m_map.put(((Object[]) inputs[0])[0], ((Object[]) inputs[0])[1]);
       outputs[0] = m_map;
@@ -308,7 +308,7 @@ public class Maps
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+    protected boolean compute(Object[] inputs, Object[] outputs)
     {
       Map<?,?> m = (Map<?,?>) inputs[0];
       for (Object m_o : m.entrySet())

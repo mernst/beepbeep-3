@@ -117,7 +117,7 @@ public abstract class SynchronousProcessor extends Processor
    * @return <tt>true</tt> if this processor may output other events in the
    * future, <tt>false</tt> otherwise
    */
-  protected abstract boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs);
+  protected abstract boolean compute(Object[] inputs, Queue<Object[]> outputs);
 
   /**
    * Implementation of a {@link Pushable} for a single processor.
@@ -180,7 +180,7 @@ public abstract class SynchronousProcessor extends Processor
         }
       }
       // Pick an event from each input queue
-      @Nullable Object[] inputs = new Object[m_inputArity];
+      Object[] inputs = new Object[m_inputArity];
       for (int i = 0; i < m_inputArity; i++)
       {
         Queue<Object> queue = m_inputQueues[i];
@@ -402,7 +402,7 @@ public abstract class SynchronousProcessor extends Processor
         }
         // We are here only if every input pullable has answered YES
         // Pull an event from each
-        @Nullable Object[] inputs = new Object[m_inputArity];
+        Object[] inputs = new Object[m_inputArity];
         for (int i = 0; i < m_inputArity; i++)
         {
           Pullable p = m_inputPullables[i];

@@ -75,7 +75,7 @@ public abstract class UniformProcessor extends SynchronousProcessor
   }
 
   @Override
-  protected final boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected final boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     boolean b = compute(inputs, m_outputArray);
     outputs.add(m_outputArray);
@@ -93,7 +93,7 @@ public abstract class UniformProcessor extends SynchronousProcessor
    * @return A queue of vectors of output events, or null if no event could be
    *         produced
    */
-  protected abstract boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs);
+  protected abstract boolean compute(Object[] inputs, Object[] outputs);
 
   @Override
   protected final boolean onEndOfTrace(Queue<Object[]> outputs)

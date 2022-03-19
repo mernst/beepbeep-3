@@ -43,6 +43,7 @@ public abstract class AbstractWindow extends SynchronousProcessor
   /**
    * The event windows
    */
+  // Initialized by reset(), used by compute().
   protected LinkedList<Object>[] m_window;
 
   /**
@@ -60,6 +61,7 @@ public abstract class AbstractWindow extends SynchronousProcessor
    * @param in_processor The processor to run on each window
    * @param width The width of the window
    */
+  @SuppressWarnings("initialization.fields.uninitialized") // Only subclass is Window, whose constructor sets the field
   public AbstractWindow(Processor in_processor, int width)
   {
     super(in_processor.getInputArity(), in_processor.getOutputArity());

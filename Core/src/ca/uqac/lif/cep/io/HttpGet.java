@@ -66,7 +66,7 @@ public class HttpGet extends Source
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     try
     {
@@ -83,7 +83,9 @@ public class HttpGet extends Source
         response = s.next();
       }
       s.close();
-      outputs.add(new @Nullable Object[] { response });
+      @SuppressWarnings("assignment") // TO ASK (question written)
+      Object[] response_array = new Object[] { response };
+      outputs.add(response_array);
     }
     catch (IOException e)
     {

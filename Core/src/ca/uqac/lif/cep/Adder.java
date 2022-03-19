@@ -69,7 +69,7 @@ public class Adder extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     outputs.add(new Object[]{((Integer) inputs[0]) + ((Integer) inputs[1])});
     return true;

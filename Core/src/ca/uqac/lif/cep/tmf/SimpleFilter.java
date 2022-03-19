@@ -77,7 +77,7 @@ public class SimpleFilter extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     try
     {

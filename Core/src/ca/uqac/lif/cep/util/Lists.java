@@ -109,7 +109,7 @@ public class Lists
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+    protected boolean compute(Object[] inputs, Object[] outputs)
     {
       m_list.add(inputs[0]);
       outputs[0] = m_list;
@@ -144,7 +144,7 @@ public class Lists
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+    protected boolean compute(Object[] inputs, Object[] outputs)
     {
       m_list.add(inputs[0]);
       ArrayList<Object> new_set = new ArrayList<Object>();
@@ -225,7 +225,7 @@ public class Lists
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+    protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
     {
       if ((Boolean) inputs[1])
       {
@@ -321,7 +321,7 @@ public class Lists
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+    protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
     {
       m_lock.lock();
       m_packedEvents.add(inputs[0]);
@@ -405,7 +405,7 @@ public class Lists
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+    protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
     {
       if (inputs[0].getClass().isArray())
       {

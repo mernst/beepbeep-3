@@ -52,7 +52,7 @@ public class TurnInto extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+  protected boolean compute(Object[] inputs, Object[] outputs)
   {
     outputs[0] = m_event;
     return true;

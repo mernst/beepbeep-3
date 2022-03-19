@@ -55,7 +55,7 @@ public class Fork extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+  protected boolean compute(Object[] inputs, Object[] outputs)
   {
     int arity = getOutputArity();
     for (int i = 0; i < arity; i++)

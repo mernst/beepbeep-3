@@ -90,7 +90,7 @@ public class Randomize extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+  protected boolean compute(Object[] inputs, Object[] outputs)
   {
     for (int i = 0; i < getOutputArity(); i++)
     {

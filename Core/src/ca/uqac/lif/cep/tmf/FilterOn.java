@@ -58,7 +58,7 @@ public class FilterOn extends SynchronousProcessor
 
   @Override
   @SuppressWarnings("squid:S3516")
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     Object o = inputs[0];
     Object[] f_cond_out = new Object[1];

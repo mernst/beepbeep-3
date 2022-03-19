@@ -39,6 +39,7 @@ public class QueueSink extends Sink
 {
   protected Queue<Object>[] m_queues;
 
+  @SuppressWarnings("method.invocation") // permit call to reset() from constructor
   public QueueSink(int in_arity)
   {
     super(in_arity);
@@ -52,8 +53,8 @@ public class QueueSink extends Sink
 
   @SuppressWarnings("unchecked")
   @Override
-  @EnsuresNonNull("m_queues")
-  public void reset(@UnknownInitialization QueueSink this)
+  @EnsuresNonNull("m_queues") // permits constructor to type-check
+  public void reset(QueueSink this)
   {
     super.reset();
     int arity = getInputArity();
@@ -66,7 +67,7 @@ public class QueueSink extends Sink
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     for (int i = 0; i < m_queues.length; i++)
     {
@@ -107,7 +108,7 @@ public class QueueSink extends Sink
   /**
    * Removes the first event of all queues
    * 
-   * @return A vector containing the first event of all queues, or null
+   * @return A vector containing the first event of all queues, or containing null for empty queues
    */
   public @Nullable Object[] remove()
   {

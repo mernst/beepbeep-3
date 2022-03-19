@@ -62,7 +62,7 @@ public class Doubler extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     outputs.add(new Object[] {2 * ((Number) inputs[0]).intValue()});
     return true;

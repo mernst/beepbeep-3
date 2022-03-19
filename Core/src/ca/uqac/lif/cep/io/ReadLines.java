@@ -101,7 +101,7 @@ public class ReadLines extends ReadInputStream
 
   @Override
   @SuppressWarnings("squid:S1168")
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     if (m_scanner.hasNextLine())
     {

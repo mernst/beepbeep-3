@@ -318,7 +318,7 @@ public abstract class Processor implements DuplicableProcessor,
    * should also reset this state to its "initial" settings (whatever that means
    * in your context).
    */
-  public synchronized void reset()
+  public synchronized void reset(Processor this)
   {
     // Reset input
     for (int i = 0; i < m_inputArity; i++)

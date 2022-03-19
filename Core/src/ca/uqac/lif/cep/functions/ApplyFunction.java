@@ -74,7 +74,7 @@ public class ApplyFunction extends UniformProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, @Nullable Object[] outputs)
+  protected boolean compute(Object[] inputs, Object[] outputs)
   {
     try
     {

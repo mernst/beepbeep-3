@@ -152,7 +152,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
   }
   
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     int output_arity = getOutputArity();
     Object[] f_value = new Object[1];
@@ -170,7 +170,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
       // This event applies to no slice; don't bother processing it
       return produceReturn(outputs);
     }
-    Object[] slice_vals;
+    @Nullable Object[] slice_vals;
     if (m_explodeArrays)
     {
       if (slice_ids.getClass().isArray())
@@ -182,7 +182,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
         Collection<?> col = (Collection<?>) slice_ids;
         slice_vals = new Object[col.size()];
         int i = 0;
-        for (@NonNull Object o : col)
+        for (Object o : col)
         {
           slice_vals[i] = o;
           i++;
@@ -197,7 +197,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
     {
       slice_vals = new Object[] { slice_ids };
     }
-    for (Object slice_id : slice_vals)
+    for (@Nullable Object slice_id : slice_vals)
     {
       Set<Object> slices_to_process = new HashSet<Object>();
       if (slice_id instanceof ToAllSlices || slice_id == null)
@@ -235,8 +235,9 @@ public abstract class AbstractSlice extends SynchronousProcessor
           QueueSink sink_p = m_sinks.get(s_id);
           if (m_eventTracker != null)
           {
-            // m_sliceIndices has the same keys as m_sinks, and s_id is a key for m_sinks
-            m_sliceIndices.get(s_id).add(m_inputCount);
+            @SuppressWarnings("assignment") // m_sliceIndices has the same keys as m_sinks, and s_id is a key for m_sinks
+            @NonNull List<Integer> eventPositions = m_sliceIndices.get(s_id);
+            eventPositions.add(m_inputCount);
           }
           // Push the input into the processor
           // Pushable[] p_array = new Pushable[inputs.length];
@@ -267,7 +268,9 @@ public abstract class AbstractSlice extends SynchronousProcessor
               }
             }
           }
+          // remove() returns "@Nullable Object[]", but evaluate requires non-null.
           // Collect the output from that processor
+          @SuppressWarnings({"assignment", "dereference.of.nullable"})  // TO ASK (question written)
           Object[] out = sink_p.remove();
           // Can we clean that slice?
           Object[] can_clean = new Object[1];
@@ -282,6 +285,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
               throw new ProcessorException(e);
             }
           }
+          // TODO: can_clean test is gratuitous, and so is length test.
           if (can_clean != null && can_clean.length > 0 && can_clean[0] instanceof Boolean
               && (Boolean) (can_clean[0]))
           {

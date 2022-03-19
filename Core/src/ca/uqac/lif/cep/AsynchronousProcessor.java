@@ -274,6 +274,6 @@ public abstract class AsynchronousProcessor extends Processor
    * @return <tt>true</tt> if this processor may output other events in the
    * future, <tt>false</tt> otherwise
    */
-  protected abstract boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs);
+  protected abstract boolean compute(Object[] inputs, Queue<Object[]> outputs);
 
 }

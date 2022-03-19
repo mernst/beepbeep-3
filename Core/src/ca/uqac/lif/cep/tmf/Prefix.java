@@ -36,7 +36,7 @@ public class Prefix extends Trim
 
   @Override
   @SuppressWarnings("squid:S1168")
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     m_inputCount++;
     if (m_inputCount <= getDelay())

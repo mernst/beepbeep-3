@@ -36,7 +36,7 @@ public class QueueSourceBatch extends QueueSource
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     int output_arity = getOutputArity();
     for (Object event : m_events)

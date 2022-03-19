@@ -53,11 +53,14 @@ public class WindowFunction extends SynchronousProcessor
    */
   protected LinkedList<Object> m_window;
 
+  // What is the point of this constructor?  It is never called explicitly.
   WindowFunction()
   {
     this(1);
   }
 
+  // What is the point of this constructor?  It is never called explicitly.
+  @SuppressWarnings("initialization.fields.uninitialized")  // 
   WindowFunction(int width)
   {
     super(1, 1);
@@ -78,7 +81,7 @@ public class WindowFunction extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     m_window.add(inputs[0]);
     int size = m_window.size();

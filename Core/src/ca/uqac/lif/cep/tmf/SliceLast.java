@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
@@ -154,7 +155,8 @@ public class SliceLast extends AbstractSlice
       {
         throw new ProcessorException("Cannot restore the state of the slice processor");
       }
-      QueueSink qs = s.m_sinks.get(entry.getKey());
+      @SuppressWarnings("assignment")  // likely CF bug, Suzanne is investigating
+      @NonNull QueueSink qs = s.m_sinks.get(entry.getKey());
       Connector.connect(p, qs);
     }
     return s;

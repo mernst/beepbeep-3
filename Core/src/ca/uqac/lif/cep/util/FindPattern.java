@@ -98,7 +98,7 @@ public class FindPattern extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     m_contents += (String) inputs[0];
     Matcher mat = m_pattern.matcher(m_contents);

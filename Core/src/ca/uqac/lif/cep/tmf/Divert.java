@@ -208,6 +208,7 @@ public class Divert extends Processor
       return m_inputPullables[0].pull();
     }
 
+    @SuppressWarnings("return")  // BeepBeep bug: violates specification of `next()`
     @Override
     public Object next()
     {

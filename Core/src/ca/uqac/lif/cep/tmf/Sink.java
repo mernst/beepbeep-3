@@ -60,11 +60,13 @@ public abstract class Sink extends SynchronousProcessor
    */
   public final void pull()
   {
-    @Nullable Object[] inputs = new @Nullable Object[getInputArity()];
+    Object[] inputs = new Object[getInputArity()];
     for (int i = 0; i < getInputArity(); i++)
     {
       Pullable p = m_inputPullables[i];
-      inputs[i] = p.pullSoft();
+      @SuppressWarnings("assignment")      // TO ASK (question written)
+      @NonNull Object event = p.pullSoft();
+      inputs[i] = event;
     }
     try
     {

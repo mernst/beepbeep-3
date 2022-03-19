@@ -458,7 +458,7 @@ public class Multiset implements Set<Object>
     }
 
     @Override
-    protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+    protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
     {
       m_set.add(inputs[0]);
       outputs.add(new Object[] {m_set});

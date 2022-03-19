@@ -65,6 +65,7 @@ public class Window extends AbstractWindow
    * @param in_processor The processor to run on each window
    * @param width The width of the window
    */
+  @SuppressWarnings("method.invocation") // permit call to reset() from constructor
   public Window(Processor in_processor, int width)
   {
     super(in_processor, width);
@@ -75,7 +76,7 @@ public class Window extends AbstractWindow
   @SuppressWarnings("unchecked")
   @Override
   @EnsuresNonNull({"m_innerInputs", "m_window"})
-  public void reset(@UnknownInitialization(Window.class) Window this)
+  public void reset(Window this)
   {
     super.reset();
     int arity = getInputArity();
@@ -93,7 +94,7 @@ public class Window extends AbstractWindow
 
   @Override
   @SuppressWarnings("squid:S3516")
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     // Add the inputs to each window
     m_inputCount++;

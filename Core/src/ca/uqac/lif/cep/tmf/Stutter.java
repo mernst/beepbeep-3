@@ -48,7 +48,7 @@ public class Stutter extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(@Nullable Object[] inputs, Queue<@Nullable Object[]> outputs)
+  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
   {
     for (int i = 0; i < m_numReps; i++)
     {
