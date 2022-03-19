@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2020 Sylvain Hallé
+    Copyright (C) 2008-2021 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -104,27 +104,31 @@ public class Bags
     /**
      * The condition to evaluate on each element
      */
-    protected UnaryFunction<?, Boolean> m_condition;
+    protected Function m_condition;
 
-    /**
-     * Gets a new instance of the function
+   /**
+     * Gets a new instance of the function.
      * 
      * @param condition
-     *          The condition to evaluate on each element
+     *          The condition to evaluate on each element. This function must
+     *          be of arity 1 and return a Boolean value.
      */
-    public FilterElements(UnaryFunction<?, Boolean> condition)
+    /*@ requires condition.getInputArity() == 1; @*/
+    public FilterElements(Function condition)
     {
       super(Object.class, Object.class);
       m_condition = condition;
     }
 
     /**
-     * Sets the condition to evaluate on each element
+     * Sets the condition to evaluate on each element.
      * 
      * @param condition
-     *          The condition
+     *          The condition to evaluate on each element. This function must
+     *          be of arity 1 and return a Boolean value.
      */
-    public void setCondition(UnaryFunction<Object, Boolean> condition)
+    /*@ requires condition.getInputArity() == 1; @*/
+    public void setCondition(Function condition)
     {
       m_condition = condition;
     }
