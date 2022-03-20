@@ -351,7 +351,7 @@ public class Strings
       m_pattern = Pattern.compile(regex);
     }
 
-    @SuppressWarnings("nullness")  // uses raw types
+    @SuppressWarnings("nullness")  // BUG: regex's matched group 1 might be null
     @Override
     public Set getValue(String s)
     {

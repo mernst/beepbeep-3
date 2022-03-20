@@ -65,7 +65,7 @@ public class Window extends AbstractWindow
    * @param in_processor The processor to run on each window
    * @param width The width of the window
    */
-  @SuppressWarnings("method.invocation") // permit call to reset() from constructor
+  @SuppressWarnings("nullness") // permit call to reset() from constructor
   public Window(Processor in_processor, int width)
   {
     super(in_processor, width);

@@ -235,7 +235,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
           QueueSink sink_p = m_sinks.get(s_id);
           if (m_eventTracker != null)
           {
-            @SuppressWarnings("assignment") // m_sliceIndices has the same keys as m_sinks, and s_id is a key for m_sinks
+            @SuppressWarnings("nullness") // m_sliceIndices has the same keys as m_sinks, and s_id is a key for m_sinks
             @NonNull List<Integer> eventPositions = m_sliceIndices.get(s_id);
             eventPositions.add(m_inputCount);
           }
@@ -270,7 +270,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
           }
           // remove() returns "@Nullable Object[]", but evaluate requires non-null.
           // Collect the output from that processor
-          @SuppressWarnings({"assignment", "dereference.of.nullable"})  // TO ASK (question written)
+          @SuppressWarnings("nullness")  // TO ASK (question written)
           Object[] out = sink_p.remove();
           // Can we clean that slice?
           Object[] can_clean = new Object[1];

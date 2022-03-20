@@ -41,6 +41,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.7
  */
+@SuppressWarnings("argument")  // TO ASK: Should these classes be null-friendly or null-hostile
 public class Maps
 {
   /**
@@ -90,7 +91,7 @@ public class Maps
    * well.
    * @since 0.10.3
    */
-  @SuppressWarnings({"rawtypes", "nullness"})
+  @SuppressWarnings("rawtypes")
   public static class MultiValues extends UnaryFunction<Map, Collection>
   {
     /**

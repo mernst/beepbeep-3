@@ -33,7 +33,7 @@ import java.util.Set;
  * 
  * @since 0.2.1
  */
-public abstract class UnaryFunction<T extends Object, U extends Object> extends Function
+public abstract class UnaryFunction<T extends @Nullable Object, U extends @Nullable Object> extends Function
 {
   /**
    * The class of the input
@@ -60,7 +60,7 @@ public abstract class UnaryFunction<T extends Object, U extends Object> extends 
     m_outputType = u;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "nullness"}) // TO ASK
   @Override
   /* @ requires inputs.length == 1 */
   public void evaluate(/*@ non_null @*/ Object[] inputs, Object[] outputs, 

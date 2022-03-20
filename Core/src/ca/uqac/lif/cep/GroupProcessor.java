@@ -815,7 +815,7 @@ public class GroupProcessor extends Processor
     {
       return null;
     }
-    @SuppressWarnings("assignment")  // just tested containsKey
+    @SuppressWarnings("nullness")  // just tested containsKey
     @NonNull ProcessorAssociation pa = m_inputPullableAssociations.get(index);
     return pa.m_processor;
   }

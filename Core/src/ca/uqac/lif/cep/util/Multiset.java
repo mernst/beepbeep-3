@@ -34,6 +34,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.9
  */
+@SuppressWarnings("argument")  // TO ASK: Should these classes be null-friendly or null-hostile
 public class Multiset implements Set<Object>
 {
   /**

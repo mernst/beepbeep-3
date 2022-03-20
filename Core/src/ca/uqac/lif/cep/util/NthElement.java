@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.functions.FunctionException;
 import ca.uqac.lif.cep.functions.InvalidArgumentException;
@@ -57,7 +58,7 @@ public class NthElement extends UnaryFunction<Object, Object>
     this(0);
   }
 
-  @SuppressWarnings("nullness")  // casts from Object to collection; and not used
+  // @SuppressWarnings("nullness")  // casts from Object to collection; and not used
   @Override
   public Object getValue(Object x)
   {
@@ -75,7 +76,7 @@ public class NthElement extends UnaryFunction<Object, Object>
     }
     if (x instanceof List<?>)
     {
-      List<?> list = (List<?>) x;
+      List<? extends @NonNull Object> list = (List<? extends @NonNull Object>) x;
       try
       {
         return list.get(m_n);

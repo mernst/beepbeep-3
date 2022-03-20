@@ -127,7 +127,7 @@ public class ContextAssignment implements Printable, Readable
   /**
    * @since 0.10.2
    */
-  @SuppressWarnings("nullness")  // Azrael is not annotated
+  @SuppressWarnings("nullness")  // Azrael is not yet annotated for nullness
   @Override
   public Object print(ObjectPrinter<?> printer) throws PrintException
   {

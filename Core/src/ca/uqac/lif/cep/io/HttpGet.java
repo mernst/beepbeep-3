@@ -83,7 +83,7 @@ public class HttpGet extends Source
         response = s.next();
       }
       s.close();
-      @SuppressWarnings("assignment") // TO ASK (question written)
+      @SuppressWarnings("nullness") // TO ASK (question written)
       Object[] response_array = new Object[] { response };
       outputs.add(response_array);
     }

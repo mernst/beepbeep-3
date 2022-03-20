@@ -556,7 +556,7 @@ public class Bags
    * Returns any element of a collection. If the collection is empty, returns
    * <tt>null</tt>.
    */
-  @SuppressWarnings({"rawtypes", "nullness"})
+  @SuppressWarnings("rawtypes")
   public static class AnyElement extends UnaryFunction<Collection, @Nullable Object>
   {
     private AnyElement()
@@ -565,6 +565,7 @@ public class Bags
     }
 
     @Override
+    @SuppressWarnings("nullness")  // returns null, looks like a bug
     public Object getValue(Collection x)
     {
       Object o = null;

@@ -64,7 +64,7 @@ public abstract class Sink extends SynchronousProcessor
     for (int i = 0; i < getInputArity(); i++)
     {
       Pullable p = m_inputPullables[i];
-      @SuppressWarnings("assignment")      // TO ASK (question written)
+      @SuppressWarnings("nullness")      // TO ASK (question written)
       @NonNull Object event = p.pullSoft();
       inputs[i] = event;
     }

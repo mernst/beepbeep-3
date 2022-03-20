@@ -60,7 +60,7 @@ public class WindowFunction extends SynchronousProcessor
   }
 
   // What is the point of this constructor?  It is never called explicitly.
-  @SuppressWarnings("initialization.fields.uninitialized")  // 
+  @SuppressWarnings("nullness")
   WindowFunction(int width)
   {
     super(1, 1);

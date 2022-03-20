@@ -39,7 +39,7 @@ public class QueueSink extends Sink
 {
   protected Queue<Object>[] m_queues;
 
-  @SuppressWarnings("method.invocation") // permit call to reset() from constructor
+  @SuppressWarnings("nullness") // permit call to reset() from constructor
   public QueueSink(int in_arity)
   {
     super(in_arity);
