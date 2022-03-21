@@ -562,9 +562,8 @@ public class GroupProcessor extends Processor
       return m_pullable.pull();
     }
 
-    @SuppressWarnings("nullness")  // BUG: code violates Iterator contract
     @Override
-    public synchronized @Nullable Object next()
+    public synchronized Object next()
     {
       return m_pullable.next();
     }

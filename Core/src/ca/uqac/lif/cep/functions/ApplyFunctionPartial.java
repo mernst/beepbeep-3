@@ -243,7 +243,7 @@ public class ApplyFunctionPartial extends Processor
 
     @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
-    public @Nullable Object next()
+    public Object next()
     {
       // TODO Auto-generated method stub
       return null;
