@@ -17,7 +17,6 @@
  */
 package ca.uqac.lif.cep.util;
 
-import org.checkerframework.checker.mustcall.qual.MustCall;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.Context;
@@ -153,7 +152,7 @@ public class Bags
       {
         throw new InvalidArgumentException(this, 0);
       }
-      for (Object o : (Collection<? extends @MustCall Object>) x)
+      for (Object o : (Collection<? extends Object>) x)
       {
         Object[] in = new Object[1];
         in[0] = o;
@@ -489,7 +488,7 @@ public class Bags
       if (x instanceof List)
       {
         List<Object> out = new ArrayList<Object>(((List<?>) x).size());
-        for (Object o : (List<? extends @MustCall Object>) x)
+        for (Object o : (List<? extends Object>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -502,7 +501,7 @@ public class Bags
       if (x instanceof Set)
       {
         Set<Object> out = new HashSet<Object>();
-        for (Object o : (Set<? extends @MustCall Object>) x)
+        for (Object o : (Set<? extends Object>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -662,7 +661,7 @@ public class Bags
     }
     if (o instanceof Collection<?>)
     {
-      Collection<? extends @MustCall Object> c = (Collection<? extends @MustCall Object>) o;
+      Collection<? extends Object> c = (Collection<? extends Object>) o;
       Object[] a = new Object[c.size()];
       int i = 0;
       for (Object obj : c)

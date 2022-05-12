@@ -235,6 +235,7 @@
       <compilerarg line="-processor org.checkerframework.checker.resourceleak.ResourceLeakChecker"/>
       <compilerarg value="-AwarnUnneededSuppressions"/>
       <!-- <compilerarg value="-AassumeKeyFor"/> -->
+      <compilerarg value="-Astubs=azrael.astub"/>
       <compilerarg line="-Xmaxerrs 10000"/>
     </cf.javac>
     <copy todir="${build.bindir}" includeemptydirs="false">

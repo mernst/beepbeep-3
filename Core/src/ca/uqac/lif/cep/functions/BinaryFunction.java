@@ -34,7 +34,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.3
  */
-public abstract class BinaryFunction<T, V, U> extends Function
+public abstract class BinaryFunction<T extends Object, V extends Object, U extends Object> extends Function
 {
   /**
    * The class of the first input

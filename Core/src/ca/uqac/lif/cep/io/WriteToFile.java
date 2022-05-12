@@ -73,6 +73,7 @@ public class WriteToFile extends Sink
     m_outputCount++;
     try
     {
+      @SuppressWarnings("required.method.not.called")  // BUG: not closed if an exception occurs
       FileOutputStream fos = new FileOutputStream(new File(new_filename));
       BufferedOutputStream bos = new BufferedOutputStream(fos);
       if (inputs[0] instanceof byte[])

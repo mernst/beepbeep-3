@@ -17,7 +17,6 @@
  */
 package ca.uqac.lif.cep.tmf;
 
-import org.checkerframework.checker.mustcall.qual.MustCall;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -176,7 +175,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
       }
       if (slice_ids instanceof Collection)
       {
-        Collection<? extends @MustCall Object> col = (Collection<? extends @MustCall Object>) slice_ids;
+        Collection<? extends Object> col = (Collection<? extends Object>) slice_ids;
         slice_vals = new Object[col.size()];
         int i = 0;
         for (Object o : col)

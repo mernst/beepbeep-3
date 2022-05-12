@@ -1,0 +1,9 @@
+package ca.uqac.lif.azrael;
+
+import org.checkerframework.checker.mustcall.qual.MustCall;
+
+public abstract class ObjectPrinter<T extends @MustCall Object> {
+
+  T print(java.lang.Object o);
+
+}
