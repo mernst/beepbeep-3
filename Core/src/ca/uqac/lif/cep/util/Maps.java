@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.mustcall.qual.MustCall;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.Function;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -329,7 +330,7 @@ public class Maps
           }
           if (value instanceof Collection)
           {
-            s_value.addAll((Collection<?>) value);
+            s_value.addAll((Collection<? extends @MustCall Object>) value);
           }
           else
           {

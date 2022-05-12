@@ -36,7 +36,7 @@
   <mainclass>ca.uqac.lif.cep.Main</mainclass>
   
   <!-- The target JDK -->
-  <targetjdk>1.6</targetjdk>
+  <targetjdk>8</targetjdk>
   
   <!-- Installation folders -->
   <srcdir>Core/src</srcdir>

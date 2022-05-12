@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.mustcall.qual.MustCall;
 import ca.uqac.lif.cep.functions.FunctionException;
 import ca.uqac.lif.cep.functions.InvalidArgumentException;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -73,7 +74,7 @@ public class NthElement extends UnaryFunction<Object, Object>
     }
     if (x instanceof List<?>)
     {
-      List<?> list = (List<?>) x;
+      List<? extends @MustCall Object> list = (List<? extends @MustCall Object>) x;
       try
       {
         return list.get(m_n);
