@@ -156,7 +156,6 @@ public class SliceLast extends AbstractSlice
       {
         throw new ProcessorException("Cannot restore the state of the slice processor");
       }
-      @SuppressWarnings("nullness")  // likely CF bug, Suzanne is investigating
       @NonNull QueueSink qs = s.m_sinks.get(entry.getKey());
       Connector.connect(p, qs);
     }

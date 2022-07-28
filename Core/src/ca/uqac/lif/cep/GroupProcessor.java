@@ -813,7 +813,6 @@ public class GroupProcessor extends Processor implements PubliclyStateful
     {
       return null;
     }
-    @SuppressWarnings("nullness")  // just tested containsKey
     @NonNull ProcessorAssociation pa = m_inputPullableAssociations.get(index);
     return pa.m_processor;
   }
@@ -1025,7 +1024,7 @@ public class GroupProcessor extends Processor implements PubliclyStateful
   	}
   	
   	@Override
-  	public boolean equals(Object o)
+  	public boolean equals(@Nullable Object o)
   	{
   		if (!(o instanceof GroupState))
   		{

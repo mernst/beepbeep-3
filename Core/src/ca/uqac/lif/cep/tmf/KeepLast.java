@@ -1,5 +1,6 @@
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -14,7 +15,7 @@ import java.util.Queue;
  */
 public class KeepLast extends SynchronousProcessor
 {
-  protected Object[] m_lasts;
+  protected Object @MonotonicNonNull [] m_lasts;
 
   public KeepLast(int in_arity)
   {

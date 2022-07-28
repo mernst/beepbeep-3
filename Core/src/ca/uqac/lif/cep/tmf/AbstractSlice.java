@@ -236,7 +236,6 @@ public abstract class AbstractSlice extends SynchronousProcessor
           QueueSink sink_p = m_sinks.get(s_id);
           if (m_eventTracker != null)
           {
-            @SuppressWarnings("nullness") // m_sliceIndices has the same keys as m_sinks, and s_id is a key for m_sinks
             @NonNull List<Integer> eventPositions = m_sliceIndices.get(s_id);
             eventPositions.add(m_inputCount);
           }
