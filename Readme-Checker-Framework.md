@@ -1,3 +1,5 @@
+# 0. Use Java 8 or 11, because BeepBeep 3 does not compile under Java 17.
+
 # 1. Install the Checker Framework:
 https://checkerframework.org/manual/#build-source
 # Note that the instructions include setting the CHECKERFRAMEWORK environment variable.
