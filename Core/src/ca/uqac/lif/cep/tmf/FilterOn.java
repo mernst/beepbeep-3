@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.tmf;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.Function;
 import java.util.Queue;

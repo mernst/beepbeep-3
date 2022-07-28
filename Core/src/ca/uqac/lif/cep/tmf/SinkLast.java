@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Queue;
 
 /**

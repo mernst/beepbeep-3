@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.functions;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Set;
 
 import ca.uqac.lif.cep.Context;

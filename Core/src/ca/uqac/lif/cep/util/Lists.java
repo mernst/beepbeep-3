@@ -23,6 +23,8 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
+import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
 import ca.uqac.lif.cep.SynchronousProcessor;
@@ -185,6 +187,17 @@ public class Lists
     protected List<Object> newList(@UnknownInitialization AbstractPack this)
     {
       return new LinkedList<Object>();
+    }
+    
+    @Override
+    protected boolean onEndOfTrace(Queue<Object[]> outputs) throws ProcessorException
+    {
+      if (m_packedEvents.isEmpty())
+      {
+        return false;
+      }
+      outputs.add(new Object[] {m_packedEvents});
+      return true;
     }
   }
 

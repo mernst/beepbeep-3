@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;

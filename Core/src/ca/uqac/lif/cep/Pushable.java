@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.concurrent.Future;
 
 /**

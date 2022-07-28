@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.util;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import java.util.HashSet;

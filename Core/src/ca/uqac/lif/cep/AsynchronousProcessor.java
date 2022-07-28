@@ -19,6 +19,7 @@ package ca.uqac.lif.cep;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;

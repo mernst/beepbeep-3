@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.util;
 
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import ca.uqac.lif.cep.functions.UnaryFunction;

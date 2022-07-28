@@ -21,6 +21,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.azrael.ObjectPrinter;
 import ca.uqac.lif.azrael.ObjectReader;
 import ca.uqac.lif.azrael.PrintException;
@@ -157,9 +158,12 @@ public abstract class Processor implements DuplicableProcessor,
   public static final transient int MAX_PULL_RETRIES = 10000000;
 
   /**
-   * Indicates whether the processor has been notified of the end of trace or not
+   * Indicates whether the processor has been notified of the end of trace or
+   * not. Each input pushable has its own flag, and the end of trace signal
+   * is propagated only once all upstream processors have sent the
+   * notification.
    */
-  protected boolean m_hasBeenNotifiedOfEndOfTrace;
+  protected boolean[] m_hasBeenNotifiedOfEndOfTrace;
 
   /**
    * Initializes a processor. This has for effect of executing the basic
@@ -204,7 +208,29 @@ public abstract class Processor implements DuplicableProcessor,
     }
     m_inputPullables = new Pullable[m_inputArity];
     m_outputPushables = new Pushable[m_outputArity];
-    m_hasBeenNotifiedOfEndOfTrace = false;
+    m_hasBeenNotifiedOfEndOfTrace = new boolean[m_inputArity];
+    for (int i = 0; i < m_inputArity; i++)
+    {
+      m_hasBeenNotifiedOfEndOfTrace[i] = false; 
+    }
+  }
+  
+  /**
+   * Determines if all the upstream pushables have sent the end of trace
+   * notification.
+   * @return {@code true} if all notifications have been sent, {@code false}
+   * otherwise
+   */
+  protected boolean allNotifiedEndOfTrace()
+  {
+    for (int i = 0; i < m_inputArity; i++)
+    {
+      if (!m_hasBeenNotifiedOfEndOfTrace[i])
+      {
+        return false;
+      }
+    }
+    return true;
   }
   
   /**
@@ -330,7 +356,10 @@ public abstract class Processor implements DuplicableProcessor,
     {
       m_outputQueues[i].clear();
     }
-    m_hasBeenNotifiedOfEndOfTrace = false;
+    for (int i = 0; i < m_inputArity; i++)
+    {
+      m_hasBeenNotifiedOfEndOfTrace[i] = false; 
+    }
     m_inputCount = 0;
     m_outputCount = 0;
   }

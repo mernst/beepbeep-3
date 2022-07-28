@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2021 Sylvain Hallé
+    Copyright (C) 2008-2022 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.functions;
 
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.petitpoucet.NodeFunction;
 
 /**
@@ -45,7 +46,7 @@ public class Cumulate extends ApplyFunction
   @Override
   protected boolean compute(Object[] inputs, Object[] outputs)
   {
-    // We override compute() from FunctionProcessor, only to complete the
+    // We override compute() from ApplyFunction, only to complete the
     // association between input and output events (each output event depends on
     // the current input event and also the previous output event front)
     boolean b = super.compute(inputs, outputs);
@@ -190,5 +191,11 @@ public class Cumulate extends ApplyFunction
   {
     CumulativeFunction<?> f = (CumulativeFunction<?>) o;
     return new Cumulate(f);
+  }
+  
+  @Override
+  public Object getState()
+  {
+  	return ((CumulativeFunction<?>) m_function).getLastValue();
   }
 }

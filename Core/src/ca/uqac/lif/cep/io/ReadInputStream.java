@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep.io;
 
 import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.tmf.Source;
 import java.io.InputStream;
 

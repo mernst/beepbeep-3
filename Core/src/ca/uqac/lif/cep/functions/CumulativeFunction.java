@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2022 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.functions;
 
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,4 +109,14 @@ public class CumulativeFunction<T extends @NonNull Object> extends UnaryFunction
     cf.m_lastValue = (T) list.get(1);
     return cf;
   }
+  
+  /**
+   * @since 0.11
+   * @return The last value
+   */
+  /*@ pure @*/ public T getLastValue()
+  {
+  	return m_lastValue;
+  }
+
 }

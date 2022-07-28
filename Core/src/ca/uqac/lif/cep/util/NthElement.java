@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.util;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.functions.FunctionException;
 import ca.uqac.lif.cep.functions.InvalidArgumentException;
 import ca.uqac.lif.cep.functions.UnaryFunction;

@@ -19,6 +19,7 @@
 package ca.uqac.lif.cep.tmf;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;

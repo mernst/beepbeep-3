@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep.io;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.ProcessorException;
 import java.io.BufferedReader;
 import java.io.IOException;

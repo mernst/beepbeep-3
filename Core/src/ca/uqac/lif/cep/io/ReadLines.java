@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep.io;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Queue;

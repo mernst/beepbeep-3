@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.tmf;
 
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.petitpoucet.DirectValue;
 import ca.uqac.lif.petitpoucet.NodeFunction;

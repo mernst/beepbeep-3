@@ -19,6 +19,8 @@ package ca.uqac.lif.cep.tmf;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+
+import ca.uqac.lif.cep.PubliclyStateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -29,7 +31,7 @@ import java.util.Queue;
  * @since 0.2.1
  */
 @SuppressWarnings("squid:S2160")
-public class Trim extends SynchronousProcessor
+public class Trim extends SynchronousProcessor implements PubliclyStateful
 {
   /**
    * How many events to ignore at the beginning of the trace
@@ -116,4 +118,10 @@ public class Trim extends SynchronousProcessor
     int delay = ((Number) o).intValue();
     return new Trim(delay);
   }
+
+	@Override
+	public Object getState()
+	{
+		return Math.max(0, m_delay - m_inputCount);
+	}
 }

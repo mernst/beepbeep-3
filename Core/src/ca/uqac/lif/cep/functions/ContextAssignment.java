@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep.functions;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.azrael.ObjectPrinter;
 import ca.uqac.lif.azrael.ObjectReader;
 import ca.uqac.lif.azrael.PrintException;

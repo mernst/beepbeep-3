@@ -19,6 +19,7 @@ package ca.uqac.lif.cep.functions;
 
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 

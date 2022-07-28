@@ -19,6 +19,7 @@ package ca.uqac.lif.cep;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Iterator;
 
 /**

@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.tmf.Passthrough;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -200,13 +201,12 @@ public abstract class UniformProcessor extends SynchronousProcessor
     @Override
     public synchronized void notifyEndOfTrace() throws PushableException
     {
-      // Nothing to do if the Pushable has already been notified
-      boolean b = false;
-      if (m_hasBeenNotifiedOfEndOfTrace)
+      m_hasBeenNotifiedOfEndOfTrace[getPosition()] = true;
+      if (!allNotifiedEndOfTrace())
       {
         return;
       }
-      m_hasBeenNotifiedOfEndOfTrace = true;
+      boolean b;
       try
       {
         b = onEndOfTrace(m_outputArray);
@@ -219,7 +219,10 @@ public abstract class UniformProcessor extends SynchronousProcessor
       {
         m_outputPushables[0].push(m_outputArray[0]);
       }
-      m_outputPushables[0].notifyEndOfTrace();
+      for (int i = 0; i < m_outputArity; i++)
+      {
+        m_outputPushables[i].notifyEndOfTrace();
+      }
     }
 
     @Override

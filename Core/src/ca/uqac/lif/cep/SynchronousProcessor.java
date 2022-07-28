@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -206,13 +207,11 @@ public abstract class SynchronousProcessor extends Processor
     @Override
     public void notifyEndOfTrace()
     {
-      // Nothing to do if the Pushable has already been notified
-      if (m_hasBeenNotifiedOfEndOfTrace)
+      m_hasBeenNotifiedOfEndOfTrace[m_index] = true;
+      if (!allNotifiedEndOfTrace())
       {
         return;
       }
-      m_hasBeenNotifiedOfEndOfTrace = true;
-
       m_tempQueue.clear();
       boolean outs;
       try
@@ -379,13 +378,13 @@ public abstract class SynchronousProcessor extends Processor
           boolean status = p.hasNext();
           if (!status)
           {
-            if (m_hasBeenNotifiedOfEndOfTrace)
+            if (allNotifiedEndOfTrace())
             {
               return false;
             }
             Queue<Object[]> last_queue = new ArrayDeque<Object[]>();
             boolean b = onEndOfTrace(last_queue);
-            m_hasBeenNotifiedOfEndOfTrace = true;
+            m_hasBeenNotifiedOfEndOfTrace[i] = true;
             if (!b)
             {
               return false;
@@ -478,13 +477,13 @@ public abstract class SynchronousProcessor extends Processor
         NextStatus status = p.hasNextSoft();
         if (status == NextStatus.NO)
         {
-          if (m_hasBeenNotifiedOfEndOfTrace)
+          if (allNotifiedEndOfTrace())
           {
             return NextStatus.NO;
           }
           Queue<Object[]> last_queue = new ArrayDeque<Object[]>();
           boolean b = onEndOfTrace(last_queue);
-          m_hasBeenNotifiedOfEndOfTrace = true;
+          m_hasBeenNotifiedOfEndOfTrace[i] = true;
           if (!b)
           {
             return NextStatus.NO;

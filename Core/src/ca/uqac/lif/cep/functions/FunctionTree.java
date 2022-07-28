@@ -21,6 +21,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.ArrayList;

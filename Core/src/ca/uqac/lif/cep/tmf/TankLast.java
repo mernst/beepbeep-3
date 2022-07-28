@@ -18,6 +18,7 @@
 package ca.uqac.lif.cep.tmf;
 
 import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Pushable;
 
 /**
