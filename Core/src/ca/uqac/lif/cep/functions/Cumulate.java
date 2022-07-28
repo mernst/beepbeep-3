@@ -150,7 +150,7 @@ public class Cumulate extends ApplyFunction
       return m_index;
     }
 
-    @SuppressWarnings("nullness")  // petitpoucet is not annotated
+    @SuppressWarnings("nullness")  // unannotated library: petitpoucet
     @Override
     public @Nullable NodeFunction dependsOn()
     {

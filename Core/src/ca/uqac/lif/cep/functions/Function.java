@@ -250,7 +250,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
     map.put("contents", printState());
     try
     {
-      @SuppressWarnings("nullness") // Azrael is not yet annotated for nullness
+      @SuppressWarnings("nullness") // unannotated library: Azrael
       @NonNull Object result = printer.print(map);
       return result;
     }

@@ -56,8 +56,8 @@ public abstract class Source extends SynchronousProcessor
     Queue<Object[]> output = new ArrayDeque<Object[]>(1);
     try
     {
-      @SuppressWarnings("nullness:assignment") // this `compute()` does not read its input
-       Object @NonNull []  dummy_null  = null;
+      @SuppressWarnings("nullness:assignment") // unused: this `compute()` does not read its input
+      Object @NonNull [] dummy_null  = null;
       compute(dummy_null, output);
     }
     catch (ProcessorException e)

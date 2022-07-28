@@ -566,7 +566,7 @@ public class Bags
     }
 
     @Override
-    @SuppressWarnings("nullness")  // returns null, looks like a bug
+    @SuppressWarnings("nullness")  // BUG: returns null, looks like a bug
     public Object getValue(Collection x)
     {
       Object o = null;

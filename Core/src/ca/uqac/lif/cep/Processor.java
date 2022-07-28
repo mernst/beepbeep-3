@@ -807,7 +807,7 @@ public abstract class Processor implements DuplicableProcessor,
     contents.put("contents", printState());
     try
     {
-      @SuppressWarnings("nullness")  // Azrael is not annotated, not sure about return type, but likely non-null.
+      @SuppressWarnings("nullness")  // unannotated library: Azrael (not sure about return type, but likely non-null)
       @NonNull Object result = printer.print(contents);
       return result;
     }

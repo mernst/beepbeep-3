@@ -59,7 +59,6 @@ public class NthElement extends UnaryFunction<Object, Object>
     this(0);
   }
 
-  // @SuppressWarnings("nullness")  // casts from Object to collection; and not used
   @Override
   public Object getValue(Object x)
   {

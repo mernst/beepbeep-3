@@ -166,7 +166,7 @@ public class GroupProcessor extends Processor implements PubliclyStateful
     /**
      * No-args constructor. Used only for serialization and deserialization.
      */
-    @SuppressWarnings("nullness")  // used only for serialization
+    @SuppressWarnings("nullness")  // serialization
     protected ProcessorAssociation()
     {
       super();

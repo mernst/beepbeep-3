@@ -61,7 +61,7 @@ public class WindowFunction extends SynchronousProcessor
   }
 
   // What is the point of this constructor?  It is never called explicitly.
-  @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness")  // unused: method is never called
   WindowFunction(int width)
   {
     super(1, 1);

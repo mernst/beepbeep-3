@@ -43,7 +43,7 @@ import java.util.Queue;
 @SuppressWarnings("squid:S2160")
 public abstract class Sink extends SynchronousProcessor
 {
-  @SuppressWarnings("nullness")  // the compute function of a sink produces no output
+  @SuppressWarnings("nullness")  // unused: the compute function of a sink produces no output
   static @NonNull Queue<Object[]> nullOutputQueue = null;
 
   public Sink()
