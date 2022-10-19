@@ -62,7 +62,7 @@ public abstract class UnaryFunction<T, U> extends Function
   @Override
   /* @ requires inputs.length == 1 */
   public void evaluate(/*@ non_null @*/ Object[] inputs, Object[] outputs, 
-      /*@ null @*/ Context context, /*@ null @*/ EventTracker tracker)
+      /*@ null @*/ Context context, /*@ null @*/ @Nullable EventTracker tracker)
   {
     T in = (T) inputs[0];
     outputs[0] = getValue(in);

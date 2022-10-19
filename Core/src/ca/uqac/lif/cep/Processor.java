@@ -95,7 +95,7 @@ public abstract class Processor implements DuplicableProcessor,
    * An object that keeps track of the relationship between input and output
    * events.
    */
-  protected transient EventTracker m_eventTracker = null;
+  protected transient @Nullable EventTracker m_eventTracker = null;
 
   /**
    * An array of output event queues. This is where the output events will be
@@ -249,7 +249,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          The key associated to that object
    * @return The object, or <code>null</code> if no object exists with such key
    */
-  public final synchronized /*@ null @*/ Object getContext(/*@ non_null @*/ String key)
+  public final synchronized /*@ null @*/ @Nullable Object getContext(/*@ non_null @*/ String key)
   {
     if (m_context == null || !m_context.containsKey(key))
     {
@@ -283,7 +283,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/*@ null @*/ Context context)
+  public synchronized void setContext(/*@ null @*/ @Nullable Context context)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -670,7 +670,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @return The event tracker, or <tt>null</tt> of no event tracker is associated
    *         to this processor
    */
-  public final /*@ null @*/ EventTracker getEventTracker()
+  public final /*@ null @*/ @Nullable EventTracker getEventTracker()
   {
     return m_eventTracker;
   }
@@ -683,7 +683,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          existing tracker
    * @return This processor
    */
-  public Processor setEventTracker(/*@ null @*/ EventTracker tracker)
+  public Processor setEventTracker(/*@ null @*/ @Nullable EventTracker tracker)
   {
     m_eventTracker = tracker;
     return this;
@@ -987,7 +987,7 @@ public abstract class Processor implements DuplicableProcessor,
   	/**
   	 * The internal state of the processor itself.
   	 */
-  	/*@ null @*/ protected Object m_processorState = null;
+  	/*@ null @*/ protected @Nullable Object m_processorState = null;
   	
   	public InternalProcessorState(Processor p)
   	{
