@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -37,7 +38,7 @@ import java.util.Queue;
  * @see FilterOn
  */
 @SuppressWarnings("squid:S2160")
-public class Filter extends SynchronousProcessor
+public class Filter extends SynchronousProcessor implements Stateful
 {
   public Filter()
   {
@@ -69,4 +70,13 @@ public class Filter extends SynchronousProcessor
   {
     return new Filter();
   }
+
+  /**
+   * @since 0.11
+   */
+	@Override
+	public Object getState() throws UnsupportedOperationException
+	{
+		return null;
+	}
 }

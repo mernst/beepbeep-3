@@ -25,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
-import ca.uqac.lif.cep.PubliclyStateful;
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.Pushable;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +49,7 @@ import java.util.concurrent.Future;
  *
  */
 @SuppressWarnings("squid:S2160")
-public class Window extends AbstractWindow implements PubliclyStateful
+public class Window extends AbstractWindow implements Stateful
 {
   /**
    * The internal processor's input pushables
@@ -234,6 +234,9 @@ public class Window extends AbstractWindow implements PubliclyStateful
     this.m_width = m_width;
   }
 
+  /**
+   * @since 0.11
+   */
 	@Override
         @SuppressWarnings("nullness") // Auto-generated method stub
 	public Object getState()

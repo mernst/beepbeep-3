@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.functions;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.petitpoucet.NodeFunction;
 
 /**
@@ -36,7 +37,7 @@ import ca.uqac.lif.petitpoucet.NodeFunction;
  * @author Sylvain Hallé
  * @since 0.1
  */
-public class Cumulate extends ApplyFunction
+public class Cumulate extends ApplyFunction implements Stateful
 {
   public Cumulate(CumulativeFunction<?> f)
   {
@@ -193,6 +194,9 @@ public class Cumulate extends ApplyFunction
     return new Cumulate(f);
   }
   
+  /**
+   * @since 0.11
+   */
   @Override
   public Object getState()
   {

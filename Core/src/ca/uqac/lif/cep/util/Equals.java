@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2022 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -21,6 +21,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import ca.uqac.lif.cep.functions.Constant;
+import ca.uqac.lif.cep.util.Lists.MathList;
+import ca.uqac.lif.cep.util.Maps.MathMap;
+import ca.uqac.lif.cep.util.Sets.MathSet;
+
 import java.util.Collection;
 
 /**
@@ -54,10 +58,12 @@ public class Equals extends BinaryFunction<Object, Object, Boolean>
    * Determines if two objects <i>x</i> and <i>y</i> are equal. The method
    * uses the following rules to determine equality:
    * <ul>
-   * <li>If any of <i>x</i> and <i>y</i> is null, the answer is false</li>
+   * <li>null is equal to null, but not to any other value</li>
    * <li>{@link Constant} objects are compared according to the value
    * they contain</li>
-   * <li>Collections are equal if they have the same size and the
+   * <li>{@link MathList}s and {@link MathMap}s are compared using their own
+   * method</li>
+   * <li>Other collections are equal if they have the same size and the
    * same elements</li>
    * <li>Strings and numbers are compared according to their value</li>
    * <li>Any other objects are compared by calling their {@link #equals(Object)}
@@ -69,9 +75,13 @@ public class Equals extends BinaryFunction<Object, Object, Boolean>
    */
   public static boolean isEqualTo(@Nullable Object x, @Nullable Object y)
   {
-    if (x == null || y == null)
+  	if ((x == null) != (y == null))
+  	{
+  		return false;
+  	}
+    if (x == null)
     {
-      return false;
+      return true;
     }
     if (x instanceof Constant)
     {
@@ -80,6 +90,10 @@ public class Equals extends BinaryFunction<Object, Object, Boolean>
     if (y instanceof Constant)
     {
       y = ((Constant) y).getValue();
+    }
+    if (x instanceof MathList || x instanceof MathMap || x instanceof MathSet)
+    {
+    	return x.equals(y);
     }
     if (x instanceof Collection && y instanceof Collection)
     {

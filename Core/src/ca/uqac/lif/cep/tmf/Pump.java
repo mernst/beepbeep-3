@@ -20,7 +20,7 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Processor;
-import ca.uqac.lif.cep.PubliclyStateful;
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
 
@@ -46,7 +46,7 @@ import ca.uqac.lif.cep.Pushable;
  * @since 0.6
  */
 @SuppressWarnings("squid:S2160")
-public class Pump extends Processor implements Runnable, PubliclyStateful
+public class Pump extends Processor implements Runnable, Stateful
 {
   /**
    * Semaphore used to stop the pump
@@ -177,6 +177,9 @@ public class Pump extends Processor implements Runnable, PubliclyStateful
     }
   }
 
+  /**
+   * @since 0.11
+   */
 	@Override
 	public Object getState()
 	{

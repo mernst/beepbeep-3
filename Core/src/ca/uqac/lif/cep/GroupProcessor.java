@@ -24,6 +24,8 @@ import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import ca.uqac.lif.cep.tmf.Source;
+import ca.uqac.lif.cep.util.Lists.MathList;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +44,7 @@ import java.util.concurrent.Future;
  * @since 0.1
  */
 @SuppressWarnings("squid:S2160")
-public class GroupProcessor extends Processor implements PubliclyStateful
+public class GroupProcessor extends Processor implements Stateful
 {
   /**
    * The set of processors included in the group
@@ -130,6 +132,16 @@ public class GroupProcessor extends Processor implements PubliclyStateful
     m_notifySources = b;
     return this;
   }
+  
+  /**
+   * Gets the tracker instance for the processors contained in this group.
+   * @return The tracker instance, or <tt>null</tt> if no inner tracker is set.
+   * @since 0.11
+   */
+  /*@ pure null @*/ public EventTracker getInnerTracker()
+  {
+  	return m_innerTracker;
+  }
 
   /**
    * Tuple made of a number and a processor.
@@ -183,6 +195,10 @@ public class GroupProcessor extends Processor implements PubliclyStateful
   public synchronized GroupProcessor addProcessor(Processor p)
   {
     m_processors.add(p);
+    if (m_innerTracker != null)
+    {
+    	p.setEventTracker(m_innerTracker);
+    }
     if (p instanceof Source)
     {
       m_sources.add((Source) p);
@@ -202,6 +218,10 @@ public class GroupProcessor extends Processor implements PubliclyStateful
     for (Processor p : procs)
     {
       m_processors.add(p);
+      if (m_innerTracker != null)
+      {
+      	p.setEventTracker(m_innerTracker);
+      }
       if (p instanceof Source)
       {
         m_sources.add((Source) p);
@@ -364,8 +384,18 @@ public class GroupProcessor extends Processor implements PubliclyStateful
   public synchronized Map<Integer, Processor> cloneInto(GroupProcessor group, boolean with_state)
   {
     super.duplicateInto(group);
+    if (group.m_eventTracker != null)
+    {
+    	group.m_eventTracker.add(group);
+    }
     group.m_notifySources = m_notifySources;
     Map<Integer, Processor> new_procs = new HashMap<Integer, Processor>();
+    EventTracker new_tracker = null;
+    if (m_innerTracker != null)
+    {
+    	new_tracker = m_innerTracker.getCopy(false);
+    }
+    group.m_innerTracker = new_tracker;
     Processor start = null;
     // Clone every processor of the original group
     for (Processor p : m_processors)
@@ -381,7 +411,7 @@ public class GroupProcessor extends Processor implements PubliclyStateful
     // Re-pipe the inputs and outputs like in the original group
     associateEndpoints(group, new_procs);
     // Re-pipe the internal processors like in the original group
-    CopyCrawler cc = new CopyCrawler(new_procs);
+    CopyCrawler cc = new CopyCrawler(new_procs, new_tracker);
     // POSSIBLE NullPointerException.
     if (start == null) {
       throw new Error("No processor with non-zero output arity in " + m_processors);
@@ -472,12 +502,15 @@ public class GroupProcessor extends Processor implements PubliclyStateful
   protected static class CopyCrawler extends PipeCrawler
   {
     private final Map<Integer, Processor> m_correspondences;
+    
+    private final EventTracker m_tracker;
 
-    public CopyCrawler(Map<Integer, Processor> correspondences)
+    public CopyCrawler(Map<Integer, Processor> correspondences, EventTracker tracker)
     {
       super();
       m_correspondences = new HashMap<Integer, Processor>();
       m_correspondences.putAll(correspondences);
+      m_tracker = tracker;
     }
 
     @Override
@@ -513,7 +546,7 @@ public class GroupProcessor extends Processor implements PubliclyStateful
           {
             // new_p and new_target may be null if they refer to a processor
             // outside of the group
-            Connector.connect(new_p, i, new_target, j);
+          	Connector.connect(m_tracker, new_p, i, new_target, j);
           }
         }
       }
@@ -816,6 +849,80 @@ public class GroupProcessor extends Processor implements PubliclyStateful
     @NonNull ProcessorAssociation pa = m_inputPullableAssociations.get(index);
     return pa.m_processor;
   }
+  
+  /**
+   * Gets the index of the group's input pipe associated to the inner processor
+   * with given ID and pipe index.
+   * @param id The ID of the inner processor
+   * @param pipe_index The input pipe index of the inner processor
+   * @return The index of the group's input pipe, or -1 if no such association
+   * exists
+   */
+  public int getGroupInputIndex(int id, int pipe_index)
+  {
+  	for (Map.Entry<Integer,ProcessorAssociation> e : m_inputPullableAssociations.entrySet())
+  	{
+  		ProcessorAssociation pa = e.getValue();
+  		if (pa.m_processor.getId() == id && pa.m_ioNumber == pipe_index)
+  		{
+  			return e.getKey();
+  		}
+  	}
+  	return -1;
+  }
+  
+  /**
+   * Gets the input stream index of the processor associated to the i-th
+   * input of the group.
+   * 
+   * @param index
+   *          The index
+   * @return The index, or <tt>-1</tt> if no processor is associated to this
+   *         index
+   */
+  public int getAssociatedInputIndex(int index)
+  {
+    if (!m_inputPullableAssociations.containsKey(index))
+    {
+      return -1;
+    }
+    return m_inputPullableAssociations.get(index).m_ioNumber;
+  }
+  
+  /**
+   * Gets the processor associated to the i-th output of the group
+   * 
+   * @param index
+   *          The index
+   * @return The processor, or <tt>null</tt> if no processor is associated to this
+   *         index
+   */
+  public Processor getAssociatedOutput(int index)
+  {
+    if (!m_outputPushableAssociations.containsKey(index))
+    {
+      return null;
+    }
+    return m_outputPushableAssociations.get(index).m_processor;
+  }
+  
+  /**
+   * Gets the output stream index of the processor associated to the i-th
+   * output of the group.
+   * 
+   * @param index
+   *          The index
+   * @return The index, or <tt>-1</tt> if no processor is associated to this
+   *         index
+   */
+  public int getAssociatedOutputIndex(int index)
+  {
+    if (!m_outputPushableAssociations.containsKey(index))
+    {
+      return -1;
+    }
+    return m_outputPushableAssociations.get(index).m_ioNumber;
+  }
 
   @Override
   public boolean onEndOfTrace(Queue<Object[]> outputs)
@@ -951,9 +1058,10 @@ public class GroupProcessor extends Processor implements PubliclyStateful
   public final Processor setEventTracker(/*@ null @*/ @Nullable EventTracker tracker)
   {
     super.setEventTracker(tracker);
-    if (tracker != null)
+    tracker.add(this);
+    if (tracker != null && m_innerTracker == null)
     {
-      m_innerTracker = tracker.getCopy();
+      m_innerTracker = tracker.getCopy(false);
       for (Processor p : m_processors)
       {
         p.setEventTracker(m_innerTracker);
@@ -965,92 +1073,11 @@ public class GroupProcessor extends Processor implements PubliclyStateful
   @Override
   public Object getState()
   {
-  	return new GroupState(m_processors);
-  }
-
-  protected static class GroupState
-  {
-  	/**
-  	 * The list of states of each processor within the group.
-  	 */
-  	/*@ non_null @*/ protected final List<Object> m_states;
-  	
-  	public GroupState(List<Processor> processors)
+  	MathList<InternalProcessorState> group_state = new MathList<InternalProcessorState>();
+  	for (Processor p : m_processors)
   	{
-  		super();
-  		m_states = new ArrayList<Object>(processors.size());
-  		for (Processor p : processors)
-  		{
-  			if ((p instanceof PubliclyStateful))
-  			{
-  				m_states.add(((PubliclyStateful) p).getState());
-  			}
-  			else
-  			{
-  				m_states.add(0);
-  			}
-  		}
+  		group_state.add(new InternalProcessorState(p));
   	}
-  	
-  	/**
-  	 * Gets the number of processors in this group state.
-  	 * @return The number of processors
-  	 */
-  	public int getSize()
-  	{
-  		return m_states.size();
-  	}
-  	
-  	/**
-  	 * Gets the state of one of the processors in this group state.
-  	 * @param index The index of the processor
-  	 * @return The state of that processor, or 0 if the processor does not
-  	 * implements {@link PubliclyStateful}
-  	 */
-  	public Object getState(int index)
-  	{
-  		return m_states.get(index);
-  	}
-  	
-  	@Override
-  	public int hashCode()
-  	{
-  		int h = 0;
-  		for (Object o : m_states)
-  		{
-  			h += o.hashCode();
-  		}
-  		return h;
-  	}
-  	
-  	@Override
-  	public boolean equals(@Nullable Object o)
-  	{
-  		if (!(o instanceof GroupState))
-  		{
-  			return false;
-  		}
-  		GroupState gs = (GroupState) o;
-  		if (gs.getSize() != getSize())
-  		{
-  			return false;
-  		}
-  		for (int i = 0; i < m_states.size(); i++)
-  		{
-  			Object s1 = getState(i);
-  			Object s2 = gs.getState(i);
-  			if (!s1.equals(s2))
-  			{
-  				return false;
-  			}
-  		}
-  		return true;
-  	}
-  	
-  	@Override
-  	public String toString()
-  	{
-  		return m_states.toString();
-  	}
+  	return group_state;
   }
 }

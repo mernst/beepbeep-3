@@ -21,6 +21,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Processor;
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -30,7 +31,7 @@ import java.util.Queue;
  * @author Sylvain Hallé
  * @since 0.2.1
  */
-public class Stutter extends SynchronousProcessor
+public class Stutter extends SynchronousProcessor implements Stateful
 {
   /**
    * The number of times each input event is repeated
@@ -64,4 +65,10 @@ public class Stutter extends SynchronousProcessor
   {
     return new Stutter(m_numReps);
   }
+
+	@Override
+	public Object getState() throws UnsupportedOperationException
+	{
+		return null;
+	}
 }

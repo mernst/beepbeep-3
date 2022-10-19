@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2022 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -21,6 +21,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import ca.uqac.lif.cep.Connector.Variant;
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.petitpoucet.DirectValue;
 import ca.uqac.lif.petitpoucet.NodeFunction;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import java.util.Queue;
  * @since 0.1
  */
 @SuppressWarnings("squid:S2160")
-public class QueueSource extends Source
+public class QueueSource extends Source implements Stateful
 {
   /**
    * The events to repeat endlessly
@@ -301,5 +302,14 @@ public class QueueSource extends Source
     qs.m_events = (List<Object>) map.get("events");
     qs.m_loop = (Boolean) map.get("loop");
     return qs;
+  }
+  
+  /**
+   * @since 0.11
+   */
+  @Override
+  public Object getState()
+  {
+  	return m_index;
   }
 }

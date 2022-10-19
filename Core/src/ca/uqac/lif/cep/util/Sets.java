@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.util;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import java.util.HashSet;
@@ -58,7 +59,7 @@ public class Sets
   /**
    * Processor that updates a set
    */
-  protected abstract static class SetUpdateProcessor extends UniformProcessor
+  protected abstract static class SetUpdateProcessor extends UniformProcessor implements Stateful
   {
     /**
      * The underlying set
@@ -86,6 +87,14 @@ public class Sets
     {
       return Set.class;
     }
+    
+    @Override
+    public Object getState()
+    {
+    	MathSet<Object> set = new MathSet<Object>();
+    	set.addAll(m_set);
+    	return set;
+    }
   }
 
   /**
@@ -109,6 +118,7 @@ public class Sets
       if (with_state)
       {
         pi.m_set.addAll(m_set);
+        pi.m_inputCount = m_inputCount;
       }
       return pi;
     }
@@ -116,8 +126,21 @@ public class Sets
     @Override
     protected boolean compute(Object[] inputs, Object[] outputs)
     {
+    	boolean added = !m_set.contains(inputs[0]);
       m_set.add(inputs[0]);
       outputs[0] = m_set;
+      if (m_eventTracker != null)
+      {
+      	if (added)
+      	{
+      		m_eventTracker.associateToInput(getId(), 0, m_inputCount, 0, m_inputCount);
+      	}
+      	if (m_inputCount > 0)
+      	{
+      		m_eventTracker.associateToOutput(getId(), 0, m_inputCount - 1, 0, m_inputCount);
+      	}
+      }
+      m_inputCount++;
       return true;
     }
   }
@@ -149,10 +172,23 @@ public class Sets
     @Override
     protected boolean compute(Object[] inputs, Object[] outputs)
     {
+    	boolean added = !m_set.contains(inputs[0]);
       m_set.add(inputs[0]);
       HashSet<Object> new_set = new HashSet<Object>();
       new_set.addAll(m_set);
       outputs[0] = new_set;
+      if (m_eventTracker != null)
+      {
+      	if (added)
+      	{
+      		m_eventTracker.associateToInput(getId(), 0, m_inputCount, 0, m_inputCount);
+      	}
+      	if (m_inputCount > 0)
+      	{
+      		m_eventTracker.associateToOutput(getId(), 0, m_inputCount - 1, 0, m_inputCount);
+      	}
+      }
+      m_inputCount++;
       return true;
     }
   }
@@ -195,5 +231,71 @@ public class Sets
     {
       return x.containsAll(y);
     }
+  }
+  
+  public static class MathSet<T> extends HashSet<T>
+  {
+		/**
+		 * Dummy UID.
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public int hashCode()
+		{
+			int h = 0;
+			for (T t : this)
+			{
+				if (t !=  null)
+				{
+					h += t.hashCode();
+				}
+			}
+			return h;
+		}
+  	
+		@Override
+		public boolean equals(Object o)
+		{
+			if (!(o instanceof MathSet))
+			{
+				return false;
+			}
+			MathSet<?> set = (MathSet<?>) o;
+			if (set.size() != size())
+			{
+				return false;
+			}
+			for (T t : this)
+			{
+				if (!set.contains(t))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public String toString()
+		{
+			StringBuilder out = new StringBuilder();
+			out.append("{");
+			boolean first = true;
+			for (T t : this)
+			{
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					out.append(",");
+				}
+				out.append(t);
+			}
+			out.append("}");
+			return out.toString();
+		}
   }
 }
