@@ -89,7 +89,7 @@ public class Sets
     }
     
     @Override
-    public Object getState()
+    public @Nullable Object getState()
     {
     	MathSet<Object> set = new MathSet<Object>();
     	set.addAll(m_set);
@@ -255,7 +255,7 @@ public class Sets
 		}
   	
 		@Override
-		public boolean equals(Object o)
+		public boolean equals(@Nullable Object o)
 		{
 			if (!(o instanceof MathSet))
 			{

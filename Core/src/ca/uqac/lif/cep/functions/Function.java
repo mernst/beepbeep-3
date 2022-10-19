@@ -89,7 +89,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          This argument is optional and may be null.
    */
   /*@ pure @*/ public abstract void evaluate(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context,
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context,
       /*@ null @*/ @Nullable EventTracker tracker);
 
   /**
@@ -223,7 +223,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * @return A {@link Future} object for this function call
    */
   /*@ pure @*/ public Future<Object[]> evaluateFast(Object[] inputs, Object[] outputs, 
-      Context context, ExecutorService service)
+      @Nullable Context context, ExecutorService service)
   {
     evaluate(inputs, outputs, context);
     return new FutureDone<Object[]>(outputs);

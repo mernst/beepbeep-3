@@ -390,7 +390,7 @@ public class Maps
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		public boolean equals(Object o)
+		public boolean equals(@Nullable Object o)
 		{
 			if (!(o instanceof MathMap))
 			{

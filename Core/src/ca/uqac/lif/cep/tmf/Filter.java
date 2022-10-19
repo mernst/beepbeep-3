@@ -75,7 +75,7 @@ public class Filter extends SynchronousProcessor implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState() throws UnsupportedOperationException
+	public @Nullable Object getState() throws UnsupportedOperationException
 	{
 		return null;
 	}

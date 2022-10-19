@@ -107,6 +107,7 @@ public class Bags
      */
     protected Function m_condition;
 
+    @SuppressWarnings("initialization.fields.uninitialized")  // deserialization
     // This constructor is used for deserialization.
     protected FilterElements()
     {
@@ -467,6 +468,7 @@ public class Bags
      */
     protected Function m_function;
 
+    @SuppressWarnings("initialization.fields.uninitialized")  // deserialization
     // This constructor is used for deserialization.
     public ApplyToAll()
     {

@@ -39,6 +39,7 @@ import ca.uqac.lif.petitpoucet.NodeFunction;
  */
 public class Cumulate extends ApplyFunction implements Stateful
 {
+  @SuppressWarnings("nullness")  // deserialization
   // This constructor is used for deserialization.
   private Cumulate()
   {
@@ -204,7 +205,7 @@ public class Cumulate extends ApplyFunction implements Stateful
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	return ((CumulativeFunction<?>) m_function).getLastValue();
   }

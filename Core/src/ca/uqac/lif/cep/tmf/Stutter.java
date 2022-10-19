@@ -67,7 +67,7 @@ public class Stutter extends SynchronousProcessor implements Stateful
   }
 
 	@Override
-	public Object getState() throws UnsupportedOperationException
+	public @Nullable Object getState() throws UnsupportedOperationException
 	{
 		return null;
 	}

@@ -224,7 +224,7 @@ public class ApplyFunction extends UniformProcessor implements Stateful
   }
 
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return null;
 	}

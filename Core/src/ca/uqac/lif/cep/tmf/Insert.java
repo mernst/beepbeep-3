@@ -101,7 +101,7 @@ public class Insert extends SynchronousProcessor implements Stateful
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	return m_sentPad;
   }

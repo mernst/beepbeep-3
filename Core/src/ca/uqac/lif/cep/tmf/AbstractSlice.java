@@ -425,7 +425,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	MathMap<Object,InternalProcessorState> state = new MathMap<Object,InternalProcessorState>();
   	for (Map.Entry<Object,Processor> e : m_slices.entrySet())

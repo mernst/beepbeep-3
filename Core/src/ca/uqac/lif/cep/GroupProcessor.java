@@ -138,7 +138,7 @@ public class GroupProcessor extends Processor implements Stateful
    * @return The tracker instance, or <tt>null</tt> if no inner tracker is set.
    * @since 0.11
    */
-  /*@ pure null @*/ public EventTracker getInnerTracker()
+  /*@ pure null @*/ public @Nullable EventTracker getInnerTracker()
   {
   	return m_innerTracker;
   }
@@ -503,9 +503,9 @@ public class GroupProcessor extends Processor implements Stateful
   {
     private final Map<Integer, Processor> m_correspondences;
     
-    private final EventTracker m_tracker;
+    private final @Nullable EventTracker m_tracker;
 
-    public CopyCrawler(Map<Integer, Processor> correspondences, EventTracker tracker)
+    public CopyCrawler(Map<Integer, Processor> correspondences, @Nullable EventTracker tracker)
     {
       super();
       m_correspondences = new HashMap<Integer, Processor>();
@@ -897,7 +897,7 @@ public class GroupProcessor extends Processor implements Stateful
    * @return The processor, or <tt>null</tt> if no processor is associated to this
    *         index
    */
-  public Processor getAssociatedOutput(int index)
+  public @Nullable Processor getAssociatedOutput(int index)
   {
     if (!m_outputPushableAssociations.containsKey(index))
     {
@@ -1058,7 +1058,10 @@ public class GroupProcessor extends Processor implements Stateful
   public final Processor setEventTracker(/*@ null @*/ @Nullable EventTracker tracker)
   {
     super.setEventTracker(tracker);
-    tracker.add(this);
+    if (tracker != null)
+    {
+      tracker.add(this);
+    }
     if (tracker != null && m_innerTracker == null)
     {
       m_innerTracker = tracker.getCopy(false);
@@ -1071,7 +1074,7 @@ public class GroupProcessor extends Processor implements Stateful
   }
   
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	MathList<InternalProcessorState> group_state = new MathList<InternalProcessorState>();
   	for (Processor p : m_processors)

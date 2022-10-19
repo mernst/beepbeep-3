@@ -123,7 +123,7 @@ public class Trim extends SynchronousProcessor implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return Math.max(0, m_delay - m_inputCount);
 	}

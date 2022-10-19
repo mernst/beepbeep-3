@@ -1021,7 +1021,7 @@ public abstract class Processor implements DuplicableProcessor,
   	}
   	
   	@Override
-  	public boolean equals(Object o)
+  	public boolean equals(@Nullable Object o)
   	{
   		if (!(o instanceof InternalProcessorState))
   		{

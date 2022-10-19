@@ -109,7 +109,7 @@ public class TurnInto extends UniformProcessor implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return 0;
 	}

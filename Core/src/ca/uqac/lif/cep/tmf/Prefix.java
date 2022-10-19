@@ -54,7 +54,7 @@ public class Prefix extends Trim
 	}
 	
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return Math.min(m_delay, m_inputCount);
 	}

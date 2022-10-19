@@ -469,6 +469,8 @@ public class Lists
 		 * Creates a new math list and adds elements from an array.
 		 * @param elements The elements to add
 		 */
+    
+		@SuppressWarnings("nullness") // inference failure
 		@SafeVarargs
 		public MathList(T ... elements)
 		{
@@ -495,7 +497,7 @@ public class Lists
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public boolean equals(Object o)
+		public boolean equals(@Nullable Object o)
 		{
 			if (!(o instanceof MathList))
 			{
