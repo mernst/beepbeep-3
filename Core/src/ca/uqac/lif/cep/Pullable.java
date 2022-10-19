@@ -97,8 +97,8 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
 
   /**
    * Attempts to pull an event from the source. An event is returned if
-   * {@link #hasNext()} returns <code>YES</code>, and <code>null</code> is
-   * returned otherwise.
+   * {@link #hasNext()} returns <code>YES</code>, and
+   * <code>java.util.NoSuchElementException</code> is thrown otherwise.
    * 
    * @return An event
    * @throws java.util.NoSuchElementException if the iteration has no more elements

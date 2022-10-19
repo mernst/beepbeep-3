@@ -192,7 +192,7 @@ public interface Pushable
    * {@link Pushable#pushFast(Object)}.
    *
    * @param p a dummy processor
-   * @return a dummy {@link Future object}
+   * @return a dummy {@link Future} object}
    */
   public static FutureDone<Pushable> nullFuture(Processor p) {
     return new FutureDone<Pushable>(new PushNotSupported(p, 0));
