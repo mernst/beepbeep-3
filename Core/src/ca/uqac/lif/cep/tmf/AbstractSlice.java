@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2021 Sylvain Hallé
+    Copyright (C) 2008-2022 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -21,9 +21,12 @@ import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.Pushable;
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.Function;
 import ca.uqac.lif.cep.functions.FunctionException;
+import ca.uqac.lif.cep.util.Maps.MathMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -62,7 +65,7 @@ import java.util.concurrent.Future;
  * @since 0.10.2
  */
 @SuppressWarnings("squid:S2160")
-public abstract class AbstractSlice extends SynchronousProcessor
+public abstract class AbstractSlice extends SynchronousProcessor implements Stateful
 {
   /**
    * The slicing function
@@ -213,7 +216,7 @@ public abstract class AbstractSlice extends SynchronousProcessor
           m_sinks.put(slice_id, sink);
           if (m_eventTracker != null)
           {
-            p.setEventTracker(m_eventTracker.getCopy());
+            //p.setEventTracker(m_eventTracker.getCopy(false));
             m_sliceIndices.put(slice_id, new ArrayList<Integer>());
           }
         }
@@ -408,5 +411,19 @@ public abstract class AbstractSlice extends SynchronousProcessor
    */
   protected abstract void handleNewSliceValue(Object slice_id, Object value,
       Queue<Object[]> outputs);
+
+  /**
+   * @since 0.11
+   */
+  @Override
+  public Object getState()
+  {
+  	MathMap<Object,InternalProcessorState> state = new MathMap<Object,InternalProcessorState>();
+  	for (Map.Entry<Object,Processor> e : m_slices.entrySet())
+  	{
+  		state.put(e.getKey(), new InternalProcessorState(e.getValue()));	
+  	}
+  	return state;
+  }
 
 }

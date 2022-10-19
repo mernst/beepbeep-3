@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2017 Sylvain Hallé
+    Copyright (C) 2008-2022 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -119,6 +119,13 @@ public interface EventTracker
    *          The processors this tracker should be associated to
    */
   public void setTo(Processor ... processors);
+  
+  /**
+   * Adds a group to be managed by this tracker.
+   * @param g The group
+   * @since 0.11
+   */
+  public void add(GroupProcessor g);
 
   /**
    * Dummy event tracker that does nothing
@@ -136,7 +143,7 @@ public interface EventTracker
     }
     
     @Override
-    public NoOpEventTracker getCopy()
+    public NoOpEventTracker getCopy(boolean with_state)
     {
       return instance;
     }
@@ -179,11 +186,19 @@ public interface EventTracker
     {
       // Do nothing
     }
+    
+    @Override
+    public void add(GroupProcessor g)
+    {
+      // Do nothing
+    }
   }
   
   /**
-   * Gets a copy of the event tracker
+   * Gets a copy of the event tracker.
+   * @param with_state A flag indicating if the track should be copied with
+   * its existing associations.
    * @return A copy of this event tracker
    */
-  public EventTracker getCopy();
+  public EventTracker getCopy(boolean with_state);
 }
