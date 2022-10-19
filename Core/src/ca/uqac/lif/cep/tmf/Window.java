@@ -238,7 +238,7 @@ public class Window extends AbstractWindow implements Stateful
    * @since 0.11
    */
 	@Override
-        @SuppressWarnings("nullness") // Auto-generated method stub
+	@SuppressWarnings("nullness") // Auto-generated method stub
 	public Object getState()
 	{
 		// TODO Auto-generated method stub

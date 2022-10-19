@@ -76,12 +76,12 @@ public abstract class UnaryFunction<T extends @Nullable Object, U extends @Nulla
   }
 
   /**
-   * Evaluates the function.
-   * Throws any exception occurring during the evaluation of the underlying function.
+   * Evaluates the function
    * 
    * @param x
    *          The argument
    * @return The return value of the function
+   * @throws Any exception occurring during the evaluation of the underlying function
    */
   public abstract U getValue(T x);
 

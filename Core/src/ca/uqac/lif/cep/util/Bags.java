@@ -107,7 +107,13 @@ public class Bags
      */
     protected Function m_condition;
 
-   /**
+    // This constructor is used for deserialization.
+    protected FilterElements()
+    {
+      super(Object.class, Object.class);
+    }
+
+    /**
      * Gets a new instance of the function.
      * 
      * @param condition
@@ -117,7 +123,7 @@ public class Bags
     /*@ requires condition.getInputArity() == 1; @*/
     public FilterElements(Function condition)
     {
-      super(Object.class, Object.class);
+      this();
       m_condition = condition;
     }
 
@@ -461,9 +467,15 @@ public class Bags
      */
     protected Function m_function;
 
-    public ApplyToAll(Function function)
+    // This constructor is used for deserialization.
+    public ApplyToAll()
     {
       super(Object.class, Object.class);
+    }
+
+    public ApplyToAll(Function function)
+    {
+      this();
       m_function = function;
     }
 
@@ -598,7 +610,7 @@ public class Bags
     }
 
     @Override
-  @SideEffectFree
+    @SideEffectFree
     public Explode duplicate(boolean with_state)
     {
       return new Explode(m_classes);

@@ -389,7 +389,7 @@ public class SliceTest
 		}
 
 		@Override
-                @SideEffectFree
+		@SideEffectFree
 		public EvenAll duplicate(boolean with_state)
 		{
 			return instance;

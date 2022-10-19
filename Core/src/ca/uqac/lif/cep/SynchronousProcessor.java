@@ -509,7 +509,7 @@ public abstract class SynchronousProcessor extends Processor
         int i = 0;
         for (Pullable p : m_inputPullables)
         {
-          inputs[i] = p.pull();
+          inputs[i] = p.pullSoft();
           i++;
         }
       }

@@ -164,7 +164,7 @@ public class SingleProcessorTest
 		}
 
 		@Override
-                @SideEffectFree
+		@SideEffectFree
 		public ThrowException duplicate(boolean with_state)
 		{
 			return null;
