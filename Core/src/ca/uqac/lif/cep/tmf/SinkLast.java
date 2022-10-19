@@ -64,8 +64,6 @@ public class SinkLast extends Sink
   public void reset()
   {
     super.reset();
-    m_last = null;
-    m_eventCounter = 0;
   }
 
   @Override

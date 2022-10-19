@@ -995,7 +995,7 @@ public abstract class Processor implements DuplicableProcessor,
   	/**
   	 * The internal state of the processor itself.
   	 */
-  	/*@ null @*/ protected Object m_processorState = null;
+  	/*@ null @*/ protected @Nullable Object m_processorState = null;
   	
   	public InternalProcessorState(Processor p)
   	{

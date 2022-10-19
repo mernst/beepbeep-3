@@ -89,7 +89,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          This argument is optional and may be null.
    */
   /*@ pure @*/ public abstract void evaluate(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context,
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context,
       /*@ null @*/ @Nullable EventTracker tracker);
 
   /**
