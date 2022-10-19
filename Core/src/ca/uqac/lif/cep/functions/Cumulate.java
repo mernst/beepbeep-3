@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.petitpoucet.NodeFunction;
 
 /**
@@ -33,7 +34,7 @@ import ca.uqac.lif.petitpoucet.NodeFunction;
  * @author Sylvain Hallé
  * @since 0.1
  */
-public class Cumulate extends ApplyFunction
+public class Cumulate extends ApplyFunction implements Stateful
 {
   // This constructor is used for deserialization.
   private Cumulate()
@@ -194,6 +195,9 @@ public class Cumulate extends ApplyFunction
     return new Cumulate(f);
   }
   
+  /**
+   * @since 0.11
+   */
   @Override
   public Object getState()
   {

@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2022 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,7 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.UniformProcessor;
+import ca.uqac.lif.cep.util.Lists.MathList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,7 @@ import java.util.List;
  * @since 0.2.1
  */
 @SuppressWarnings("squid:S2160")
-public class Freeze extends UniformProcessor
+public class Freeze extends UniformProcessor implements Stateful
 {
   /**
    * The event front to freeze
@@ -107,5 +110,23 @@ public class Freeze extends UniformProcessor
       }
     }
     return f;
+  }
+  
+  /**
+   * @since 0.11
+   */
+  @Override
+  public Object getState()
+  {
+  	if (m_output == null)
+  	{
+  		return null;
+  	}
+  	MathList<Object> list = new MathList<Object>();
+  	for (Object o : m_output)
+  	{
+  		list.add(o);
+  	}
+  	return list;
   }
 }
