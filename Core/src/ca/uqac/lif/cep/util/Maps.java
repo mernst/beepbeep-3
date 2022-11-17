@@ -329,7 +329,7 @@ public class Maps
           }
           if (value instanceof Collection)
           {
-            s_value.addAll((Collection<?>) value);
+            s_value.addAll((Collection<? extends Object>) value);
           }
           else
           {

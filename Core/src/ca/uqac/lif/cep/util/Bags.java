@@ -152,7 +152,7 @@ public class Bags
       {
         throw new InvalidArgumentException(this, 0);
       }
-      for (Object o : (Collection<?>) x)
+      for (Object o : (Collection<? extends Object>) x)
       {
         Object[] in = new Object[1];
         in[0] = o;
@@ -488,7 +488,7 @@ public class Bags
       if (x instanceof List)
       {
         List<Object> out = new ArrayList<Object>(((List<?>) x).size());
-        for (Object o : (List<?>) x)
+        for (Object o : (List<? extends Object>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -501,7 +501,7 @@ public class Bags
       if (x instanceof Set)
       {
         Set<Object> out = new HashSet<Object>();
-        for (Object o : (Set<?>) x)
+        for (Object o : (Set<? extends Object>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -661,7 +661,7 @@ public class Bags
     }
     if (o instanceof Collection<?>)
     {
-      Collection<?> c = (Collection<?>) o;
+      Collection<? extends Object> c = (Collection<? extends Object>) o;
       Object[] a = new Object[c.size()];
       int i = 0;
       for (Object obj : c)

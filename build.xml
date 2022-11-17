@@ -105,6 +105,18 @@
   <!-- The location of rt.jar, if it is there -->
   <property name="build.rtlocation">rt.jar</property>
   
+  <property environment="env"/>
+  <property name="checkerframework" value="${env.CHECKERFRAMEWORK}" />
+  <condition property="cfJavac" value="javac.bat" else="javac">
+    <os family="windows" />
+  </condition>
+  <presetdef name="cf.javac">
+    <javac fork="yes" executable="${checkerframework}/checker/bin/${cfJavac}" >
+      <compilerarg value="-version"/>
+      <compilerarg value="-implicit:class"/>
+    </javac>
+  </presetdef>
+
   <!-- Target: initialization
        All other targets should ultimately
        depend on this one (except perhaps very simple ones such as
@@ -129,6 +141,7 @@
     <!-- Create a global classpath that other tasks will refer to -->
     <path id="build.classpath">
       <pathelement location="${build.bindir}"/>
+      <pathelement location="${checkerframework}/checker/dist/checker-qual.jar"/>
       <fileset dir="${build.depdir}">
         <include name="*.jar"/>
       </fileset>
@@ -208,6 +221,31 @@
     </copy>
   </target>
   
+  <!-- Target: check-resourceleak
+       Does pluggoble type-checking on the main project
+  -->
+  <target name="check-resourceleak" depends="init,junit,check-rt,download-deps" description="Run the Resource Leak Checker">
+    <mkdir dir="${build.bindir}"/>
+    <cf.javac
+      srcdir="${build.srcdir}"
+      destdir="${build.bindir}"
+      debug="${build.debug}"
+      includeantruntime="false">
+      <classpath refid="build.classpath"/>
+      <compilerarg line="-processor org.checkerframework.checker.resourceleak.ResourceLeakChecker"/>
+      <compilerarg value="-AwarnUnneededSuppressions"/>
+      <!-- <compilerarg value="-AassumeKeyFor"/> -->
+      <compilerarg value="-Astubs=azrael.astub"/>
+      <compilerarg line="-Xmaxerrs 10000"/>
+    </cf.javac>
+    <copy todir="${build.bindir}" includeemptydirs="false">
+      <fileset dir="${build.srcdir}">
+        <exclude name="**/*.java"/>
+        <exclude name="**/doc-files/**"/>
+      </fileset>
+    </copy>
+  </target>
+
   <!-- Target: compile-tests
        Compiles the unit tests
   -->

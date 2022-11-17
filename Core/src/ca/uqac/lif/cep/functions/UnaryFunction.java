@@ -31,7 +31,7 @@ import java.util.Set;
  * 
  * @since 0.2.1
  */
-public abstract class UnaryFunction<T, U> extends Function
+public abstract class UnaryFunction<T extends Object, U extends Object> extends Function
 {
   /**
    * The class of the input

@@ -26,7 +26,7 @@ import java.util.List;
  * @author Sylvain Hallé
  * @since 0.1
  */
-public class CumulativeFunction<T> extends UnaryFunction<T, T>
+public class CumulativeFunction<T extends Object> extends UnaryFunction<T, T>
 {
   /**
    * The last value returned by the function

@@ -73,7 +73,7 @@ public class NthElement extends UnaryFunction<Object, Object>
     }
     if (x instanceof List<?>)
     {
-      List<?> list = (List<?>) x;
+      List<? extends Object> list = (List<? extends Object>) x;
       try
       {
         return list.get(m_n);

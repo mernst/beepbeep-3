@@ -40,7 +40,7 @@ import java.util.Iterator;
  * @param <T> The type of the output objects
  */
 @SuppressWarnings("unchecked")
-public class TypedPullable<T> implements Pullable
+public class TypedPullable<T extends Object> implements Pullable
 {
   /**
    * The actual pullable this class is wrapping

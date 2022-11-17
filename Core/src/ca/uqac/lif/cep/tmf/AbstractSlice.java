@@ -178,7 +178,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
       }
       if (slice_ids instanceof Collection)
       {
-        Collection<?> col = (Collection<?>) slice_ids;
+        Collection<? extends Object> col = (Collection<? extends Object>) slice_ids;
         slice_vals = new Object[col.size()];
         int i = 0;
         for (Object o : col)
