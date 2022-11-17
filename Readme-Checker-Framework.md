@@ -31,12 +31,10 @@ BUILD SUCCESSFUL
 Total time: 1 second
 ```
 
-The lack of error messages (and the correctness of `@SuppressWarnings(nullness)` in the BeepBeep 3 source code) proves that BeepBeep 3 contains no null pointer exceptions.
+The lack of error messages in the output console log (and the correctness of `@SuppressWarnings(nullness)` in the BeepBeep 3 source code) proves that BeepBeep 3 contains no null pointer exceptions.
 
 5. Examine the changes made to BeepBeep 3 to support the Nullness Checker.
 
 https://github.com/liflab/beepbeep-3/compare/master...mernst:beepbeep-3:nullness?expand=1
 
-The Nullness Checker did reveal bugs.  For example, one was fixed here:
-
-https://github.com/liflab/beepbeep-3/pull/75/files
+The Nullness Checker did reveal null pointer bugs in a previous version of BeepBeep 3.  For example, one was fixed in https://github.com/liflab/beepbeep-3/pull/75/files .  The current version of BeepBeep 3 (used in this analysis) has no null pointer exceptions.
