@@ -17,6 +17,11 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -61,6 +66,7 @@ public class Window extends AbstractWindow implements Stateful
    * @param in_processor The processor to run on each window
    * @param width The width of the window
    */
+  @SuppressWarnings("nullness") // permit call to reset() from constructor
   public Window(Processor in_processor, int width)
   {
     super(in_processor, width);
@@ -70,7 +76,8 @@ public class Window extends AbstractWindow implements Stateful
 
   @SuppressWarnings("unchecked")
   @Override
-  public void reset()
+  @EnsuresNonNull({"m_innerInputs", "m_window"})
+  public void reset(Window this)
   {
     super.reset();
     int arity = getInputArity();
@@ -194,6 +201,7 @@ public class Window extends AbstractWindow implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public Window duplicate(boolean with_state)
   {
     Window w = new Window(m_processor.duplicate(), m_width);
@@ -230,7 +238,8 @@ public class Window extends AbstractWindow implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState()
+	@SuppressWarnings("nullness") // Auto-generated method stub
+	public @Nullable Object getState()
 	{
 		// TODO Auto-generated method stub
 		return null;

@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Queue;
 
 /**
@@ -52,7 +54,7 @@ public class Prefix extends Trim
 	}
 	
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return Math.min(m_delay, m_inputCount);
 	}

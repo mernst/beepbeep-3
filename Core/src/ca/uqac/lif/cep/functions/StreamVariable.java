@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 
@@ -93,7 +96,7 @@ public class StreamVariable extends Variable
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (o == null || !(o instanceof StreamVariable))
     {
@@ -103,7 +106,7 @@ public class StreamVariable extends Variable
   }
 
   @Override
-  public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
   {
     outputs[0] = inputs[m_index];
     if (tracker != null)
@@ -113,7 +116,7 @@ public class StreamVariable extends Variable
   }
   
   @Override
-  public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+  public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
   {
     if (inputs[m_index] != null)
     {
@@ -124,6 +127,7 @@ public class StreamVariable extends Variable
   }
 
   @Override
+  @SideEffectFree
   public StreamVariable duplicate(boolean with_state)
   {
     return this;

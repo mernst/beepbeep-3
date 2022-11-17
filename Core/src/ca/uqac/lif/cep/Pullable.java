@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Iterator;
 
 /**
@@ -91,7 +93,7 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
    * 
    * @return An event, or <code>null</code> if none could be retrieved
    */
-  public Object pullSoft();
+  public @Nullable Object pullSoft();
 
   /**
    * Attempts to pull an event from the source. An event is returned if
@@ -207,7 +209,7 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
     /**
      * The processor to which the exception is associated (if any)
      */
-    protected final transient Processor m_processor;
+    protected final transient @Nullable Processor m_processor;
 
     public PullableException(Throwable t)
     {
@@ -219,13 +221,13 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
       this(message, null);
     }
 
-    public PullableException(String message, Processor p)
+    public PullableException(String message, @Nullable Processor p)
     {
       super(message);
       m_processor = p;
     }
 
-    public PullableException(Throwable t, Processor p)
+    public PullableException(Throwable t, @Nullable Processor p)
     {
       super(t);
       m_processor = p;
@@ -263,7 +265,7 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
     }
 
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       throw new UnsupportedOperationException();
     }

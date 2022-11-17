@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.Context;
@@ -103,6 +107,7 @@ public class Bags
      */
     protected Function m_condition;
 
+    @SuppressWarnings("initialization.fields.uninitialized")  // deserialization
     // This constructor is used for deserialization.
     protected FilterElements()
     {
@@ -152,7 +157,7 @@ public class Bags
       {
         throw new InvalidArgumentException(this, 0);
       }
-      for (Object o : (Collection<?>) x)
+      for (Object o : (Collection<@NonNull ?>) x)
       {
         Object[] in = new Object[1];
         in[0] = o;
@@ -228,7 +233,7 @@ public class Bags
       }
       else
       {
-        for (Object o : (Collection<?>) inputs[0])
+        for (Object o : (Collection<@NonNull ?>) inputs[0])
         {
           m_pushable.push(o);
         }
@@ -247,6 +252,7 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public RunOn duplicate(boolean with_state)
     {
       return new RunOn(m_processor.duplicate(with_state));
@@ -322,13 +328,14 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public ToArray duplicate(boolean with_state)
     {
       return new ToArray(m_types);
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       Object[] out = new Object[inputs.length];
       for (int i = 0; i < inputs.length; i++)
@@ -356,13 +363,14 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public ToList duplicate(boolean with_state)
     {
       return new ToList(m_types);
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       List<Object> out = new ArrayList<Object>(inputs.length);
       for (int i = 0; i < inputs.length; i++)
@@ -394,13 +402,14 @@ public class Bags
     }
 
     @Override
+  @SideEffectFree
     public ToSet duplicate(boolean with_state)
     {
       return new ToSet(m_types);
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       Set<Object> out = new HashSet<Object>(inputs.length);
       for (int i = 0; i < inputs.length; i++)
@@ -459,6 +468,7 @@ public class Bags
      */
     protected Function m_function;
 
+    @SuppressWarnings("initialization.fields.uninitialized")  // deserialization
     // This constructor is used for deserialization.
     public ApplyToAll()
     {
@@ -488,7 +498,7 @@ public class Bags
       if (x instanceof List)
       {
         List<Object> out = new ArrayList<Object>(((List<?>) x).size());
-        for (Object o : (List<?>) x)
+        for (Object o : (List<@NonNull ?>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -501,7 +511,7 @@ public class Bags
       if (x instanceof Set)
       {
         Set<Object> out = new HashSet<Object>();
-        for (Object o : (Set<?>) x)
+        for (Object o : (Set<@NonNull ?>) x)
         {
           Object[] in = new Object[1];
           in[0] = o;
@@ -562,7 +572,7 @@ public class Bags
    * <tt>null</tt>.
    */
   @SuppressWarnings("rawtypes")
-  public static class AnyElement extends UnaryFunction<Collection, Object>
+  public static class AnyElement extends UnaryFunction<Collection, @Nullable Object>
   {
     private AnyElement()
     {
@@ -570,6 +580,7 @@ public class Bags
     }
 
     @Override
+    @SuppressWarnings("nullness")  // BUG: returns null, looks like a bug
     public Object getValue(Collection x)
     {
       Object o = null;
@@ -601,13 +612,14 @@ public class Bags
     }
 
     @Override
+    @SideEffectFree
     public Explode duplicate(boolean with_state)
     {
       return new Explode(m_classes);
     }
 
     @Override
-    public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+    public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
     {
       Object[] ins = (Object[]) inputs[0];
       for (int i = 0; i < ins.length; i++)
@@ -653,7 +665,7 @@ public class Bags
    * @return An array, or <tt>null</tt> if the object could not be converted into
    *         an array.
    */
-  public static Object[] toObjectArray(Object o)
+  public static Object @Nullable [] toObjectArray(Object o)
   {
     if (o.getClass().isArray())
     {
@@ -661,7 +673,7 @@ public class Bags
     }
     if (o instanceof Collection<?>)
     {
-      Collection<?> c = (Collection<?>) o;
+      Collection<@NonNull ?> c = (Collection<@NonNull ?>) o;
       Object[] a = new Object[c.size()];
       int i = 0;
       for (Object obj : c)

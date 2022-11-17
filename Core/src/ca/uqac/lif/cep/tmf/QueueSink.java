@@ -17,6 +17,11 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,7 @@ public class QueueSink extends Sink
 {
   protected Queue<Object>[] m_queues;
 
+  @SuppressWarnings("nullness") // permit call to reset() from constructor
   public QueueSink(int in_arity)
   {
     super(in_arity);
@@ -48,7 +54,8 @@ public class QueueSink extends Sink
 
   @SuppressWarnings("unchecked")
   @Override
-  public void reset()
+  @EnsuresNonNull("m_queues") // permits constructor to type-check
+  public void reset(QueueSink this)
   {
     super.reset();
     int arity = getInputArity();
@@ -104,9 +111,9 @@ public class QueueSink extends Sink
    * 
    * @return A vector containing the first event of all queues, or containing null for empty queues
    */
-  public Object[] remove()
+  public @Nullable Object[] remove()
   {
-    Object[] out = new Object[m_queues.length];
+    @Nullable Object[] out = new Object[m_queues.length];
     for (int i = 0; i < m_queues.length; i++)
     {
       Queue<Object> q = m_queues[i];
@@ -124,6 +131,7 @@ public class QueueSink extends Sink
   }
 
   @Override
+  @SideEffectFree
   public QueueSink duplicate(boolean with_state)
   {
     QueueSink qs = new QueueSink(getInputArity());

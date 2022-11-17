@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.UniformProcessor;
 
@@ -62,6 +65,7 @@ public class Passthrough extends UniformProcessor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public Passthrough duplicate(boolean with_state)
   {
     return new Passthrough(getInputArity());
@@ -88,7 +92,7 @@ public class Passthrough extends UniformProcessor implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return null;
 	}

@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -52,7 +55,7 @@ public class SliceLast extends AbstractSlice
    * @param clean_func The cleaning function
    */
   public SliceLast(/* @ non_null @ */ Function func, /* @ non_null @ */ Processor proc,
-      Function clean_func)
+      @Nullable Function clean_func)
   {
     super(func, proc, clean_func);
     m_currentList = new ArrayList<Object>();
@@ -118,7 +121,7 @@ public class SliceLast extends AbstractSlice
   @Override
   public Object printState()
   {
-    Map<String,Object> contents = new HashMap<String,Object>();
+    Map<String,@Nullable Object> contents = new HashMap<String,@Nullable Object>();
     contents.put("cleaning-function", m_cleaningFunction);
     contents.put("explode-arrays", m_explodeArrays);
     contents.put("sinks", m_sinks);
@@ -153,7 +156,7 @@ public class SliceLast extends AbstractSlice
       {
         throw new ProcessorException("Cannot restore the state of the slice processor");
       }
-      QueueSink qs = s.m_sinks.get(entry.getKey());
+      @NonNull QueueSink qs = s.m_sinks.get(entry.getKey());
       Connector.connect(p, qs);
     }
     return s;

@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.concurrent.Future;
 
 /**
@@ -105,7 +107,7 @@ public interface Pushable
     /**
      * The processor to which the exception is associated (if any)
      */
-    protected final transient Processor m_processor;
+    protected final transient @Nullable Processor m_processor;
 
     public PushableException(Throwable t)
     {
@@ -117,13 +119,13 @@ public interface Pushable
       this(message, null);
     }
 
-    public PushableException(String message, Processor p)
+    public PushableException(String message, @Nullable Processor p)
     {
       super(message);
       m_processor = p;
     }
 
-    public PushableException(Throwable t, Processor p)
+    public PushableException(Throwable t, @Nullable Processor p)
     {
       super(t);
       m_processor = p;
@@ -188,7 +190,11 @@ public interface Pushable
   /**
    * A dummy {@link Future} object that will be returned on all calls to
    * {@link Pushable#pushFast(Object)}.
+   *
+   * @param p a dummy processor
+   * @return a dummy {@link Future} object}
    */
-  public static final FutureDone<Pushable> NULL_FUTURE = new FutureDone<Pushable>(
-      new PushNotSupported(null, 0));
+  public static FutureDone<Pushable> nullFuture(Processor p) {
+    return new FutureDone<Pushable>(new PushNotSupported(p, 0));
+  }
 }

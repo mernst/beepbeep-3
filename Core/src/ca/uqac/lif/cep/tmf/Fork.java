@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
 import ca.uqac.lif.cep.UniformProcessor;
@@ -46,6 +49,7 @@ public class Fork extends UniformProcessor
   }
 
   @Override
+  @SideEffectFree
   public Fork duplicate(boolean with_state)
   {
   	Fork f = new Fork(getOutputArity());

@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.Set;
@@ -55,11 +59,11 @@ public abstract class PassthroughFunction extends Function
    * 
    * @return The function
    */
-  public abstract Function getFunction();
+  public abstract Function getFunction(@UnknownInitialization(Function.class) PassthroughFunction this);
 
   @Override
-  public final void evaluate(Object[] inputs, Object[] outputs, Context context,
-      EventTracker tracker)
+  public final void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context,
+      @Nullable EventTracker tracker)
   {
     m_function.evaluate(inputs, outputs, context, tracker);
   }
@@ -89,6 +93,7 @@ public abstract class PassthroughFunction extends Function
   }
 
   @Override
+  @SideEffectFree
   public final Function duplicate(boolean with_state)
   {
     return this;

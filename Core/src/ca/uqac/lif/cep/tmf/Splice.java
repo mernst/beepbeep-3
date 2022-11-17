@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
@@ -64,7 +68,7 @@ public class Splice extends Source
     setPullablesTo(0);
   }
 
-  protected void setPullablesTo(int index)
+  protected void setPullablesTo(@UnknownInitialization(Splice.class) Splice this, int index)
   {
     Processor p = m_processors[index];
     for (int i = 0; i < m_pullables.length; i++)
@@ -86,7 +90,7 @@ public class Splice extends Source
   }
 
   @Override
-  public void setContext(Context context)
+  public void setContext(@Nullable Context context)
   {
     super.setContext(context);
     for (Processor p : m_processors)
@@ -96,7 +100,7 @@ public class Splice extends Source
   }
 
   @Override
-  public void setContext(String key, Object value)
+  public void setContext(String key, @Nullable Object value)
   {
     super.setContext(key, value);
     for (Processor p : m_processors)
@@ -149,6 +153,7 @@ public class Splice extends Source
   }
 
   @Override
+  @SideEffectFree
   public Splice duplicate(boolean with_state)
   {
     return new Splice(m_processors);

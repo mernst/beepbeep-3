@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 
@@ -63,7 +66,7 @@ public class ContextVariable extends Variable
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (o == null || !(o instanceof ContextVariable))
     {
@@ -74,7 +77,7 @@ public class ContextVariable extends Variable
 
   @Override
   @SuppressWarnings("squid:S1168")
-  public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+  public void evaluate(Object[] inputs, @Nullable Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
   {
     if (context == null || !context.containsKey(m_name))
     {
@@ -85,6 +88,7 @@ public class ContextVariable extends Variable
   }
 
   @Override
+  @SideEffectFree
   public ContextVariable duplicate(boolean with_state)
   {
     return new ContextVariable(m_name);

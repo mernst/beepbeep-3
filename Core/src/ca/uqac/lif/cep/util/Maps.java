@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.Function;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -39,6 +42,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.7
  */
+@SuppressWarnings("argument")  // TO ASK: Should these classes be null-friendly or null-hostile
 public class Maps
 {
   /**
@@ -76,6 +80,7 @@ public class Maps
     public Collection<?> getValue(Map x)
     {
       Collection<?> col = x.values();
+      // remove is allowed to throw NullPointerException if the collection doesn't support null
       col.remove(null);
       return col;
     }
@@ -171,6 +176,7 @@ public class Maps
     }
 
     @Override
+    @SideEffectFree
     public PutInto duplicate(boolean with_state)
     {
       return new PutInto();
@@ -220,6 +226,7 @@ public class Maps
     }
 
     @Override
+    @SideEffectFree
     public MapPutInto duplicate(boolean with_state)
     {
       return new MapPutInto();
@@ -350,6 +357,7 @@ public class Maps
     }
 
     @Override
+    @SideEffectFree
     public MergeMaps duplicate(boolean with_state)
     {
       MergeMaps mm = new MergeMaps();
@@ -382,7 +390,7 @@ public class Maps
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		public boolean equals(Object o)
+		public boolean equals(@Nullable Object o)
 		{
 			if (!(o instanceof MathMap))
 			{

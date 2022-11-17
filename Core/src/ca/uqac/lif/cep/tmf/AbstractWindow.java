@@ -61,6 +61,7 @@ public abstract class AbstractWindow extends SynchronousProcessor
    * @param in_processor The processor to run on each window
    * @param width The width of the window
    */
+  @SuppressWarnings("nullness") // Only subclass is Window, whose constructor sets the field
   public AbstractWindow(Processor in_processor, int width)
   {
     super(in_processor.getInputArity(), in_processor.getOutputArity());

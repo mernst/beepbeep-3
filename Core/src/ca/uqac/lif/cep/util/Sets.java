@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
@@ -86,7 +89,7 @@ public class Sets
     }
     
     @Override
-    public Object getState()
+    public @Nullable Object getState()
     {
     	MathSet<Object> set = new MathSet<Object>();
     	set.addAll(m_set);
@@ -108,6 +111,7 @@ public class Sets
     }
 
     @Override
+    @SideEffectFree
     public PutInto duplicate(boolean with_state)
     {
       PutInto pi = new PutInto();
@@ -251,7 +255,7 @@ public class Sets
 		}
   	
 		@Override
-		public boolean equals(Object o)
+		public boolean equals(@Nullable Object o)
 		{
 			if (!(o instanceof MathSet))
 			{

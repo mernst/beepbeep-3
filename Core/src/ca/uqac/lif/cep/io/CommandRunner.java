@@ -17,6 +17,11 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,13 +39,13 @@ public class CommandRunner extends Thread
 {
   protected String[] m_command;
 
-  protected byte[] m_stdin;
+  protected byte @Nullable [] m_stdin;
 
   protected volatile boolean m_stop = false;
 
-  protected StreamGobbler m_stdoutGobbler;
+  protected @MonotonicNonNull StreamGobbler m_stdoutGobbler;
 
-  protected StreamGobbler m_stderrGobbler;
+  protected @MonotonicNonNull StreamGobbler m_stderrGobbler;
 
   protected int m_errorCode = 0;
 
@@ -53,7 +58,7 @@ public class CommandRunner extends Thread
    *          If not set to null, this array of bytes will be sent to the stdin of
    *          the command being run
    */
-  public CommandRunner(String[] command, byte[] stdin)
+  public CommandRunner(String[] command, byte @Nullable [] stdin)
   {
     super();
     m_command = command;
@@ -197,6 +202,7 @@ public class CommandRunner extends Thread
     }
   }
 
+  @EnsuresNonNull({"m_stderrGobbler", "m_stdoutGobbler"})
   protected void execute() throws IOException
   {
     Process process = null;
@@ -236,6 +242,7 @@ public class CommandRunner extends Thread
    * 
    * @return The contents of stdout
    */
+  @RequiresNonNull("m_stdoutGobbler")
   public synchronized byte[] getBytes()
   {
     return m_stdoutGobbler.getBytes();
@@ -246,6 +253,7 @@ public class CommandRunner extends Thread
    * 
    * @return The contents of stdout
    */
+  @RequiresNonNull("m_stdoutGobbler")
   public synchronized String getString()
   {
     byte[] out = m_stdoutGobbler.getBytes();

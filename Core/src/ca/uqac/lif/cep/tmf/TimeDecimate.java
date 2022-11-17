@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * After returning an input event, discards all others for the next *n* seconds.
  * This processor therefore acts as a rate limiter.
@@ -101,6 +103,7 @@ public class TimeDecimate extends Decimate
   }
 
   @Override
+  @SideEffectFree
   public TimeDecimate duplicate(boolean with_state)
   {
     return new TimeDecimate(m_interval, m_shouldProcessLastInputs);

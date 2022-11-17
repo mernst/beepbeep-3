@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.UniformProcessor;
 import java.util.Set;
@@ -58,6 +61,7 @@ public class TurnInto extends UniformProcessor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public synchronized TurnInto duplicate(boolean with_state)
   {
     TurnInto out = new TurnInto(m_event);
@@ -105,7 +109,7 @@ public class TurnInto extends UniformProcessor implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return 0;
 	}

@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Set;
 
 import ca.uqac.lif.cep.Context;
@@ -28,9 +32,9 @@ import ca.uqac.lif.cep.EventTracker;
  */
 public class FunctionLambda extends Function
 {
-  UnaryLambdaEvaluable m_unary = null;
+  @MonotonicNonNull UnaryLambdaEvaluable m_unary = null;
   
-  BinaryLambdaEvaluable m_binary = null;
+  @MonotonicNonNull BinaryLambdaEvaluable m_binary = null;
   
   protected Class<?> m_returnType = Object.class;
   
@@ -59,6 +63,7 @@ public class FunctionLambda extends Function
   }
 
   @Override
+  @SideEffectFree
   public FunctionLambda duplicate(boolean with_state)
   {
     return this;
@@ -75,7 +80,7 @@ public class FunctionLambda extends Function
   }
 
   @Override
-  public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
   {
     if (m_unary != null)
     {

@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.tmf.Passthrough;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -54,7 +56,7 @@ public abstract class UniformProcessor extends SynchronousProcessor
    *          The processor's context (can be null)
    * @since 0.10.2
    */
-  public UniformProcessor(int in_arity, int out_arity, /*@ null @*/ Context c)
+  public UniformProcessor(int in_arity, int out_arity, /*@ null @*/ @Nullable Context c)
   {
     super(in_arity, out_arity);
     m_outputArray = new Object[out_arity];
@@ -193,7 +195,7 @@ public abstract class UniformProcessor extends SynchronousProcessor
     public synchronized Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(UniformProcessor.this);
     }
 
     @Override
@@ -262,7 +264,7 @@ public abstract class UniformProcessor extends SynchronousProcessor
     }
 
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       if (!m_inputQueues[0].isEmpty())
       {

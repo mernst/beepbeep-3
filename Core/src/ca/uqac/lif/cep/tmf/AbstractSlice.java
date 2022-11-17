@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -80,7 +84,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
   /**
    * The cleaning function
    */
-  protected Function m_cleaningFunction = null;
+  protected @Nullable Function m_cleaningFunction;
 
   /**
    * A map associating slice IDs to the instance of processor associated to them
@@ -109,6 +113,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
    * Creates a dummy abstract slice. This constructor is only used for
    * deserialization purposes.
    */
+  @SuppressWarnings("nullness")  // serialization
   protected AbstractSlice()
   {
     super(1, 1);
@@ -126,7 +131,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
    *          The cleaning function
    */
   public AbstractSlice(/* @ non_null @ */ Function func, /* @ non_null @ */ Processor proc,
-      Function clean_func)
+      @Nullable Function clean_func)
   {
     super(proc.getInputArity(), proc.getOutputArity());
     m_processor = proc;
@@ -169,7 +174,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
       // This event applies to no slice; don't bother processing it
       return produceReturn(outputs);
     }
-    Object[] slice_vals;
+    @Nullable Object[] slice_vals;
     if (m_explodeArrays)
     {
       if (slice_ids.getClass().isArray())
@@ -196,7 +201,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
     {
       slice_vals = new Object[] { slice_ids };
     }
-    for (Object slice_id : slice_vals)
+    for (@Nullable Object slice_id : slice_vals)
     {
       Set<Object> slices_to_process = new HashSet<Object>();
       if (slice_id instanceof ToAllSlices || slice_id == null)
@@ -223,7 +228,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
         slices_to_process.add(slice_id);
       }
       @SuppressWarnings("unchecked")
-      Future<Pushable>[] futures = new Future[slices_to_process.size()];
+      @Nullable Future<Pushable>[] futures = new Future[slices_to_process.size()];
       for (Object s_id : slices_to_process)
       {
         // Find processor corresponding to that slice
@@ -234,7 +239,8 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
           QueueSink sink_p = m_sinks.get(s_id);
           if (m_eventTracker != null)
           {
-            m_sliceIndices.get(s_id).add(m_inputCount);
+            @NonNull List<Integer> eventPositions = m_sliceIndices.get(s_id);
+            eventPositions.add(m_inputCount);
           }
           // Push the input into the processor
           // Pushable[] p_array = new Pushable[inputs.length];
@@ -265,7 +271,9 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
               }
             }
           }
+          // remove() returns "@Nullable Object[]", but evaluate requires non-null.
           // Collect the output from that processor
+          @SuppressWarnings("nullness")  // TO ASK (question written)
           Object[] out = sink_p.remove();
           // Can we clean that slice?
           Object[] can_clean = new Object[1];
@@ -280,6 +288,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
               throw new ProcessorException(e);
             }
           }
+          // TODO: can_clean test is gratuitous, and so is length test.
           if (can_clean != null && can_clean.length > 0 && can_clean[0] instanceof Boolean
               && (Boolean) (can_clean[0]))
           {
@@ -346,7 +355,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
   {
     return m_slices.size();
   }
-  
+
   /**
    * Copies the content of the current abstract slice processor into another
    * instance.
@@ -416,7 +425,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	MathMap<Object,InternalProcessorState> state = new MathMap<Object,InternalProcessorState>();
   	for (Map.Entry<Object,Processor> e : m_slices.entrySet())

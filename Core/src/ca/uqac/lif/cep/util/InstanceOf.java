@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.functions.UnaryFunction;
 
 /**
@@ -52,6 +54,7 @@ public class InstanceOf extends UnaryFunction<Object,Boolean>
   }
   
   @Override
+  @SideEffectFree
   public InstanceOf duplicate(boolean with_state)
   {
     return this;

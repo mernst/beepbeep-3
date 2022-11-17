@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.azrael.ObjectPrinter;
 import ca.uqac.lif.azrael.ObjectReader;
 import ca.uqac.lif.azrael.PrintException;
@@ -61,7 +65,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          function
    */
   /*@ pure @*/ public void evaluate(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context)
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context)
   {
     evaluate(inputs, outputs, context, null);
   }
@@ -85,8 +89,8 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          This argument is optional and may be null.
    */
   /*@ pure @*/ public abstract void evaluate(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context,
-      /*@ null @*/ EventTracker tracker);
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context,
+      /*@ null @*/ @Nullable EventTracker tracker);
 
   /**
    * Evaluates the outputs of the function, given some inputs
@@ -122,8 +126,8 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * @return <tt>true</tt> if the function succeeded in producing an output
    *          value, <tt>false</tt> otherwise
    */
-  /*@ pure @*/ public boolean evaluatePartial(/*@ non_null @*/ Object[] inputs, 
-      /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context)
+  /*@ pure @*/ public boolean evaluatePartial(/*@ non_null @*/ @Nullable Object[] inputs, 
+      /*@ non_null @*/ Object[] outputs, /*@ null @*/ @Nullable Context context)
   {
     // Defer the call to evaluate if any input is null
     for (int i = 0; i < inputs.length; i++)
@@ -133,7 +137,9 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
         return false;
       }
     }
-    evaluate(inputs, outputs, context);
+    @SuppressWarnings("nullness") // inputs now contains non-null elements
+    Object[] inputsNn = inputs;
+    evaluate(inputsNn, outputs, context);
     return true;
   }
 
@@ -217,19 +223,21 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * @return A {@link Future} object for this function call
    */
   /*@ pure @*/ public Future<Object[]> evaluateFast(Object[] inputs, Object[] outputs, 
-      Context context, ExecutorService service)
+      @Nullable Context context, ExecutorService service)
   {
     evaluate(inputs, outputs, context);
     return new FutureDone<Object[]>(outputs);
   }
 
   @Override
+  @SideEffectFree
   /*@ pure non_null @*/ public final Function duplicate()
   {
     return duplicate(false);
   }
 
   @Override
+  @SideEffectFree
   /*@ pure non_null @*/ public abstract Function duplicate(boolean with_state);
 
   /**
@@ -238,11 +246,13 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
   @Override
   public Object print(ObjectPrinter<?> printer)
   {
-    Map<String,Object> map = new HashMap<String,Object>();
+    Map<String,@Nullable Object> map = new HashMap<String,@Nullable Object>();
     map.put("contents", printState());
     try
     {
-      return printer.print(map);
+      @SuppressWarnings("nullness") // unannotated library: Azrael
+      @NonNull Object result = printer.print(map);
+      return result;
     }
     catch (PrintException e)
     {
@@ -258,7 +268,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * (including <tt>null</tt>)
    * @since 0.10.2
    */
-  protected Object printState()
+  protected @Nullable Object printState()
   {
     return null;
   }

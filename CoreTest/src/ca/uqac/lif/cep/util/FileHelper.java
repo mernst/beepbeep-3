@@ -280,7 +280,7 @@ public class FileHelper
 		return out;
 	}
 
-	public static byte[] internalFileToBytes(Class<?> c, String path)
+	public static byte @Nullable [] internalFileToBytes(Class<?> c, String path)
 	{
 		InputStream in = internalFileToStream(c, path);
 		byte[] file_contents = null;
@@ -291,7 +291,7 @@ public class FileHelper
 		return file_contents;
 	}
 
-	public static InputStream internalFileToStream(Class<?> c, String path)
+	public static @Nullable InputStream internalFileToStream(Class<?> c, String path)
 	{
 		return c.getResourceAsStream(path);
 	}

@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -127,7 +129,7 @@ public abstract class UtilityMethods
 	 * @param o The object
 	 * @return The string rendition of the object
 	 */
-	public static String print(Object o)
+	public static String print(@Nullable Object o)
 	{
 	  if (o == null)
 	  {

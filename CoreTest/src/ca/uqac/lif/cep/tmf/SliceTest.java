@@ -365,7 +365,7 @@ public class SliceTest
 	 * is equal to 1, and <tt>true</tt> or <tt>false</tt> for the remaining
 	 * numbers, depending on whether they are even or odd.  
 	 */
-	public static class EvenAll extends UnaryFunction<Number,Object>
+	public static class EvenAll extends UnaryFunction<Number,@Nullable Object>
 	{
 		public static final EvenAll instance = new EvenAll();
 
@@ -375,7 +375,7 @@ public class SliceTest
 		}
 
 		@Override
-		public Object getValue(Number x) 
+		public @Nullable Object getValue(Number x) 
 		{
 			if (x.intValue() == 2)
 			{
@@ -389,6 +389,7 @@ public class SliceTest
 		}
 
 		@Override
+		@SideEffectFree
 		public EvenAll duplicate(boolean with_state)
 		{
 			return instance;

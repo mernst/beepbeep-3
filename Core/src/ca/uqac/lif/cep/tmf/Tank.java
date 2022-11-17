@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -43,12 +47,12 @@ public class Tank extends Processor
   /**
    * A pushable
    */
-  protected QueuePushable m_pushable = null;
+  protected @MonotonicNonNull QueuePushable m_pushable = null;
 
   /**
    * A pullable
    */
-  protected QueuePullable m_pullable = null;
+  protected @MonotonicNonNull QueuePullable m_pullable = null;
 
   /**
    * Creates a new empty tank
@@ -59,6 +63,7 @@ public class Tank extends Processor
   }
 
   @Override
+  @SideEffectFree
   public Tank duplicate(boolean with_state)
   {
     Tank t = new Tank();
@@ -105,7 +110,7 @@ public class Tank extends Processor
     }
 
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       synchronized (m_inputQueues[0])
       {
@@ -212,7 +217,7 @@ public class Tank extends Processor
     public Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(Tank.this);
     }
 
     @Override

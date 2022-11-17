@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import java.util.Queue;
 
 /**
@@ -45,6 +48,7 @@ public class BlackHole extends Sink
   }
 
   @Override
+  @SideEffectFree
   public BlackHole duplicate(boolean with_state)
   {
     return new BlackHole();

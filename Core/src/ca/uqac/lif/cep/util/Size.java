@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.functions.UnaryFunction;
 import java.util.Collection;
 import java.util.Map;
@@ -34,7 +36,7 @@ import java.util.Map;
  * @since 0.3
  */
 @SuppressWarnings("rawtypes")
-public class Size extends UnaryFunction<Object, Integer>
+public class Size extends UnaryFunction<@Nullable Object, Integer>
 {
   public static final transient Size instance = new Size();
 
@@ -44,7 +46,7 @@ public class Size extends UnaryFunction<Object, Integer>
   }
 
   @Override
-  public Integer getValue(Object x)
+  public Integer getValue(@Nullable Object x)
   {
     if (x == null)
     {

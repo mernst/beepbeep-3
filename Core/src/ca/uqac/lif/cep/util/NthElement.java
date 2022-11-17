@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.functions.FunctionException;
 import ca.uqac.lif.cep.functions.InvalidArgumentException;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -73,7 +76,7 @@ public class NthElement extends UnaryFunction<Object, Object>
     }
     if (x instanceof List<?>)
     {
-      List<?> list = (List<?>) x;
+      List<? extends @NonNull Object> list = (List<? extends @NonNull Object>) x;
       try
       {
         return list.get(m_n);
@@ -87,6 +90,7 @@ public class NthElement extends UnaryFunction<Object, Object>
   }
 
   @Override
+  @SideEffectFree
   public NthElement duplicate(boolean with_state)
   {
     return new NthElement(m_n);

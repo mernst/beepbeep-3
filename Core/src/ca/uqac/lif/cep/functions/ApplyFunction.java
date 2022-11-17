@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.GroupProcessor;
 import ca.uqac.lif.cep.Processor;
@@ -90,6 +93,7 @@ public class ApplyFunction extends UniformProcessor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public synchronized ApplyFunction duplicate(boolean with_state)
   {
     ApplyFunction out = new ApplyFunction(m_function.duplicate(with_state));
@@ -220,7 +224,7 @@ public class ApplyFunction extends UniformProcessor implements Stateful
   }
 
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return null;
 	}

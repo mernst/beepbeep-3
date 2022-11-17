@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.Set;
@@ -31,7 +34,7 @@ import java.util.Set;
  * 
  * @since 0.2.1
  */
-public abstract class UnaryFunction<T, U> extends Function
+public abstract class UnaryFunction<T extends @Nullable Object, U extends @Nullable Object> extends Function
 {
   /**
    * The class of the input
@@ -58,11 +61,11 @@ public abstract class UnaryFunction<T, U> extends Function
     m_outputType = u;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "nullness"}) // TO ASK
   @Override
   /* @ requires inputs.length == 1 */
   public void evaluate(/*@ non_null @*/ Object[] inputs, Object[] outputs, 
-      /*@ null @*/ Context context, /*@ null @*/ EventTracker tracker)
+      /*@ null @*/ @Nullable Context context, /*@ null @*/ @Nullable EventTracker tracker)
   {
     T in = (T) inputs[0];
     outputs[0] = getValue(in);
@@ -101,6 +104,7 @@ public abstract class UnaryFunction<T, U> extends Function
   }
 
   @Override
+  @SideEffectFree
   public UnaryFunction<T, U> duplicate(boolean with_state)
   {
     return this;

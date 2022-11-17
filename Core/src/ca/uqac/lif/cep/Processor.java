@@ -17,6 +17,11 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.azrael.ObjectPrinter;
 import ca.uqac.lif.azrael.ObjectReader;
 import ca.uqac.lif.azrael.PrintException;
@@ -95,7 +100,7 @@ public abstract class Processor implements DuplicableProcessor,
    * An object that keeps track of the relationship between input and output
    * events.
    */
-  protected transient EventTracker m_eventTracker = null;
+  protected transient @Nullable EventTracker m_eventTracker = null;
 
   /**
    * An array of output event queues. This is where the output events will be
@@ -146,7 +151,7 @@ public abstract class Processor implements DuplicableProcessor,
   /**
    * The context in which the processor is instantiated
    */
-  protected Context m_context = null;
+  protected @Nullable Context m_context = null;
 
   /**
    * Number of times the {@link Pullable#hasNext()} method tries to produce an
@@ -249,7 +254,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          The key associated to that object
    * @return The object, or <code>null</code> if no object exists with such key
    */
-  public final synchronized /*@ null @*/ Object getContext(/*@ non_null @*/ String key)
+  public final synchronized /*@ null @*/ @Nullable Object getContext(/*@ non_null @*/ String key)
   {
     if (m_context == null || !m_context.containsKey(key))
     {
@@ -271,7 +276,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/*@ non_null @*/ String key, Object value)
+  public synchronized void setContext(/*@ non_null @*/ String key, @Nullable Object value)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -283,7 +288,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/*@ null @*/ Context context)
+  public synchronized void setContext(/*@ null @*/ @Nullable Context context)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -317,7 +322,7 @@ public abstract class Processor implements DuplicableProcessor,
    * overridden by descendants. 
    */
   @Override
-  public final boolean equals(Object o)
+  public final boolean equals(@Nullable Object o)
   {
     if (o == null || !(o instanceof Processor))
     {
@@ -343,7 +348,7 @@ public abstract class Processor implements DuplicableProcessor,
    * should also reset this state to its "initial" settings (whatever that means
    * in your context).
    */
-  public synchronized void reset()
+  public synchronized void reset(Processor this)
   {
     // Reset input
     for (int i = 0; i < m_inputArity; i++)
@@ -478,7 +483,7 @@ public abstract class Processor implements DuplicableProcessor,
    * 
    * @return The arity
    */
-  /*@ pure @*/ public final int getInputArity()
+  /*@ pure @*/ public final int getInputArity(@UnknownInitialization(Processor.class) Processor this)
   {
     return m_inputArity;
   }
@@ -503,7 +508,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @return <code>true</code> if all elements in the array are null,
    *         <code>false</code> otherwise
    */
-  public static boolean allNull(Object[] v)
+  public static boolean allNull(@Nullable Object[] v)
   {
     for (Object o : v)
     {
@@ -670,7 +675,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @return The event tracker, or <tt>null</tt> of no event tracker is associated
    *         to this processor
    */
-  public final /*@ null @*/ EventTracker getEventTracker()
+  public final /*@ null @*/ @Nullable EventTracker getEventTracker()
   {
     return m_eventTracker;
   }
@@ -683,7 +688,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          existing tracker
    * @return This processor
    */
-  public Processor setEventTracker(/*@ null @*/ EventTracker tracker)
+  public Processor setEventTracker(/*@ null @*/ @Nullable EventTracker tracker)
   {
     m_eventTracker = tracker;
     return this;
@@ -786,7 +791,7 @@ public abstract class Processor implements DuplicableProcessor,
   @Override
   public final Object print(ObjectPrinter<?> printer) throws ProcessorException
   {
-    Map<String,Object> contents = new HashMap<String,Object>();
+    Map<String,@Nullable Object> contents = new HashMap<String,@Nullable Object>();
     contents.put("id", m_uniqueId);
     contents.put("input-count", m_inputCount);
     contents.put("output-count", m_outputCount);
@@ -806,7 +811,9 @@ public abstract class Processor implements DuplicableProcessor,
     contents.put("contents", printState());
     try
     {
-      return printer.print(contents);
+      @SuppressWarnings("nullness")  // unannotated library: Azrael (not sure about return type, but likely non-null)
+      @NonNull Object result = printer.print(contents);
+      return result;
     }
     catch (PrintException e)
     {
@@ -822,7 +829,7 @@ public abstract class Processor implements DuplicableProcessor,
    * (including <tt>null</tt>)
    * @since 0.10.2
    */
-  protected Object printState()
+  protected @Nullable Object printState()
   {
     return null;
   }
@@ -834,7 +841,6 @@ public abstract class Processor implements DuplicableProcessor,
    * @return The serialized processor
    * @throws ProcessorException If the read operation failed for some reason
    */
-  @SuppressWarnings("unchecked")
   @Override
   public final Processor read(ObjectReader<?> reader, Object o) throws ProcessorException
   {
@@ -899,6 +905,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
+  @SideEffectFree
   /*@ pure non_null @*/ public final Processor duplicate()
   {
     return duplicate(false);
@@ -927,6 +934,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
+  @SideEffectFree
   /*@ non_null @*/ public abstract Processor duplicate(boolean with_state);
   
   /**
@@ -987,7 +995,7 @@ public abstract class Processor implements DuplicableProcessor,
   	/**
   	 * The internal state of the processor itself.
   	 */
-  	/*@ null @*/ protected Object m_processorState = null;
+  	/*@ null @*/ protected @Nullable Object m_processorState = null;
   	
   	public InternalProcessorState(Processor p)
   	{
@@ -1013,7 +1021,7 @@ public abstract class Processor implements DuplicableProcessor,
   	}
   	
   	@Override
-  	public boolean equals(Object o)
+  	public boolean equals(@Nullable Object o)
   	{
   		if (!(o instanceof InternalProcessorState))
   		{

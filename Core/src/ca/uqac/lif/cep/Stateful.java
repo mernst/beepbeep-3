@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Interface implemented by processors that can publicly expose a token
  * equivalent to their internal state. This token can be an arbitrary
@@ -39,5 +41,5 @@ public interface Stateful
 	 * @throws UnsupportedOperationException Thrown if the internal state cannot
 	 * be provided for some reason
 	 */
-	/*@ null @*/ public Object getState() throws UnsupportedOperationException;
+	/*@ null @*/ public @Nullable Object getState() throws UnsupportedOperationException;
 }

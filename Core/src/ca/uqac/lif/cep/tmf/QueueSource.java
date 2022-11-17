@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.petitpoucet.DirectValue;
@@ -199,6 +202,7 @@ public class QueueSource extends Source implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public QueueSource duplicate(boolean with_state)
   {
     QueueSource out = new QueueSource(getOutputArity());
@@ -259,8 +263,9 @@ public class QueueSource extends Source implements Stateful
       return getDataPointId();
     }
 
+    @SuppressWarnings("nullness:override.return")  // unannotated library: petitpoucet
     @Override
-    public NodeFunction dependsOn()
+    public @Nullable NodeFunction dependsOn()
     {
       return DirectValue.instance;
     }
@@ -303,7 +308,7 @@ public class QueueSource extends Source implements Stateful
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	return m_index;
   }

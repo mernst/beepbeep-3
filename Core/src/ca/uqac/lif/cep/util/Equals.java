@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import ca.uqac.lif.cep.functions.Constant;
 import ca.uqac.lif.cep.util.Lists.MathList;
@@ -71,7 +73,7 @@ public class Equals extends BinaryFunction<Object, Object, Boolean>
    * @param y The second object
    * @return <tt>true</tt> if they are equal, <tt>false</tt> otherwise
    */
-  public static boolean isEqualTo(Object x, Object y)
+  public static boolean isEqualTo(@Nullable Object x, @Nullable Object y)
   {
   	if ((x == null) != (y == null))
   	{

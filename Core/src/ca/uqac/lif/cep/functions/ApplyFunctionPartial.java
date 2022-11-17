@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -66,7 +69,7 @@ public class ApplyFunctionPartial extends Processor
    * An array containing the events received so far in the current
    * input front
    */
-  protected Object[] m_inputFront;
+  protected @Nullable Object[] m_inputFront;
 
   /**
    * Creates a new lazy application processor.
@@ -104,6 +107,7 @@ public class ApplyFunctionPartial extends Processor
   }
 
   @Override
+  @SideEffectFree
   public ApplyFunctionPartial duplicate(boolean with_state)
   {
     return new ApplyFunctionPartial(m_function.duplicate(with_state));
@@ -182,7 +186,7 @@ public class ApplyFunctionPartial extends Processor
     public Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(ApplyFunctionPartial.this);
     }
 
     @Override
@@ -224,12 +228,13 @@ public class ApplyFunctionPartial extends Processor
     }
 
     @Override
-    public Object pullSoft()
+    public @Nullable Object pullSoft()
     {
       // TODO Auto-generated method stub
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Object pull()
     {
@@ -237,6 +242,7 @@ public class ApplyFunctionPartial extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Object next()
     {
@@ -244,6 +250,7 @@ public class ApplyFunctionPartial extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public NextStatus hasNextSoft() 
     {
@@ -306,7 +313,7 @@ public class ApplyFunctionPartial extends Processor
       front_nb.add(m_frontNumber[i]);
     }
     contents.put("front-nb", front_nb);
-    List<Object> front = new ArrayList<Object>(m_inputFront.length);
+    List<@Nullable Object> front = new ArrayList<@Nullable Object>(m_inputFront.length);
     for (int i = 0; i < m_inputFront.length; i++)
     {
       front.add(m_inputFront[i]);

@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.Function;
@@ -51,11 +54,14 @@ public class WindowFunction extends SynchronousProcessor
    */
   protected LinkedList<Object> m_window;
 
+  // What is the point of this constructor?  It is never called explicitly.
   WindowFunction()
   {
     this(1);
   }
 
+  // What is the point of this constructor?  It is never called explicitly.
+  @SuppressWarnings("nullness")  // unused: method is never called
   WindowFunction(int width)
   {
     super(1, 1);
@@ -113,6 +119,7 @@ public class WindowFunction extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public WindowFunction duplicate(boolean with_state)
   {
     WindowFunction wf = new WindowFunction(m_function.duplicate());

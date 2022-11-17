@@ -17,6 +17,13 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
@@ -92,6 +99,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public PutInto duplicate(boolean with_state)
     {
       PutInto pi = new PutInto();
@@ -126,6 +134,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public PutIntoNew duplicate(boolean with_state)
     {
       PutIntoNew pi = new PutIntoNew();
@@ -175,7 +184,7 @@ public class Lists
      * 
      * @return The list
      */
-    protected List<Object> newList()
+    protected List<Object> newList(@UnknownInitialization AbstractPack this)
     {
       return new LinkedList<Object>();
     }
@@ -217,6 +226,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public Pack duplicate(boolean with_state)
     {
       Pack p = new Pack();
@@ -263,12 +273,12 @@ public class Lists
     /**
      * The timer that will send events at periodic interval
      */
-    protected Timer m_timer;
+    protected @MonotonicNonNull Timer m_timer;
 
     /**
      * The thread that will execute the timer
      */
-    protected Thread m_timerThread;
+    protected @MonotonicNonNull Thread m_timerThread;
 
     /**
      * Creates a new list packer.
@@ -298,13 +308,16 @@ public class Lists
      *          The interval, in milliseconds
      * @return This processor
      */
-    public TimePack setInterval(long interval)
+    @SuppressWarnings("nullness")  // need @PolyInitialized annotation
+    @EnsuresNonNull("m_outputInterval")
+    public TimePack setInterval(@UnknownInitialization(AbstractPack.class) TimePack this, long interval)
     {
       m_outputInterval = interval;
       return this;
     }
 
     @Override
+    @EnsuresNonNull({"m_timer", "m_timerThread"})
     public void start()
     {
       m_timer = new Timer();
@@ -312,6 +325,8 @@ public class Lists
       m_timerThread.start();
     }
 
+    @SuppressWarnings("contracts.precondition.override")  // TODO: variable only exists in this subclass
+    @RequiresNonNull("m_timer")
     @Override
     public void stop()
     {
@@ -371,6 +386,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public TimePack duplicate(boolean with_state)
     {
       TimePack tp = new TimePack();
@@ -425,6 +441,7 @@ public class Lists
     }
 
     @Override
+    @SideEffectFree
     public Unpack duplicate(boolean with_state)
     {
       Unpack up = new Unpack();
@@ -452,6 +469,8 @@ public class Lists
 		 * Creates a new math list and adds elements from an array.
 		 * @param elements The elements to add
 		 */
+    
+		@SuppressWarnings("nullness") // inference failure
 		@SafeVarargs
 		public MathList(T ... elements)
 		{
@@ -478,7 +497,7 @@ public class Lists
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public boolean equals(Object o)
+		public boolean equals(@Nullable Object o)
 		{
 			if (!(o instanceof MathList))
 			{

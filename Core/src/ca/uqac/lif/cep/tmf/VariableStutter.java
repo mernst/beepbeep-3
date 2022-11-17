@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -50,6 +53,7 @@ public class VariableStutter extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public VariableStutter duplicate(boolean with_state)
   {
     return new VariableStutter();

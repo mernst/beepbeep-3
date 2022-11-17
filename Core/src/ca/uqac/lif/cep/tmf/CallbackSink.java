@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 
@@ -43,6 +46,7 @@ public class CallbackSink extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public CallbackSink duplicate(boolean with_state)
   {
     return new CallbackSink(getInputArity());

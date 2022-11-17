@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.functions.BinaryFunction;
@@ -87,7 +90,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+    public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == false)
       {
@@ -135,7 +138,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+    public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == false)
       {
@@ -219,7 +222,7 @@ public class Booleans
     }
 
     @Override
-    public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+    public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
     {
       if (inputs[0] != null && ((Boolean) inputs[0]) == true)
       {
@@ -304,7 +307,7 @@ public class Booleans
       }
       if (o instanceof Collection)
       {
-        Collection<?> a = (Collection<?>) o;
+        Collection<@NonNull ?> a = (Collection<@NonNull ?>) o;
         for (Object e : a)
         {
           if (!parseBoolValue(e))
@@ -349,7 +352,7 @@ public class Booleans
       }
       if (o instanceof Collection)
       {
-        Collection<?> a = (Collection<?>) o;
+        Collection<@NonNull ?> a = (Collection<@NonNull ?>) o;
         for (Object e : a)
         {
           if (parseBoolValue(e))

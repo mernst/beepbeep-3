@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Queue;
 
 /**

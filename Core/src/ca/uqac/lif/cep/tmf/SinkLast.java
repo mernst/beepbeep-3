@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Queue;
 
 /**
@@ -32,7 +36,7 @@ public class SinkLast extends Sink
   /**
    * The last event (or array of events) received
    */
-  protected Object[] m_last = null;
+  protected Object @Nullable [] m_last = null;
 
   /**
    * The number of events received so far
@@ -60,8 +64,6 @@ public class SinkLast extends Sink
   public void reset()
   {
     super.reset();
-    m_last = null;
-    m_eventCounter = 0;
   }
 
   @Override
@@ -71,12 +73,14 @@ public class SinkLast extends Sink
     return true;
   }
 
-  public Object[] getLast()
+  @Pure
+  public Object @Nullable [] getLast()
   {
     return m_last;
   }
 
   @Override
+  @SideEffectFree
   public SinkLast duplicate(boolean with_state)
   {
     return new SinkLast(getInputArity());

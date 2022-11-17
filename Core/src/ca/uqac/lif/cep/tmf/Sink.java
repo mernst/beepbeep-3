@@ -17,10 +17,14 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pullable.PullableException;
 import ca.uqac.lif.cep.SynchronousProcessor;
+import java.util.Queue;
 
 /**
  * Receives input events and stores them. As its name implies, the
@@ -39,6 +43,9 @@ import ca.uqac.lif.cep.SynchronousProcessor;
 @SuppressWarnings("squid:S2160")
 public abstract class Sink extends SynchronousProcessor
 {
+  @SuppressWarnings("nullness")  // unused: the compute function of a sink produces no output
+  static @NonNull Queue<Object[]> nullOutputQueue = null;
+
   public Sink()
   {
     this(1);
@@ -58,11 +65,13 @@ public abstract class Sink extends SynchronousProcessor
     for (int i = 0; i < getInputArity(); i++)
     {
       Pullable p = m_inputPullables[i];
-      inputs[i] = p.pullSoft();
+      @SuppressWarnings("nullness")      // TO ASK (question written)
+      @NonNull Object event = p.pullSoft();
+      inputs[i] = event;
     }
     try
     {
-      compute(inputs, null);
+      compute(inputs, nullOutputQueue);
     }
     catch (ProcessorException e)
     {
@@ -83,7 +92,7 @@ public abstract class Sink extends SynchronousProcessor
     }
     try
     {
-      compute(inputs, null);
+      compute(inputs, nullOutputQueue);
     }
     catch (ProcessorException e)
     {

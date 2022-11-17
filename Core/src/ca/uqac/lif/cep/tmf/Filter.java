@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
@@ -62,6 +65,7 @@ public class Filter extends SynchronousProcessor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public Filter duplicate(boolean with_state)
   {
     return new Filter();
@@ -71,7 +75,7 @@ public class Filter extends SynchronousProcessor implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState() throws UnsupportedOperationException
+	public @Nullable Object getState() throws UnsupportedOperationException
 	{
 		return null;
 	}

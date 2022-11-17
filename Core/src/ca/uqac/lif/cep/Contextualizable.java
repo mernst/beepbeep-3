@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Interface implemented by all BeepBeep objects that manipulate a
  * {@link Context}.
@@ -31,7 +33,7 @@ public interface Contextualizable
    * @param context
    *          The context to add
    */
-  public void setContext(/*@ null @*/ Context context);
+  public void setContext(/*@ null @*/ @Nullable Context context);
 
   /**
    * Adds an object to the object's context
@@ -41,7 +43,7 @@ public interface Contextualizable
    * @param value
    *          The object
    */
-  public void setContext(/*@ non_null @*/ String key, /*@ null @*/ Object value);
+  public void setContext(/*@ non_null @*/ String key, /*@ null @*/ @Nullable Object value);
 
   /**
    * Gets the context associated to this object

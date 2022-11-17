@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +29,7 @@ import java.util.List;
  * @author Sylvain Hallé
  * @since 0.1
  */
-public class CumulativeFunction<T> extends UnaryFunction<T, T>
+public class CumulativeFunction<T extends @NonNull Object> extends UnaryFunction<T, T>
 {
   /**
    * The last value returned by the function
@@ -71,6 +74,7 @@ public class CumulativeFunction<T> extends UnaryFunction<T, T>
   }
 
   @Override
+  @SideEffectFree
   public CumulativeFunction<T> duplicate(boolean with_state)
   {
     CumulativeFunction<T> cf = new CumulativeFunction<T>(m_function.duplicate(with_state));

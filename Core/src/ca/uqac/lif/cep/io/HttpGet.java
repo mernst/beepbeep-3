@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.io;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.tmf.Source;
@@ -81,7 +84,9 @@ public class HttpGet extends Source
         response = s.next();
       }
       s.close();
-      outputs.add(new Object[] { response });
+      @SuppressWarnings("nullness") // TO ASK (question written)
+      Object[] response_array = new Object[] { response };
+      outputs.add(response_array);
     }
     catch (IOException e)
     {
@@ -111,6 +116,7 @@ public class HttpGet extends Source
   }
 
   @Override
+  @SideEffectFree
   public HttpGet duplicate(boolean with_state)
   {
     return new HttpGet(m_url);

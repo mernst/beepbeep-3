@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.util.Lists.MathList;
@@ -40,7 +43,7 @@ public class Freeze extends UniformProcessor implements Stateful
   /**
    * The event front to freeze
    */
-  protected transient Object[] m_output;
+  protected transient Object @Nullable [] m_output;
 
   /**
    * Creates a new freeze processor
@@ -69,6 +72,7 @@ public class Freeze extends UniformProcessor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public Freeze duplicate(boolean with_state)
   {
     return new Freeze();
@@ -78,7 +82,7 @@ public class Freeze extends UniformProcessor implements Stateful
    * @since 0.10.2
    */
   @Override
-  public Object printState()
+  public @Nullable Object printState()
   {
     if (m_output != null)
     {
@@ -116,7 +120,7 @@ public class Freeze extends UniformProcessor implements Stateful
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	if (m_output == null)
   	{

@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;
@@ -122,6 +125,7 @@ public abstract class AsynchronousProcessor extends Processor
       m_index = index;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Pushable push(Object o)
     {
@@ -133,7 +137,7 @@ public abstract class AsynchronousProcessor extends Processor
     public Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(AsynchronousProcessor.this);
     }
 
     @Override
@@ -168,6 +172,7 @@ public abstract class AsynchronousProcessor extends Processor
       m_index = index;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Iterator<Object> iterator()
     {
@@ -176,12 +181,13 @@ public abstract class AsynchronousProcessor extends Processor
     }
 
     @Override
-    public Object pullSoft() 
+    public @Nullable Object pullSoft() 
     {
       // TODO Auto-generated method stub
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Object pull() 
     {
@@ -189,6 +195,7 @@ public abstract class AsynchronousProcessor extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Object next()
     {
@@ -196,6 +203,7 @@ public abstract class AsynchronousProcessor extends Processor
       return null;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public NextStatus hasNextSoft()
     {
@@ -210,6 +218,7 @@ public abstract class AsynchronousProcessor extends Processor
       return false;
     }
 
+    @SuppressWarnings("nullness")  // Auto-generated method stub
     @Override
     public Processor getProcessor() 
     {

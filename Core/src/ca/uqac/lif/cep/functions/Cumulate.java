@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.petitpoucet.NodeFunction;
 
@@ -36,6 +39,7 @@ import ca.uqac.lif.petitpoucet.NodeFunction;
  */
 public class Cumulate extends ApplyFunction implements Stateful
 {
+  @SuppressWarnings("nullness")  // deserialization
   // This constructor is used for deserialization.
   private Cumulate()
   {
@@ -154,8 +158,9 @@ public class Cumulate extends ApplyFunction implements Stateful
       return m_index;
     }
 
+    @SuppressWarnings("nullness")  // unannotated library: petitpoucet
     @Override
-    public NodeFunction dependsOn()
+    public @Nullable NodeFunction dependsOn()
     {
       // This is normal. This function is a leaf node in the dependency
       // tree, so its dependency is null.
@@ -169,6 +174,7 @@ public class Cumulate extends ApplyFunction implements Stateful
   }
   
   @Override
+  @SideEffectFree
   public Cumulate duplicate(boolean with_state)
   {
     Cumulate c = new Cumulate((CumulativeFunction<?>) m_function.duplicate(with_state));
@@ -199,7 +205,7 @@ public class Cumulate extends ApplyFunction implements Stateful
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	return ((CumulativeFunction<?>) m_function).getLastValue();
   }

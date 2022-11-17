@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
@@ -45,6 +49,7 @@ public class Slice extends AbstractSlice
    * Creates a dummy slice processor. This constructor is only used for
    * deserialization purposes.
    */
+  @SuppressWarnings("nullness") // serialization
   protected Slice()
   {
     super();
@@ -58,7 +63,7 @@ public class Slice extends AbstractSlice
    * @param clean_func The cleaning function
    */
   public Slice(/*@ non_null @*/ Function func, /*@ non_null @*/ Processor proc,
-      Function clean_func)
+      @Nullable Function clean_func)
   {
     super(func, proc, clean_func);
     m_lastValues = new HashMap<Object, Object>();
@@ -80,7 +85,7 @@ public class Slice extends AbstractSlice
   @Override
   public Object printState()
   {
-    Map<String,Object> contents = new HashMap<String,Object>();
+    Map<String,@Nullable Object> contents = new HashMap<String,@Nullable Object>();
     contents.put("cleaning-function", m_cleaningFunction);
     contents.put("explode-arrays", m_explodeArrays);
     contents.put("last-values", m_lastValues);
@@ -115,13 +120,14 @@ public class Slice extends AbstractSlice
       {
         throw new ProcessorException("Cannot restore the state of the slice processor");
       }
-      QueueSink qs = s.m_sinks.get(entry.getKey());
+      @NonNull QueueSink qs = s.m_sinks.get(entry.getKey());
       Connector.connect(p, qs);
     }
     return s;
   }
 
   @Override
+  @SideEffectFree
   public Slice duplicate(boolean with_state)
   {
     Slice s = null;

@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
@@ -94,6 +97,7 @@ public class SimpleFilter extends SynchronousProcessor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public SimpleFilter duplicate(boolean with_state)
   {
     return new SimpleFilter(getInputArity(), m_condition.duplicate());
@@ -113,7 +117,7 @@ public class SimpleFilter extends SynchronousProcessor implements Stateful
    * @since 0.11
    */
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	return null;
   }

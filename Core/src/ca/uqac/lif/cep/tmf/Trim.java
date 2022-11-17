@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
@@ -76,6 +79,7 @@ public class Trim extends SynchronousProcessor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public Trim duplicate(boolean with_state)
   {
     Trim t = new Trim(getDelay());
@@ -119,7 +123,7 @@ public class Trim extends SynchronousProcessor implements Stateful
    * @since 0.11
    */
 	@Override
-	public Object getState()
+	public @Nullable Object getState()
 	{
 		return Math.max(0, m_delay - m_inputCount);
 	}

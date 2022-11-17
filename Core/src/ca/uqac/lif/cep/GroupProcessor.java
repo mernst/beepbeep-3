@@ -17,6 +17,12 @@
  */
 package ca.uqac.lif.cep;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.tmf.Source;
 import ca.uqac.lif.cep.util.Lists.MathList;
 
@@ -83,7 +89,7 @@ public class GroupProcessor extends Processor implements Stateful
   /**
    * An inner event tracker for the group
    */
-  protected EventTracker m_innerTracker;
+  protected @Nullable EventTracker m_innerTracker;
 
   /**
    * Crate a group processor
@@ -132,7 +138,7 @@ public class GroupProcessor extends Processor implements Stateful
    * @return The tracker instance, or <tt>null</tt> if no inner tracker is set.
    * @since 0.11
    */
-  /*@ pure null @*/ public EventTracker getInnerTracker()
+  /*@ pure null @*/ public @Nullable EventTracker getInnerTracker()
   {
   	return m_innerTracker;
   }
@@ -172,6 +178,7 @@ public class GroupProcessor extends Processor implements Stateful
     /**
      * No-args constructor. Used only for serialization and deserialization.
      */
+    @SuppressWarnings("nullness")  // serialization
     protected ProcessorAssociation()
     {
       super();
@@ -277,6 +284,10 @@ public class GroupProcessor extends Processor implements Stateful
   public final synchronized void setPullableInput(int i, Pullable p)
   {
     ProcessorAssociation a = m_inputPullableAssociations.get(i);
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", i, m_inputPullableAssociations.keySet()));
+    }
     a.m_processor.setPullableInput(a.m_ioNumber, p);
   }
 
@@ -289,6 +300,10 @@ public class GroupProcessor extends Processor implements Stateful
   public final synchronized void setPushableOutput(int i, Pushable p)
   {
     ProcessorAssociation a = m_outputPushableAssociations.get(i);
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", i, m_inputPullableAssociations.keySet()));
+    }
     a.m_processor.setPushableOutput(a.m_ioNumber, p);
   }
 
@@ -335,9 +350,9 @@ public class GroupProcessor extends Processor implements Stateful
   public final synchronized Pushable getPushableOutput(int index)
   {
     ProcessorAssociation a = m_outputPushableAssociations.get(index);
-    if (a == null)
-    {
-    	return null;
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", index, m_inputPullableAssociations.keySet()));
     }
     return a.m_processor.getPushableOutput(a.m_ioNumber);
   }
@@ -346,9 +361,9 @@ public class GroupProcessor extends Processor implements Stateful
   public final synchronized Pullable getPullableInput(int index)
   {
     ProcessorAssociation a = m_inputPullableAssociations.get(index);
-    if (a == null)
-    {
-    	return null;
+    if (a == null) {
+      throw new IndexOutOfBoundsException(
+          String.format("setPullableInput(%s): %s", index, m_inputPullableAssociations.keySet()));
     }
     return a.m_processor.getPullableInput(a.m_ioNumber);
   }
@@ -397,6 +412,10 @@ public class GroupProcessor extends Processor implements Stateful
     associateEndpoints(group, new_procs);
     // Re-pipe the internal processors like in the original group
     CopyCrawler cc = new CopyCrawler(new_procs, new_tracker);
+    // POSSIBLE NullPointerException.
+    if (start == null) {
+      throw new Error("No processor with non-zero output arity in " + m_processors);
+    }
     cc.crawl(start);
     return new_procs;
   }
@@ -462,6 +481,7 @@ public class GroupProcessor extends Processor implements Stateful
   }
 
   @Override
+  @SideEffectFree
   public synchronized GroupProcessor duplicate(boolean with_state)
   {
     GroupProcessor group = new GroupProcessor(getInputArity(), getOutputArity());
@@ -483,9 +503,9 @@ public class GroupProcessor extends Processor implements Stateful
   {
     private final Map<Integer, Processor> m_correspondences;
     
-    private final EventTracker m_tracker;
+    private final @Nullable EventTracker m_tracker;
 
-    public CopyCrawler(Map<Integer, Processor> correspondences, EventTracker tracker)
+    public CopyCrawler(Map<Integer, Processor> correspondences, @Nullable EventTracker tracker)
     {
       super();
       m_correspondences = new HashMap<Integer, Processor>();
@@ -534,7 +554,7 @@ public class GroupProcessor extends Processor implements Stateful
   }
 
   @Override
-  public synchronized void setContext(Context context)
+  public synchronized void setContext(@Nullable Context context)
   {
     super.setContext(context);
     for (Processor p : m_processors)
@@ -544,7 +564,7 @@ public class GroupProcessor extends Processor implements Stateful
   }
 
   @Override
-  public synchronized void setContext(String key, Object value)
+  public synchronized void setContext(String key, @Nullable Object value)
   {
     super.setContext(key, value);
     for (Processor p : m_processors)
@@ -565,7 +585,7 @@ public class GroupProcessor extends Processor implements Stateful
     }
 
     @Override
-    public synchronized Object pullSoft()
+    public synchronized @Nullable Object pullSoft()
     {
       return m_pullable.pullSoft();
     }
@@ -687,7 +707,7 @@ public class GroupProcessor extends Processor implements Stateful
     public synchronized Future<Pushable> pushFast(Object o)
     {
       push(o);
-      return Pushable.NULL_FUTURE;
+      return Pushable.nullFuture(GroupProcessor.this);
     }
 
     /**
@@ -735,6 +755,10 @@ public class GroupProcessor extends Processor implements Stateful
       for (int i = 0; i < m_outputPushables.length; i++)
       {
         ProcessorAssociation pa = m_outputPushableAssociations.get(i);
+        if (pa == null) {
+          throw new IndexOutOfBoundsException(
+              String.format("setPullableInput(%s): %s", i, m_outputPushableAssociations.keySet()));
+        }
         Pushable p = pa.m_processor.getPushableOutput(pa.m_ioNumber);
         if (p == null)
         {
@@ -816,13 +840,14 @@ public class GroupProcessor extends Processor implements Stateful
    * @return The processor, or <tt>null</tt> if no processor is associated to this
    *         index
    */
-  public Processor getAssociatedInput(int index)
+  public @Nullable Processor getAssociatedInput(int index)
   {
     if (!m_inputPullableAssociations.containsKey(index))
     {
       return null;
     }
-    return m_inputPullableAssociations.get(index).m_processor;
+    @NonNull ProcessorAssociation pa = m_inputPullableAssociations.get(index);
+    return pa.m_processor;
   }
   
   /**
@@ -872,7 +897,7 @@ public class GroupProcessor extends Processor implements Stateful
    * @return The processor, or <tt>null</tt> if no processor is associated to this
    *         index
    */
-  public Processor getAssociatedOutput(int index)
+  public @Nullable Processor getAssociatedOutput(int index)
   {
     if (!m_outputPushableAssociations.containsKey(index))
     {
@@ -951,7 +976,6 @@ public class GroupProcessor extends Processor implements Stateful
   /**
    * @since 0.10.2
    */
-  @SuppressWarnings("unchecked")
   @Override
   public GroupProcessor readState(Object o) throws ProcessorException
   {
@@ -1031,7 +1055,7 @@ public class GroupProcessor extends Processor implements Stateful
   }
 
   @Override
-  public final Processor setEventTracker(/*@ null @*/ EventTracker tracker)
+  public final Processor setEventTracker(/*@ null @*/ @Nullable EventTracker tracker)
   {
     super.setEventTracker(tracker);
     if (tracker != null)
@@ -1050,7 +1074,7 @@ public class GroupProcessor extends Processor implements Stateful
   }
   
   @Override
-  public Object getState()
+  public @Nullable Object getState()
   {
   	MathList<InternalProcessorState> group_state = new MathList<InternalProcessorState>();
   	for (Processor p : m_processors)

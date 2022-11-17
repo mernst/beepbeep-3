@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.SynchronousProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -32,6 +35,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.9
  */
+@SuppressWarnings("argument")  // TO ASK: Should these classes be null-friendly or null-hostile
 public class Multiset implements Set<Object>
 {
   /**
@@ -107,7 +111,7 @@ public class Multiset implements Set<Object>
    * about what element of the multiset you get, as long as you get one.
    * @return An element of the multiset, or null if the multiset is empty
    */
-  public Object getAnyElement()
+  public @Nullable Object getAnyElement()
   {
     Set<Object> objects = m_map.keySet();
     for (Object o : objects)
@@ -123,7 +127,7 @@ public class Multiset implements Set<Object>
    * @param o The element
    * @return true if the element is contained at least once, false otherwise
    */
-  public boolean contains(Object o)
+  public boolean contains(@Nullable Object o)
   {
     if (!m_map.containsKey(o))
     {
@@ -376,6 +380,7 @@ public class Multiset implements Set<Object>
     return m_map.values().toArray();
   }
 
+  @SuppressWarnings("nullness")  // Auto-generated method stub
   @Override
   public <T> T[] toArray(T[] arg0) 
   {
@@ -406,6 +411,7 @@ public class Multiset implements Set<Object>
     }
     
     @Override
+    @SideEffectFree
     public Insert duplicate(boolean with_state)
     {
       return this;
@@ -433,6 +439,7 @@ public class Multiset implements Set<Object>
     }
     
     @Override
+    @SideEffectFree
     public GetCardinalities duplicate(boolean with_state)
     {
       return this;

@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.azrael.ObjectPrinter;
 import ca.uqac.lif.azrael.ObjectReader;
 import ca.uqac.lif.azrael.PrintException;
@@ -126,6 +128,7 @@ public class ContextAssignment implements Printable, Readable
   /**
    * @since 0.10.2
    */
+  @SuppressWarnings("nullness")  // unannotated library: Azrael
   @Override
   public Object print(ObjectPrinter<?> printer) throws PrintException
   {

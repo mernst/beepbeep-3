@@ -17,6 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
 import java.util.regex.Matcher;
@@ -70,6 +73,7 @@ public class FindPattern extends SynchronousProcessor
   }
 
   @Override
+  @SideEffectFree
   public FindPattern duplicate(boolean with_state)
   {
     FindPattern fp = new FindPattern(m_pattern);

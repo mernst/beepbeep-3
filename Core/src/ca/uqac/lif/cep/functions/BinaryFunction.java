@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.Set;
@@ -34,7 +38,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.3
  */
-public abstract class BinaryFunction<T, V, U> extends Function
+public abstract class BinaryFunction<T, V, U extends @NonNull Object> extends Function
 {
   /**
    * The class of the first input
@@ -73,7 +77,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
   @Override
   /* @ requires inputs.length == 2 */
   public void evaluate(/*@ non_null @*/ Object[] inputs, Object[] outputs,
-      /*@ null @*/ Context context, EventTracker tracker)
+      /*@ null @*/ @Nullable Context context, @Nullable EventTracker tracker)
   {
     outputs[0] = getValue((T) inputs[0], (V) inputs[1]);
     if (tracker != null)
@@ -132,7 +136,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
    */
   public U getStartValue()
   {
-    return null;
+    throw new Error("getStartValue was not overridden for a cumulative function");
   }
 
   @Override
@@ -142,6 +146,7 @@ public abstract class BinaryFunction<T, V, U> extends Function
   }
 
   @Override
+  @SideEffectFree
   public BinaryFunction<T, V, U> duplicate(boolean with_state)
   {
     return this;

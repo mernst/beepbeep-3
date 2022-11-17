@@ -17,6 +17,11 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
 import java.util.ArrayList;
@@ -96,14 +101,15 @@ public class FunctionTree extends Function
    *          The function
    * @return This tree
    */
-  public FunctionTree setChild(int index, Function f)
+  @RequiresNonNull("m_children")
+  public @UnknownInitialization FunctionTree setChild(@UnknownInitialization(Function.class) FunctionTree this, int index, Function f)
   {
     m_children[index] = f;
     return this;
   }
 
   @Override
-  public void evaluate(Object[] inputs, Object[] outputs, Context context, EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
   {
     Object[] values = new Object[m_children.length];
     for (int i = 0; i < values.length; i++)
@@ -122,9 +128,9 @@ public class FunctionTree extends Function
   }
 
   @Override
-  public boolean evaluatePartial(Object[] inputs, Object[] outputs, Context context)
+  public boolean evaluatePartial(@Nullable Object[] inputs, Object[] outputs, @Nullable Context context)
   {
-    Object[] values = new Object[m_children.length];
+    @Nullable Object[] values = new Object[m_children.length];
     for (int i = 0; i < values.length; i++)
     {
       Object[] val = new Object[1];
@@ -182,6 +188,7 @@ public class FunctionTree extends Function
   }
 
   @Override
+  @SideEffectFree
   public synchronized FunctionTree duplicate(boolean with_state)
   {
     FunctionTree out = new FunctionTree(m_function.duplicate(with_state));

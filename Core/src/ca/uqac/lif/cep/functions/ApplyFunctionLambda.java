@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.cep.functions;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.UniformProcessor;
 
@@ -58,6 +62,7 @@ public class ApplyFunctionLambda extends UniformProcessor
   }
 
   @Override
+  @SideEffectFree
   public Processor duplicate(boolean with_state)
   {
     return this;
@@ -75,9 +80,9 @@ public class ApplyFunctionLambda extends UniformProcessor
   
   protected static class LambdaEvaluable
   {
-    UnaryLambdaEvaluable m_unary = null;
+    @MonotonicNonNull UnaryLambdaEvaluable m_unary = null;
     
-    BinaryLambdaEvaluable m_binary = null;
+    @MonotonicNonNull BinaryLambdaEvaluable m_binary = null;
     
     public LambdaEvaluable(UnaryLambdaEvaluable e)
     {
@@ -91,7 +96,7 @@ public class ApplyFunctionLambda extends UniformProcessor
       m_binary = e;
     }
     
-    public Object[] evaluate(Object ... inputs)
+    public Object [] evaluate(Object ... inputs)
     {
       if (m_unary != null)
       {
@@ -101,7 +106,7 @@ public class ApplyFunctionLambda extends UniformProcessor
       {
         return new Object[] {m_binary.evaluate(inputs[0], inputs[1])};
       }
-      return null;
+      throw new Error("not unary or binary");
     }
   }
 }
