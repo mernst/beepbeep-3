@@ -31,7 +31,7 @@ BUILD SUCCESSFUL
 Total time: 1 second
 ```
 
-The lack of error messages (and of `@SuppressWarnings` in the BeepBeep 3 source code) proves that BeepBeep 3 contains no resource leaks.
+The lack of error messages in the output console log (and the lack of `@SuppressWarnings("resourceleak")` in the BeepBeep 3 source code) proves that BeepBeep 3 contains no resource leaks.
 
 5. Examine the changes made to BeepBeep 3 to support the Resource Leak Checker.
 
@@ -39,6 +39,4 @@ https://github.com/liflab/beepbeep-3/compare/master...mernst:beepbeep-3:resource
 
 No annotations were needed, because BeepBeep 3 does not pass open resources among methods.
 
-The Resource Leak Checker did reveal a bug, which was fixed here:
-
-https://github.com/liflab/beepbeep-3/pull/71/files
+The Resource Leak Checker did reveal a resource leak bug on a previous version of BeepBeep 3.  It was fixed in https://github.com/liflab/beepbeep-3/pull/71/files .   The current version of BeepBeep 3 (used in this analysis) has no resource leaks.
