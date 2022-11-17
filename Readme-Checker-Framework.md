@@ -1,4 +1,4 @@
-# Evidence that BeepBeep 3 has no resoure leaks.
+# Evidence that BeepBeep 3 has no resource leaks.
 
 To run the Resource Leak Checker:
 
