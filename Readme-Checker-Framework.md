@@ -27,7 +27,7 @@ The output is
 ```
 Buildfile: /home/mernst/java/beepbeep-3-fork-mernst-branch-resourceleak/build.xml
 
-...
+... [irrelevant lines omitted]
 
 BUILD SUCCESSFUL
 Total time: 0 seconds
