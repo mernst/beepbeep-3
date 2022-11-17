@@ -1,7 +1,5 @@
 # Evidence that BeepBeep 3 has no resource leaks.
 
-To run the Resource Leak Checker:
-
 1. Use Java 8 or 11, because BeepBeep 3 does not compile under Java 17.
 
 2. Install the Checker Framework:
@@ -30,7 +28,7 @@ Buildfile: /home/mernst/java/beepbeep-3-fork-mernst-branch-resourceleak/build.xm
 ... [irrelevant lines omitted]
 
 BUILD SUCCESSFUL
-Total time: 0 seconds
+Total time: 1 second
 ```
 
 The lack of error messages (and of `@SuppressWarnings` in the BeepBeep 3 source code) proves that BeepBeep 3 contains no resource leaks.
