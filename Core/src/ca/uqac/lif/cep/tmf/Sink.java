@@ -28,7 +28,7 @@ import java.util.Queue;
 
 /**
  * Receives input events and stores them. As its name implies, the
- * <code>Sink</code> is just that: the end of a pipe of processors where events
+ * {@code Sink} is just that: the end of a pipe of processors where events
  * are input, but which has no output. In other words, a sink is a processor
  * with an output arity of 0.
  * <p>
