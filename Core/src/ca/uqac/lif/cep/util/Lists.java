@@ -472,7 +472,7 @@ public class Lists
     
 		@SuppressWarnings("nullness") // inference failure
 		@SafeVarargs
-		public MathList(T ... elements)
+    public MathList(T ... elements)
 		{
 			super(elements.length);
 			for (T t : elements)

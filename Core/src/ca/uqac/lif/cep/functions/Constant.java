@@ -66,7 +66,7 @@ public class Constant extends Function
     outputs[0] = m_value;
     if (tracker != null)
     {
-      tracker.associateToOutput(-1, 0, 0, 0, 0);
+      tracker.associateToInput(-1, 0, 0, 0, 0);
     }
   }
 
