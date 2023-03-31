@@ -136,6 +136,7 @@ public class Maps
       m_key = key;
     }
 
+    @SuppressWarnings("return")  // raw formal parameter type
     @Override
     public Object getValue(Map x)
     {

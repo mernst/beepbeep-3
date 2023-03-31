@@ -198,7 +198,7 @@
   <!-- Target: check-resourceleak
        Does pluggoble type-checking on the main project
   -->
-  <target name="check-resourceleak" depends="init,junit,check-rt,download-deps" description="Run the Resource Leak Checker">
+  <target name="check-resourceleak" depends="init,junit,download-deps" description="Run the Resource Leak Checker">
     <mkdir dir="${build.bindir}"/>
     <cf.javac
       srcdir="${build.srcdir}"
