@@ -26,7 +26,7 @@
   <name>BeepBeep 3</name>
   
   <!-- The project's version number -->
-  <version>0.10.6-alpha</version>
+  <version>0.10.8-alpha</version>
   
   <!-- The project's author. Currently this only
   shows up in the footer of the Javadoc documentation. -->
@@ -52,14 +52,12 @@
   
   <!-- Output jar -->
   <jar>
-    <filename>beepbeep-3.jar</filename>
-    <withdoc>false</withdoc>
+    <filename>beepbeep-3</filename>
     <withdeps>true</withdeps>
-    <withsrc>false</withsrc>
   </jar>
   
   <!--
-    Write JAR dependencies here.
+    Write JAR dependencies here.l
   -->
   <dependencies>
    <dependency>
@@ -75,12 +73,12 @@
     </dependency>
     <dependency>
       <!--
-      Petit Poucet. Used to store provenance information.
+      Azrael. Used to serialize processors.
       -->
       <name>Azrael Core</name>
       <classname>ca.uqac.lif.azrael.ObjectPrinter</classname>
       <files>
-        <jar>https://github.com/sylvainhalle/Azrael/releases/download/v2.0.3/azrael-core.jar</jar>
+        <jar>https://github.com/sylvainhalle/Azrael/releases/download/v2.1.1/azrael-core.jar</jar>
       </files>
       <bundle>true</bundle>
     </dependency>

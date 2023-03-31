@@ -453,7 +453,7 @@ public class Lists
 		 * @param elements The elements to add
 		 */
 		@SafeVarargs
-		public MathList(T ... elements)
+    public MathList(T ... elements)
 		{
 			super(elements.length);
 			for (T t : elements)
