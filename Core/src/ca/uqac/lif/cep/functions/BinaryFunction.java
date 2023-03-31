@@ -132,7 +132,7 @@ public abstract class BinaryFunction<T extends Object, V extends Object, U exten
    */
   public U getStartValue()
   {
-    return null;
+    throw new Error("getStartValue was not overridden for a cumulative function");
   }
 
   @Override
