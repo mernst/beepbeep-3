@@ -156,7 +156,7 @@ public class SliceLast extends AbstractSlice
       {
         throw new ProcessorException("Cannot restore the state of the slice processor");
       }
-      @NonNull QueueSink qs = s.m_sinks.get(entry.getKey());
+      QueueSink qs = s.m_sinks.get(entry.getKey());
       Connector.connect(p, qs);
     }
     return s;

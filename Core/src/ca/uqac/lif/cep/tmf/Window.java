@@ -17,10 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
@@ -77,7 +77,7 @@ public class Window extends AbstractWindow implements Stateful
   @SuppressWarnings("unchecked")
   @Override
   @EnsuresNonNull({"m_innerInputs", "m_window"})
-  public void reset(Window this)
+  public void reset()
   {
     super.reset();
     int arity = getInputArity();

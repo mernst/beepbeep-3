@@ -17,12 +17,12 @@
  */
 package ca.uqac.lif.cep.util;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.Pullable;
@@ -469,7 +469,6 @@ public class Lists
 		 * Creates a new math list and adds elements from an array.
 		 * @param elements The elements to add
 		 */
-    
 		@SuppressWarnings("nullness") // inference failure
 		@SafeVarargs
     public MathList(T ... elements)

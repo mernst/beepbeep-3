@@ -54,13 +54,13 @@ public class WindowFunction extends SynchronousProcessor
    */
   protected LinkedList<Object> m_window;
 
-  // What is the point of this constructor?  It is never called explicitly.
+  // What is the point of this constructor?  It is protected and never called explicitly.
   WindowFunction()
   {
     this(1);
   }
 
-  // What is the point of this constructor?  It is never called explicitly.
+  // What is the point of this constructor?  It is protected and never called explicitly.
   @SuppressWarnings("nullness")  // unused: method is never called
   WindowFunction(int width)
   {

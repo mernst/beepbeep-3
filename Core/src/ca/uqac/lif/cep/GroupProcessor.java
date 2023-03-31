@@ -18,10 +18,10 @@
 package ca.uqac.lif.cep;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.tmf.Source;
 import ca.uqac.lif.cep.util.Lists.MathList;
@@ -846,8 +846,7 @@ public class GroupProcessor extends Processor implements Stateful
     {
       return null;
     }
-    @NonNull ProcessorAssociation pa = m_inputPullableAssociations.get(index);
-    return pa.m_processor;
+    return m_inputPullableAssociations.get(index).m_processor;
   }
   
   /**

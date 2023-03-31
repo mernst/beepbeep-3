@@ -17,10 +17,10 @@
  */
 package ca.uqac.lif.cep.tmf;
 
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class QueueSink extends Sink
   @SuppressWarnings("unchecked")
   @Override
   @EnsuresNonNull("m_queues") // permits constructor to type-check
-  public void reset(QueueSink this)
+  public void reset()
   {
     super.reset();
     int arity = getInputArity();

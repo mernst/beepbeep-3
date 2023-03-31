@@ -18,8 +18,8 @@
 package ca.uqac.lif.cep.tmf;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Processor;
@@ -239,8 +239,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
           QueueSink sink_p = m_sinks.get(s_id);
           if (m_eventTracker != null)
           {
-            @NonNull List<Integer> eventPositions = m_sliceIndices.get(s_id);
-            eventPositions.add(m_inputCount);
+            m_sliceIndices.get(s_id).add(m_inputCount);
           }
           // Push the input into the processor
           // Pushable[] p_array = new Pushable[inputs.length];

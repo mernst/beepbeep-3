@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.util;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
@@ -131,13 +132,14 @@ public class Sets
       outputs[0] = m_set;
       if (m_eventTracker != null)
       {
+        EventTracker local_m_eventTracker = m_eventTracker; // in case the field m_eventTracker is nulled
       	if (added)
       	{
-      		m_eventTracker.associateToInput(getId(), 0, m_inputCount, 0, m_inputCount);
+      		local_m_eventTracker.associateToInput(getId(), 0, m_inputCount, 0, m_inputCount);
       	}
       	if (m_inputCount > 0)
       	{
-      		m_eventTracker.associateToOutput(getId(), 0, m_inputCount - 1, 0, m_inputCount);
+      		local_m_eventTracker.associateToOutput(getId(), 0, m_inputCount - 1, 0, m_inputCount);
       	}
       }
       m_inputCount++;
@@ -179,13 +181,14 @@ public class Sets
       outputs[0] = new_set;
       if (m_eventTracker != null)
       {
+        EventTracker local_m_eventTracker = m_eventTracker; // in case the field m_eventTracker is nulled
       	if (added)
       	{
-      		m_eventTracker.associateToInput(getId(), 0, m_inputCount, 0, m_inputCount);
+      		local_m_eventTracker.associateToInput(getId(), 0, m_inputCount, 0, m_inputCount);
       	}
       	if (m_inputCount > 0)
       	{
-      		m_eventTracker.associateToOutput(getId(), 0, m_inputCount - 1, 0, m_inputCount);
+      		local_m_eventTracker.associateToOutput(getId(), 0, m_inputCount - 1, 0, m_inputCount);
       	}
       }
       m_inputCount++;

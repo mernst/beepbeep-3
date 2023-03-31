@@ -20,6 +20,7 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
@@ -67,9 +68,10 @@ public class Trim extends SynchronousProcessor implements Stateful
       outputs.add(inputs);
       if (m_eventTracker != null)
       {
+        EventTracker local_m_eventTracker = m_eventTracker; // in case the field m_eventTracker is nulled
         for (int i = 0; i < inputs.length; i++)
         {
-          m_eventTracker.associateToInput(getId(), i, m_inputCount, i, m_outputCount);
+          local_m_eventTracker.associateToInput(getId(), i, m_inputCount, i, m_outputCount);
         }
       }
       m_outputCount++;
