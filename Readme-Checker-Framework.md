@@ -1,7 +1,9 @@
 # Evidence that BeepBeep 3 has no null pointer exceptions.
 
 1. Install the Checker Framework:
-https://checkerframework.org/manual/#build-source
+https://checkerframework.org/manual/#build-source .
+This step is necessary because BeepBeep uses the Ant build system, which
+does not automatically download dependences.
 
 Note that the instructions include setting the CHECKERFRAMEWORK environment variable.
 
