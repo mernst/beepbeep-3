@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2022 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -23,6 +23,8 @@ import ca.uqac.lif.azrael.PrintException;
 import ca.uqac.lif.azrael.Printable;
 import ca.uqac.lif.azrael.ReadException;
 import ca.uqac.lif.azrael.Readable;
+import ca.uqac.lif.cep.Connector.PipeSelector;
+import ca.uqac.lif.cep.Connector.SelectedInputPipe;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.util.Equals;
 import ca.uqac.lif.cep.util.Lists.MathList;
@@ -38,8 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Receives zero or more input events, and produces zero or more output events.
@@ -134,11 +134,6 @@ public abstract class Processor implements DuplicableProcessor,
   private static int s_uniqueIdCounter = 0;
 
   /**
-   * A lock to access the ID counter
-   */
-  private static transient Lock s_counterLock = new ReentrantLock();
-
-  /**
    * The unique ID given to this processor instance
    */
   private final int m_uniqueId;
@@ -163,6 +158,13 @@ public abstract class Processor implements DuplicableProcessor,
    * notification.
    */
   protected boolean[] m_hasBeenNotifiedOfEndOfTrace;
+  
+  /**
+   * Indicates whether the processor has notified the end of the trace to the
+   * downstream processors it is connected to. The end of trace signal should
+   * be sent at most once.
+   */
+  protected boolean m_notifiedEndOfTraceDownstream;
 
   /**
    * Initializes a processor. This has for effect of executing the basic
@@ -192,9 +194,7 @@ public abstract class Processor implements DuplicableProcessor,
     super();
     m_inputArity = in_arity;
     m_outputArity = out_arity;
-    s_counterLock.lock();
     m_uniqueId = s_uniqueIdCounter++;
-    s_counterLock.unlock();
     m_inputQueues = new Queue[m_inputArity];
     for (int i = 0; i < m_inputArity; i++)
     {
@@ -212,6 +212,7 @@ public abstract class Processor implements DuplicableProcessor,
     {
       m_hasBeenNotifiedOfEndOfTrace[i] = false; 
     }
+    m_notifiedEndOfTraceDownstream = false;
   }
   
   /**
@@ -247,9 +248,9 @@ public abstract class Processor implements DuplicableProcessor,
    * 
    * @param key
    *          The key associated to that object
-   * @return The object, or <code>null</code> if no object exists with such key
+   * @return The object, or {@code null} if no object exists with such key
    */
-  public final synchronized /*@ null @*/ Object getContext(/*@ non_null @*/ String key)
+  public final /*@ null @*/ Object getContext(/*@ non_null @*/ String key)
   {
     if (m_context == null || !m_context.containsKey(key))
     {
@@ -259,7 +260,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized /*@ non_null @*/ Context getContext()
+  public /*@ non_null @*/ Context getContext()
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -271,7 +272,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/*@ non_null @*/ String key, Object value)
+  public void setContext(/*@ non_null @*/ String key, Object value)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -283,7 +284,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/*@ null @*/ Context context)
+  public void setContext(/*@ null @*/ Context context)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -343,7 +344,7 @@ public abstract class Processor implements DuplicableProcessor,
    * should also reset this state to its "initial" settings (whatever that means
    * in your context).
    */
-  public synchronized void reset()
+  public void reset()
   {
     // Reset input
     for (int i = 0; i < m_inputArity; i++)
@@ -359,6 +360,7 @@ public abstract class Processor implements DuplicableProcessor,
     {
       m_hasBeenNotifiedOfEndOfTrace[i] = false; 
     }
+    m_notifiedEndOfTraceDownstream = false;
     m_inputCount = 0;
     m_outputCount = 0;
   }
@@ -384,7 +386,7 @@ public abstract class Processor implements DuplicableProcessor,
    *         ArrayIndexOutOfBounds will be thrown if the processor has an input
    *         arity of 0.
    */
-  public final synchronized /*@ non_null @*/ Pushable getPushableInput()
+  public final /*@ non_null @*/ Pushable getPushableInput()
   {
     return getPushableInput(0);
   }
@@ -397,7 +399,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          The index. Should be between 0 and the processor's output arity - 1
    *          (since indices start at 0).
    * @return The pullable if the index is within the appropriate range,
-   *         <code>null</code> otherwise.
+   *         {@code null} otherwise.
    */
   public abstract /*@ non_null @*/ Pullable getPullableOutput(int index);
 
@@ -409,7 +411,7 @@ public abstract class Processor implements DuplicableProcessor,
    *         ArrayIndexOutOfBounds will be thrown if the processor has an output
    *         arity of 0.
    */
-  public final synchronized /*@ non_null @*/ Pullable getPullableOutput()
+  public final /*@ non_null @*/ Pullable getPullableOutput()
   {
     return getPullableOutput(0);
   }
@@ -423,7 +425,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @param p
    *          The pullable to assign it to
    */
-  public synchronized void setPullableInput(int i, /*@ non_null @*/ Pullable p)
+  public void setPullableInput(int i, /*@ non_null @*/ Pullable p)
   {
     m_inputPullables[i] = p;
   }
@@ -438,7 +440,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          ArrayIndexOutOfBounds will be thrown.
    * @return The pullable
    */
-  public synchronized Pullable getPullableInput(int i)
+  public Pullable getPullableInput(int i)
   {
     return m_inputPullables[i];
   }
@@ -453,7 +455,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @param p
    *          The pushable to assign it to
    */
-  public synchronized void setPushableOutput(int i, /*@ non_null @*/ Pushable p)
+  public void setPushableOutput(int i, /*@ non_null @*/ Pushable p)
   {
     m_outputPushables[i] = p;
   }
@@ -468,7 +470,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          ArrayIndexOutOfBounds will be thrown.
    * @return The pushable
    */
-  public synchronized /*@ non_null @*/ Pushable getPushableOutput(int i)
+  public /*@ non_null @*/ Pushable getPushableOutput(int i)
   {
     return m_outputPushables[i];
   }
@@ -500,8 +502,8 @@ public abstract class Processor implements DuplicableProcessor,
    * 
    * @param v
    *          The array
-   * @return <code>true</code> if all elements in the array are null,
-   *         <code>false</code> otherwise
+   * @return {@code true} if all elements in the array are null,
+   *         {@code false} otherwise
    */
   public static boolean allNull(Object[] v)
   {
@@ -539,12 +541,12 @@ public abstract class Processor implements DuplicableProcessor,
    * Gets the type of events the processor accepts for its <i>i</i>-th input
    * trace. Note that this method returns a <em>set</em>, in the case where the
    * processor accepts various types of objects (for example, a processor
-   * accepting <code>Number</code>s, but also <code>String</code>s it converts
+   * accepting {@code Number}s, but also {@code String}s it converts
    * into numbers internally).
    * 
    * @param index
    *          The index of the input to query
-   * @return A set of classes. If <code>index</code> it less than 0 or greater
+   * @return A set of classes. If {@code index} is less than 0 or greater
    *         than the processor's declared input arity, the set will be empty.
    */
   //@ requires index >= 0
@@ -590,7 +592,7 @@ public abstract class Processor implements DuplicableProcessor,
    * 
    * @param index
    *          The index of the output to query
-   * @return The type of the output. If <code>index</code> it less than 0 or
+   * @return The type of the output. If {@code index} it less than 0 or
    *         greater than the processor's declared output arity, this method
    *         <em>may</em> throw an IndexOutOfBoundsException.
    */
@@ -667,7 +669,7 @@ public abstract class Processor implements DuplicableProcessor,
   /**
    * Gets the instance of event tracker associated to this processor
    * 
-   * @return The event tracker, or <tt>null</tt> of no event tracker is associated
+   * @return The event tracker, or {@code null} of no event tracker is associated
    *         to this processor
    */
   public final /*@ null @*/ EventTracker getEventTracker()
@@ -679,7 +681,7 @@ public abstract class Processor implements DuplicableProcessor,
    * Associates an event tracker to this processor
    * 
    * @param tracker
-   *          The event tracker, or <tt>null</tt> to remove the association to an
+   *          The event tracker, or {@code null} to remove the association to an
    *          existing tracker
    * @return This processor
    */
@@ -819,7 +821,7 @@ public abstract class Processor implements DuplicableProcessor,
    * A concrete processor should override this method to add whatever state
    * information that needs to be preserved in the serialization process.
    * @return Any object representing the processor's state 
-   * (including <tt>null</tt>)
+   * (including {@code null})
    * @since 0.10.2
    */
   protected Object printState()
@@ -967,8 +969,96 @@ public abstract class Processor implements DuplicableProcessor,
   }
   
   /**
+   * Connects the first output pipe of this processor to the first input pipe
+   * of another processor.
+   * <p>
+   * Java programmers probably won't use this method, but users of the Groovy
+   * language can benefit from its operator overloading conventions, which map
+   * the construct {@code p | q} to {@code p.or(q)}. This can be used to
+   * easily pipe two processors together:
+   * <pre>{@code 
+   * def p = (some processor)
+   * def q = (some other processor)
+   * p | q // Connects p to q
+   * }</pre>
+   * @param p The other processor
+   * @return The other processor
+   * @since 0.10.9
+   */
+  public Processor or(Processor p)
+  {
+  	Connector.connect(this, p);
+  	return p;
+  }
+  
+  /**
+   * Connects the output at index 0 of the current processor to the input
+   * of another processor.
+   * <p>
+   * Java programmers probably won't use this method. However, combined with
+   * the definition of {@link #getAt(int)}, users of the Groovy language
+   * can benefit from its operator overloading conventions, which map
+   * the construct {@code p | q} to {@code p.or(q)}. This can be used to
+   * easily pipe two processors together:
+   * <pre>{@code 
+   * def p = (some processor)
+   * def q = (some other processor)
+   * p | q[1] // Connects p to pipe index 1 of q
+   * }</pre>
+   * The above example works because {@code q[1]} returns {@code q}'s
+   * input pushable for pipe index 1.
+   * @param p The pushable object representing the input of the other processor
+   * to which the current output should be connected.
+   * @return The other processor
+   * @since 0.10.9
+   */
+  public Processor or(SelectedInputPipe p)
+  {
+  	int index = p.getIndex();
+  	Processor proc = p.getProcessor();
+  	Connector.connect(this, 0, proc, index);
+  	return proc;
+  }
+  
+  /**
+   * Gets the {@link PipeSelector} object corresponding to the processor's
+   * input or output pipe for a given index.
+   * <p>
+   * Java programmers probably won't use this method, but users of the Groovy
+   * language can benefit from its operator overloading conventions, which map
+   * the construct {@code p[x]} to {@code p.getAt(x)}. Combined with the
+   * definition of {@link #or(Pushable)}, this can be used to easily pipe two
+   * processors together:
+   * <pre>{@code 
+   * def p = (some processor)
+   * def q = (some other processor)
+   * p | q[1] // Connects p to pipe index 1 of q
+   * }</pre>
+   * @param index The input pipe index
+   * @return The pushable object
+   * @since 0.11
+   * @see #positive()
+   * @see #negative()
+   */
+  /*@ pure non_null @*/ public PipeSelector getAt(int index)
+  {
+  	return new PipeSelector(this, index);
+  }
+  
+  public Pushable rightShift(int index)
+  {
+    return getPushableInput(index);
+  }
+  
+  public Pullable leftShift(int index)
+  {
+    return getPullableInput(index);
+  }
+  
+  /**
    * An object capturing the internal state of a processor,
    * including the current contents of its input and output queues.
+   * @since 0.10.8
    */
   public static class InternalProcessorState
   {
@@ -1020,9 +1110,24 @@ public abstract class Processor implements DuplicableProcessor,
   			return false;
   		}
   		InternalProcessorState ips = (InternalProcessorState) o;
-  		return Equals.isEqualTo(m_processorState, ips.m_processorState) &&
-  				Equals.isEqualTo(m_inputQueues, ips.m_inputQueues) &&
-  				Equals.isEqualTo(m_outputQueues, ips.m_outputQueues);
+  		boolean c1 = Equals.isEqualTo(m_processorState, ips.m_processorState);
+  		boolean c2 = Equals.isEqualTo(m_inputQueues, ips.m_inputQueues);
+  		boolean c3 = Equals.isEqualTo(m_outputQueues, ips.m_outputQueues);
+  		// Three conditions separated to facilitate debugging
+  		return c1 && c2 && c3;
+  	}
+  	
+  	@Override
+  	public String toString()
+  	{
+  		StringBuilder out = new StringBuilder();
+  		out.append("[").append(m_inputQueues).append(",").append(m_outputQueues);
+  		if (m_processorState != null)
+  		{
+  			out.append(",").append(m_processorState);
+  		}
+  		out.append("]");
+  		return out.toString();
   	}
   	
   	@Override

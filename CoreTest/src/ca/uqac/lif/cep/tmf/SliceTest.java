@@ -37,8 +37,6 @@ import ca.uqac.lif.cep.functions.FunctionTree;
 import ca.uqac.lif.cep.functions.StreamVariable;
 import ca.uqac.lif.cep.functions.UnaryFunction;
 import ca.uqac.lif.cep.util.Numbers;
-import ca.uqac.lif.cep.tmf.QueueSink;
-import ca.uqac.lif.cep.tmf.Slice;
 
 /**
  * Unit tests for the {@link Slice} processor.
@@ -361,8 +359,8 @@ public class SliceTest
 	/**
 	 * Slicing function designed specifically for testing the behaviour
 	 * of the slice processors. Given an integer <i>x</i>, it returns
-	 * {@link ToAllSlices} if <i>x</i> is equal to 2, <tt>null</tt> if <i>x</i>
-	 * is equal to 1, and <tt>true</tt> or <tt>false</tt> for the remaining
+	 * {@link ToAllSlices} if <i>x</i> is equal to 2, {@code null} if <i>x</i>
+	 * is equal to 1, and {@code true} or {@code false} for the remaining
 	 * numbers, depending on whether they are even or odd.  
 	 */
 	public static class EvenAll extends UnaryFunction<Number,Object>

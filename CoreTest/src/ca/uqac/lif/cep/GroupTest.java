@@ -29,7 +29,6 @@ import ca.uqac.lif.azrael.PrintException;
 import ca.uqac.lif.azrael.ReadException;
 import ca.uqac.lif.azrael.clone.ClonePrinter;
 import ca.uqac.lif.azrael.clone.CloneReader;
-import ca.uqac.lif.cep.SynchronousProcessor.InputPushable;
 import ca.uqac.lif.cep.functions.ApplyFunction;
 import ca.uqac.lif.cep.functions.UnaryFunction;
 import ca.uqac.lif.cep.util.Numbers;
@@ -258,7 +257,7 @@ public class GroupTest
 	/**
 	 * Try to clone a group processor that is already connected
 	 * to something else. The goal of this test is only to check
-	 * that the call to <code>duplicate()</code> does not throw an exception.
+	 * that the call to {@code duplicate()} does not throw an exception.
 	 * @
 	 */
 	@Test

@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2022 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -30,7 +30,7 @@ import ca.uqac.lif.petitpoucet.NodeFunction;
  * <img src="{@docRoot}/doc-files/functions/Cumulate.png" alt="Cumulate">
  * <p>
  * In earlier versions of the library, this class was called
- * <tt>CumulativeProcessor</tt>.
+ * {@code CumulativeProcessor}.
  * @author Sylvain Hallé
  * @since 0.1
  */
@@ -42,9 +42,25 @@ public class Cumulate extends ApplyFunction implements Stateful
     super(null);
   }
   
+  /**
+   * Creates a new instance of the processor from a cumulative function.
+   * @param f The cumulative function
+   * @since 0.1
+   */
   public Cumulate(CumulativeFunction<?> f)
   {
     super(f);
+  }
+  
+  /**
+   * Creates a new instance of the processor from a binary function.
+   * @param f The binary function
+   * @since 0.11
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+	public Cumulate(BinaryFunction<?,?,?> f)
+  {
+    super(new CumulativeFunction(f));
   }
 
   @Override
@@ -67,7 +83,7 @@ public class Cumulate extends ApplyFunction implements Stateful
             // ...and to the previous output event
             // -1 and -2 since the count has already been incremented by the
             // call to super.compute() above
-            associateToInput(j, m_outputCount - 2, k, m_outputCount - 1);
+            associateToOutput(j, m_outputCount - 2, k, m_outputCount - 1);
 
           }
         }

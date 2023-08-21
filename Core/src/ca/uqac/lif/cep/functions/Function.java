@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2019 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -25,12 +25,9 @@ import ca.uqac.lif.azrael.ReadException;
 import ca.uqac.lif.azrael.Readable;
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
-import ca.uqac.lif.cep.FutureDone;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 /**
  * Represents a stateless <i>m</i>-to-<i>n</i> function.
@@ -119,8 +116,8 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          arguments contains placeholders, they will be replaced by the
    *          corresponding object fetched from this map before evaluating the
    *          function
-   * @return <tt>true</tt> if the function succeeded in producing an output
-   *          value, <tt>false</tt> otherwise
+   * @return {@code true} if the function succeeded in producing an output
+   *          value, {@code false} otherwise
    */
   /*@ pure @*/ public boolean evaluatePartial(/*@ non_null @*/ Object[] inputs, 
       /*@ non_null @*/ Object[] outputs, /*@ null @*/ Context context)
@@ -147,8 +144,8 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    *          The outputs of the function. The size of the array should
    *          be equal to the function's declared output arity. @ Any exception
    *          that may occur during the evaluation of a function
-   * @return <tt>true</tt> if the function succeeded in producing an output
-   *          value, <tt>false</tt> otherwise 
+   * @return {@code true} if the function succeeded in producing an output
+   *          value, {@code false} otherwise 
    */
   /*@ pure @*/ public boolean evaluateLazy(/*@ non_null @*/ Object[] inputs, 
       /*@ non_null @*/ Object[] outputs)
@@ -204,25 +201,6 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    */
   /*@ pure @*/ public abstract Class<?> getOutputTypeFor(int index);
 
-  /**
-   * Utility method that delegates the call to evaluate()
-   * 
-   * @param inputs
-   *          Input arguments
-   * @param outputs
-   *          Output values
-   * @param context
-   *          Context object
-   * @param service The service responsible for assigning threads
-   * @return A {@link Future} object for this function call
-   */
-  /*@ pure @*/ public Future<Object[]> evaluateFast(Object[] inputs, Object[] outputs, 
-      Context context, ExecutorService service)
-  {
-    evaluate(inputs, outputs, context);
-    return new FutureDone<Object[]>(outputs);
-  }
-
   @Override
   /*@ pure non_null @*/ public final Function duplicate()
   {
@@ -255,7 +233,7 @@ public abstract class Function implements DuplicableFunction, Printable, Readabl
    * A concrete function should override this method to add whatever state
    * information that needs to be preserved in the serialization process.
    * @return Any object representing the function's state 
-   * (including <tt>null</tt>)
+   * (including {@code null})
    * @since 0.10.2
    */
   protected Object printState()

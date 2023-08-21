@@ -39,7 +39,6 @@ import ca.uqac.lif.cep.functions.Cumulate;
 import ca.uqac.lif.cep.functions.FunctionsTest;
 import ca.uqac.lif.cep.functions.FunctionException;
 import ca.uqac.lif.cep.functions.InvalidArgumentException;
-import ca.uqac.lif.cep.util.Numbers;
 import ca.uqac.lif.cep.tmf.QueueSink;
 import ca.uqac.lif.cep.tmf.QueueSource;
 import ca.uqac.lif.cep.util.Bags.ApplyToAll;
@@ -49,7 +48,7 @@ import ca.uqac.lif.cep.util.Bags.ToList;
 import ca.uqac.lif.cep.util.Bags.ToSet;
 
 /**
- * Unit tests for functions and processors of the <tt>util</tt> package.
+ * Unit tests for functions and processors of the {@code util} package.
  */
 public class UtilTest 
 {
@@ -103,6 +102,20 @@ public class UtilTest
 		s.add(72);
 		p.push(s);
 		assertEquals(100, ((Number) q.poll()).intValue());
+	}
+	
+	@Test
+	public void testRunOnEmpty()
+	{
+		Cumulate max = new Cumulate(new CumulativeFunction<Number>(Numbers.maximum));
+		Bags.RunOn ro = new Bags.RunOn(max, new Object[] {0});
+		QueueSink sink = new QueueSink();
+		Connector.connect(ro, sink);
+		Queue<?> q = sink.getQueue();
+		Pushable p = ro.getPushableInput(0);
+		p.push(new Object[] {});
+		assertEquals(1, q.size());
+		assertEquals(0, q.remove());
 	}
 	
 	@SuppressWarnings("unchecked")

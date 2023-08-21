@@ -35,8 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * Separates an input trace into different "slices". The slicer takes as input a
@@ -57,7 +55,7 @@ import java.util.concurrent.Future;
  * immediately
  * </ul>
  * <p>
- * The function <i>f</i> may return <code>null</code>, or the special object
+ * The function <i>f</i> may return {@code null}, or the special object
  * {@link ToAllSlices}. This indicates that no new slice must be created, but
  * that the incoming event must be dispatched to <em>all</em> slices one by one.
  * 
@@ -222,8 +220,6 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
         }
         slices_to_process.add(slice_id);
       }
-      @SuppressWarnings("unchecked")
-      Future<Pushable>[] futures = new Future[slices_to_process.size()];
       for (Object s_id : slices_to_process)
       {
         // Find processor corresponding to that slice
@@ -237,33 +233,11 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
             m_sliceIndices.get(s_id).add(m_inputCount);
           }
           // Push the input into the processor
-          // Pushable[] p_array = new Pushable[inputs.length];
           for (int i = 0; i < inputs.length; i++)
           {
             Object o_i = inputs[i];
             Pushable p = slice_p.getPushableInput(i);
-            Future<Pushable> f = p.pushFast(o_i);
-            futures[i] = f;
-            // p_array[i] = p;
-          }
-          // Wait for all slices to be done
-          for (Future<Pushable> f : futures)
-          {
-            if (f != null)
-            {
-              try
-              {
-                f.get();
-              }
-              catch (InterruptedException e)
-              {
-                throw new ProcessorException(e);
-              }
-              catch (ExecutionException e)
-              {
-                throw new ProcessorException(e);
-              }
-            }
+            p.push(o_i);
           }
           // Collect the output from that processor
           Object[] out = sink_p.remove();
@@ -300,8 +274,8 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
    * handled as individual slice IDs.
    * 
    * @param b
-   *          Set to <tt>true</tt> to handle collections as multiple IDs. The
-   *          default is <tt>false</tt>
+   *          Set to {@code true} to handle collections as multiple IDs. The
+   *          default is {@code false}
    * @return This slicer
    */
   public AbstractSlice explodeCollections(boolean b)
@@ -396,8 +370,8 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
    * and {@link #handleNewSliceValue(Object, Object, Queue)} has been called
    * for all slices that produced an output event. 
    * @param outputs The processor's output queue
-   * @return <tt>true</tt> if the processor is expected to output new events
-   * in the future, <tt>false</tt> otherwise.
+   * @return {@code true} if the processor is expected to output new events
+   * in the future, {@code false} otherwise.
    */
   protected abstract boolean produceReturn(Queue<Object[]> outputs);
   

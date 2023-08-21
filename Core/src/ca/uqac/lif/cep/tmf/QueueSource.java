@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2022 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -30,7 +30,7 @@ import java.util.Queue;
 
 /**
  * Source whose input is a queue of objects. One gives the
- * <code>QueueSource</code> a list of events, and that source sends these events
+ * {@code QueueSource} a list of events, and that source sends these events
  * as its input one by one. When reaching the end of the list, the source
  * returns to the beginning and keeps feeding events from the list endlessly.
  * This behaviour can be changed with {@link #loop(boolean)}.
@@ -71,7 +71,7 @@ public class QueueSource extends Source implements Stateful
   }
 
   /**
-   * Creates a new queue source of output arity 1
+   * Creates a new queue source of output arity 1.
    */
   public QueueSource()
   {
@@ -79,9 +79,26 @@ public class QueueSource extends Source implements Stateful
     m_events = new ArrayList<Object>();
     m_index = 0;
   }
+  
+  /**
+   * Creates a new queue source of output arity 1, and populates it with a list
+   * of objects.
+   * @param queue A collection of events that the queue source will output. If the
+   *          collection is ordered, the events will be output in the order they
+   *          appear in the collection.
+   * @since 0.10.9
+   */
+  public QueueSource(Collection<? extends Object> queue)
+  {
+  	this(1);
+  	for (Object o : queue)
+  	{
+  		m_events.add(o);
+  	}
+  }
 
   /**
-   * Sets the events that the queue will output
+   * Sets the events that the queue will output.
    * 
    * @param queue
    *          A collection of events that the queue source will output. If the
@@ -130,8 +147,8 @@ public class QueueSource extends Source implements Stateful
    * Sets whether to loop over the events endlessly
    * 
    * @param b
-   *          Set to <code>true</code> to loop over the events endlessly
-   *          (default), or <code>false</code> to play them only once.
+   *          Set to {@code true} to loop over the events endlessly
+   *          (default), or {@code false} to play them only once.
    * @return This queue source
    */
   public QueueSource loop(boolean b)

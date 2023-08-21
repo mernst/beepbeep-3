@@ -17,44 +17,38 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import static org.junit.Assert.*;
+
 import java.util.Queue;
 
+import org.junit.Test;
+
+import ca.uqac.lif.cep.Connector;
+import ca.uqac.lif.cep.Pushable;
+import ca.uqac.lif.cep.functions.Constant;
+import ca.uqac.lif.cep.functions.FunctionTree;
+import ca.uqac.lif.cep.functions.StreamVariable;
+import ca.uqac.lif.cep.util.Equals;
+
 /**
- * Returns the first <i>n</i> input events and discards the following ones.
- * 
- * @author Sylvain Hallé
- * @since 0.2.1
+ * Unit tests for {@link DetectEnd}.
  */
-@SuppressWarnings("squid:S2160")
-public class Prefix extends Trim
+public class DetectEndTest
 {
-	public Prefix(int k)
+	@Test
+	public void test1()
 	{
-		super(k);
-	}
-
-	@Override
-	@SuppressWarnings("squid:S1168")
-	protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
-	{
-		if (m_inputCount < getDelay())
-		{
-			m_inputCount++;
-			outputs.add(inputs);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public void reset()
-	{
-		super.reset();
-	}
-	
-	@Override
-	public Object getState()
-	{
-		return Math.min(m_delay, m_inputCount);
+		DetectEnd e = new DetectEnd(new FunctionTree(Equals.instance, StreamVariable.X, new Constant(0)));
+		QueueSink sink = new QueueSink();
+		Connector.connect(e, sink);
+		Queue<?> q = sink.getQueue();
+		Pushable p = e.getPushableInput();
+		p.push(1);
+		assertEquals(1, q.size());
+		assertEquals(1, q.remove());
+		p.push(0);
+		assertEquals(0, q.size());
+		p.push(2);
+		assertEquals(0, q.size());
 	}
 }
