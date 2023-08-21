@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,11 +17,13 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Queue;
+
+import ca.uqac.lif.cep.ProcessorException;
 
 /**
  * Sink that remembers only the last event sent to it. This event can be queried
@@ -33,73 +35,119 @@ import java.util.Queue;
 @SuppressWarnings("squid:S2160")
 public class SinkLast extends Sink
 {
-  /**
-   * The last event (or array of events) received
-   */
-  protected Object @Nullable [] m_last = null;
+	/**
+	 * The last event (or array of events) received
+	 */
+	protected Object @Nullable [] m_last = null;
 
-  /**
-   * The number of events received so far
-   */
-  protected int m_eventCounter = 0;
+	/**
+	 * The number of events received so far
+	 */
+	protected int m_eventCounter = 0;
 
-  /**
-   * Creates a new sink last processor
-   */
-  public SinkLast()
-  {
-    super();
-  }
+	/**
+	 * A flag that remembers if the end of trace has been seen.
+	 */
+	protected boolean m_seenEndOfTrace;
 
-  /**
-   * Creates a new sink last processor of given input arity
-   * @param in_arity The input arity
-   */
-  public SinkLast(int in_arity)
-  {
-    super(in_arity);
-  }
+	/**
+	 * Creates a new sink last processor
+	 */
+	public SinkLast()
+	{
+		this(1);
+	}
 
-  @Override
-  public void reset()
-  {
-    super.reset();
-  }
+	/**
+	 * Creates a new sink last processor of given input arity
+	 * @param in_arity The input arity
+	 */
+	public SinkLast(int in_arity)
+	{
+		super(in_arity);
+		m_last = null;
+		m_eventCounter = 0;
+		m_seenEndOfTrace = false;
+	}
 
-  @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
-  {
-    m_last = inputs;
-    return true;
-  }
+	/**
+	 * Queries if the processor has seen the end of the input trace.
+	 * @return {@code true} if the end of trace signal has been received,
+	 * {@code false} otherwise
+	 * @since 0.11
+	 */
+	/*@ pure @*/ public boolean seenEndOfTrace()
+	{
+		return m_seenEndOfTrace;
+	}
 
-  @Pure
-  public Object @Nullable [] getLast()
-  {
-    return m_last;
-  }
+	@Override
+	protected boolean onEndOfTrace(Queue<Object[]> outputs) throws ProcessorException
+	{
+		super.onEndOfTrace(outputs);
+		m_seenEndOfTrace = true;
+		return false;
+	}
 
-  @Override
-  @SideEffectFree
-  public SinkLast duplicate(boolean with_state)
-  {
-    return new SinkLast(getInputArity());
-  }
-  
-  /**
-   * @since 0.10.2
-   */
-  public Object printState()
-  {
-    return getInputArity();
-  }
-  
-  /**
-   * @since 0.10.2
-   */
-  @Override
-  public SinkLast readState(Object o)
-  {
-    return new SinkLast(((Number) o).intValue());
-  }
+	@Override
+	public void reset()
+	{
+		super.reset();
+		m_last = null;
+		m_eventCounter = 0;
+	}
+
+	@Override
+	protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+	{
+		m_last = inputs;
+		return true;
+	}
+
+	/**
+	 * Gets the last event front received by this sink.
+	 * @return The last event front, or {@code null} if no front has been
+	 * received yet
+	 */
+	/*@ null @*/ public Object @Nullable [] getLast()
+	{
+		return m_last;
+	}
+
+	@Override
+	@SideEffectFree
+	public SinkLast duplicate(boolean with_state)
+	{
+		SinkLast s = new SinkLast(getInputArity());
+		if (with_state)
+		{
+			s.m_seenEndOfTrace = m_seenEndOfTrace;
+			if (m_last != null)
+			{
+				for (int i = 0; i < m_last.length; i++)
+				{
+					s.m_last[i] = m_last[i];
+				}
+			}
+		}
+		return s;
+	}
+
+	/**
+	 * @since 0.10.2
+	 */
+	@Override
+	public Object printState()
+	{
+		return getInputArity();
+	}
+
+	/**
+	 * @since 0.10.2
+	 */
+	@Override
+	public SinkLast readState(Object o)
+	{
+		return new SinkLast(((Number) o).intValue());
+	}
 }

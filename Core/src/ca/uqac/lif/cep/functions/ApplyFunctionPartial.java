@@ -17,8 +17,8 @@
  */
 package ca.uqac.lif.cep.functions;
 
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 /**
  * Evaluates a function on each event front in a <em>lazy</em> manner.
@@ -180,13 +179,6 @@ public class ApplyFunctionPartial extends Processor
         }
       }
       return this;
-    }
-
-    @Override
-    public Future<Pushable> pushFast(Object o)
-    {
-      push(o);
-      return Pushable.nullFuture(ApplyFunctionPartial.this);
     }
 
     @Override

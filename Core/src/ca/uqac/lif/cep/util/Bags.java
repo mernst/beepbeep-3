@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2021 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,9 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Connector.Variant;
@@ -204,6 +204,8 @@ public class Bags
     protected transient SinkLast m_sink;
 
     protected transient Pushable m_pushable;
+    
+    protected final Object[] m_default;
 
     /**
      * Creates a new RunOn processor
@@ -218,14 +220,34 @@ public class Bags
       m_pushable = m_processor.getPushableInput();
       m_sink = new SinkLast(out_arity);
       Connector.connect(m_processor, m_sink);
+      m_default = null;
+    }
+    
+    /**
+     * Creates a new RunOn processor
+     * @param processor The processor on which to run the elements
+     * of each collection
+     */
+    public RunOn(Processor processor, Object[] default_values)
+    {
+      super(1, processor.getOutputArity());
+      int out_arity = processor.getOutputArity();
+      m_processor = processor;
+      m_pushable = m_processor.getPushableInput();
+      m_sink = new SinkLast(out_arity);
+      Connector.connect(m_processor, m_sink);
+      m_default = default_values;
     }
 
     @Override
     protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
     {
+    	boolean empty_input = false;
       m_processor.reset();
+      m_sink.reset();
       if (inputs[0].getClass().isArray())
       {
+      	empty_input = ((Object[]) inputs[0]).length == 0;
         for (Object o : (Object[]) inputs[0])
         {
           m_pushable.push(o);
@@ -233,6 +255,7 @@ public class Bags
       }
       else
       {
+      	empty_input = ((Collection<@NonNull ?>) inputs[0]).size() == 0;
         for (Object o : (Collection<@NonNull ?>) inputs[0])
         {
           m_pushable.push(o);
@@ -248,6 +271,10 @@ public class Bags
         }
         outputs.add(outs);
       }
+      else if (empty_input && m_default != null)
+      {
+      	outputs.add(m_default);
+      }
       return true;
     }
 
@@ -255,7 +282,7 @@ public class Bags
   @SideEffectFree
     public RunOn duplicate(boolean with_state)
     {
-      return new RunOn(m_processor.duplicate(with_state));
+      return new RunOn(m_processor.duplicate(with_state), m_default);
     }
   }
 
@@ -270,18 +297,36 @@ public class Bags
     /**
      * An array that keeps the types of each input stream
      */
-    protected Class<?>[] m_types;
+    protected final Class<?>[] m_types;
 
     /**
-     * Creates a new ToList function
+     * Creates a new instance of the function by specifying the type of each
+     * input argument.
      * 
      * @param types
-     *          The types of each input stream
+     *          The types of each input argument
      */
     public ToCollection(Class<?> ... types)
     {
       super();
       m_types = types;
+    }
+    
+    /**
+     * Creates a new instance of the function by specifying its input arity.
+     * This constructor assumes that each input argument is of type
+     * {@link Variant}.
+     * @param arity The input arity
+     * @since 0.11
+     */
+    public ToCollection(int arity)
+    {
+    	super();
+    	m_types = new Class<?>[arity];
+    	for (int i = 0; i < arity; i++)
+    	{
+    		m_types[i] = Variant.class;
+    	}
     }
 
     @Override
@@ -319,6 +364,11 @@ public class Bags
     public ToArray(Class<?> ... types)
     {
       super(types);
+    }
+    
+    public ToArray(int arity)
+    {
+    	super(arity);
     }
 
     @Override
@@ -361,6 +411,11 @@ public class Bags
     {
       super(types);
     }
+    
+    public ToList(int arity)
+    {
+    	super(arity);
+    }
 
     @Override
   @SideEffectFree
@@ -399,6 +454,11 @@ public class Bags
     public ToSet(Class<?> ... types)
     {
       super(types);
+    }
+    
+    public ToSet(int arity)
+    {
+    	super(arity);
     }
 
     @Override

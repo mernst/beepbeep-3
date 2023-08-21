@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,15 +17,14 @@
  */
 package ca.uqac.lif.cep.tmf;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.Pushable.PushableException;
 import ca.uqac.lif.cep.Pushable;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Produces output events from no input. In other words, a source is a processor
@@ -70,29 +69,12 @@ public abstract class Source extends SynchronousProcessor
     }
     for (Object[] evt : output)
     {
-      @SuppressWarnings("unchecked")
-      Future<Pushable>[] futures = new Future[output.size()];
       if (evt != null && !allNull(evt))
       {
         for (int i = 0; i < output.size(); i++)
         {
           Pushable p = m_outputPushables[i];
-          futures[i] = p.pushFast(evt[i]);
-        }
-        for (int i = 0; i < output.size(); i++)
-        {
-          try
-          {
-            futures[i].get();
-          }
-          catch (InterruptedException e)
-          {
-            throw new ProcessorException(e);
-          }
-          catch (ExecutionException e)
-          {
-            throw new ProcessorException(e);
-          }
+          p.push(evt[i]);
         }
       }
     }

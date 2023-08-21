@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2018 Sylvain Hallé
+    Copyright (C) 2008-2023 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -23,7 +23,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.concurrent.Future;
 
 /**
  * Processor that handles its inputs asynchronously.
@@ -93,7 +92,7 @@ public abstract class AsynchronousProcessor extends Processor
   }
 
   @Override
-  public synchronized Pushable getPushableInput(int index)
+  public Pushable getPushableInput(int index)
   {
     if (m_inputPushables[index] == null)
     {
@@ -103,7 +102,7 @@ public abstract class AsynchronousProcessor extends Processor
   }
 
   @Override
-  public synchronized Pullable getPullableOutput(int index)
+  public Pullable getPullableOutput(int index)
   {
     if (m_outputPullables[index] == null)
     {
@@ -131,13 +130,6 @@ public abstract class AsynchronousProcessor extends Processor
     {
       // TODO Auto-generated method stub
       return null;
-    }
-
-    @Override
-    public Future<Pushable> pushFast(Object o)
-    {
-      push(o);
-      return Pushable.nullFuture(AsynchronousProcessor.this);
     }
 
     @Override

@@ -24,8 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Associative map used by processors to store persistent data. In addition, all
- * operations on a `Context` object are synchronized.
+ * Associative map used by processors to store persistent data.
  * 
  * @author Sylvain Hallé
  * @since 0.3
@@ -64,28 +63,28 @@ public class Context extends HashMap<String, @Nullable Object>
   @SuppressWarnings({"squid:S1185",
           "nullness" // type inference failure
           })
-  public synchronized void putAll(@UnknownInitialization(Context.class) Context this, Map<? extends String, ? extends @Nullable Object> o)
+  public void putAll(@UnknownInitialization(Context.class) Context this, Map<? extends String, ? extends @Nullable Object> o)
   {
     super.putAll(o);
   }
 
   @Override
   @SuppressWarnings("squid:S1185")
-  public synchronized @Nullable Object get(@Nullable Object key)
+  public @Nullable Object get(@Nullable Object key)
   {
     return super.get(key);
   }
 
   @Override
   @SuppressWarnings("squid:S1185")
-  public synchronized @Nullable Object put(String key, @Nullable Object value)
+  public @Nullable Object put(String key, @Nullable Object value)
   {
     return super.put(key, value);
   }
 
   @Override
   @SuppressWarnings("squid:S1185")
-  public synchronized boolean containsKey(@Nullable Object key)
+  public boolean containsKey(@Nullable Object key)
   {
     return super.containsKey(key);
   }
