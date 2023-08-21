@@ -23,6 +23,8 @@ import ca.uqac.lif.azrael.PrintException;
 import ca.uqac.lif.azrael.Printable;
 import ca.uqac.lif.azrael.ReadException;
 import ca.uqac.lif.azrael.Readable;
+import ca.uqac.lif.cep.Connector.PipeSelector;
+import ca.uqac.lif.cep.Connector.SelectedInputPipe;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.util.Equals;
 import ca.uqac.lif.cep.util.Lists.MathList;
@@ -38,8 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Receives zero or more input events, and produces zero or more output events.
@@ -134,11 +134,6 @@ public abstract class Processor implements DuplicableProcessor,
   private static int s_uniqueIdCounter = 0;
 
   /**
-   * A lock to access the ID counter
-   */
-  private static transient Lock s_counterLock = new ReentrantLock();
-
-  /**
    * The unique ID given to this processor instance
    */
   private final int m_uniqueId;
@@ -163,6 +158,13 @@ public abstract class Processor implements DuplicableProcessor,
    * notification.
    */
   protected boolean[] m_hasBeenNotifiedOfEndOfTrace;
+  
+  /**
+   * Indicates whether the processor has notified the end of the trace to the
+   * downstream processors it is connected to. The end of trace signal should
+   * be sent at most once.
+   */
+  protected boolean m_notifiedEndOfTraceDownstream;
 
   /**
    * Initializes a processor. This has for effect of executing the basic
@@ -192,9 +194,7 @@ public abstract class Processor implements DuplicableProcessor,
     super();
     m_inputArity = in_arity;
     m_outputArity = out_arity;
-    s_counterLock.lock();
     m_uniqueId = s_uniqueIdCounter++;
-    s_counterLock.unlock();
     m_inputQueues = new Queue[m_inputArity];
     for (int i = 0; i < m_inputArity; i++)
     {
@@ -212,6 +212,7 @@ public abstract class Processor implements DuplicableProcessor,
     {
       m_hasBeenNotifiedOfEndOfTrace[i] = false; 
     }
+    m_notifiedEndOfTraceDownstream = false;
   }
   
   /**
@@ -249,7 +250,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          The key associated to that object
    * @return The object, or {@code null} if no object exists with such key
    */
-  public final synchronized /*@ null @*/ Object getContext(/*@ non_null @*/ String key)
+  public final /*@ null @*/ Object getContext(/*@ non_null @*/ String key)
   {
     if (m_context == null || !m_context.containsKey(key))
     {
@@ -259,7 +260,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized /*@ non_null @*/ Context getContext()
+  public /*@ non_null @*/ Context getContext()
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -271,7 +272,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/*@ non_null @*/ String key, Object value)
+  public void setContext(/*@ non_null @*/ String key, Object value)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -283,7 +284,7 @@ public abstract class Processor implements DuplicableProcessor,
   }
 
   @Override
-  public synchronized void setContext(/*@ null @*/ Context context)
+  public void setContext(/*@ null @*/ Context context)
   {
     // As the context map is created only on demand, we must first
     // check if a map already exists and create it if not
@@ -343,7 +344,7 @@ public abstract class Processor implements DuplicableProcessor,
    * should also reset this state to its "initial" settings (whatever that means
    * in your context).
    */
-  public synchronized void reset()
+  public void reset()
   {
     // Reset input
     for (int i = 0; i < m_inputArity; i++)
@@ -359,6 +360,7 @@ public abstract class Processor implements DuplicableProcessor,
     {
       m_hasBeenNotifiedOfEndOfTrace[i] = false; 
     }
+    m_notifiedEndOfTraceDownstream = false;
     m_inputCount = 0;
     m_outputCount = 0;
   }
@@ -384,7 +386,7 @@ public abstract class Processor implements DuplicableProcessor,
    *         ArrayIndexOutOfBounds will be thrown if the processor has an input
    *         arity of 0.
    */
-  public final synchronized /*@ non_null @*/ Pushable getPushableInput()
+  public final /*@ non_null @*/ Pushable getPushableInput()
   {
     return getPushableInput(0);
   }
@@ -409,7 +411,7 @@ public abstract class Processor implements DuplicableProcessor,
    *         ArrayIndexOutOfBounds will be thrown if the processor has an output
    *         arity of 0.
    */
-  public final synchronized /*@ non_null @*/ Pullable getPullableOutput()
+  public final /*@ non_null @*/ Pullable getPullableOutput()
   {
     return getPullableOutput(0);
   }
@@ -423,7 +425,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @param p
    *          The pullable to assign it to
    */
-  public synchronized void setPullableInput(int i, /*@ non_null @*/ Pullable p)
+  public void setPullableInput(int i, /*@ non_null @*/ Pullable p)
   {
     m_inputPullables[i] = p;
   }
@@ -438,7 +440,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          ArrayIndexOutOfBounds will be thrown.
    * @return The pullable
    */
-  public synchronized Pullable getPullableInput(int i)
+  public Pullable getPullableInput(int i)
   {
     return m_inputPullables[i];
   }
@@ -453,7 +455,7 @@ public abstract class Processor implements DuplicableProcessor,
    * @param p
    *          The pushable to assign it to
    */
-  public synchronized void setPushableOutput(int i, /*@ non_null @*/ Pushable p)
+  public void setPushableOutput(int i, /*@ non_null @*/ Pushable p)
   {
     m_outputPushables[i] = p;
   }
@@ -468,7 +470,7 @@ public abstract class Processor implements DuplicableProcessor,
    *          ArrayIndexOutOfBounds will be thrown.
    * @return The pushable
    */
-  public synchronized /*@ non_null @*/ Pushable getPushableOutput(int i)
+  public /*@ non_null @*/ Pushable getPushableOutput(int i)
   {
     return m_outputPushables[i];
   }
@@ -1010,17 +1012,17 @@ public abstract class Processor implements DuplicableProcessor,
    * @return The other processor
    * @since 0.10.9
    */
-  public Processor or(Pushable p)
+  public Processor or(SelectedInputPipe p)
   {
-  	int index = p.getPosition();
+  	int index = p.getIndex();
   	Processor proc = p.getProcessor();
   	Connector.connect(this, 0, proc, index);
   	return proc;
   }
   
   /**
-   * Gets the {@link Pushable} object corresponding to the processor's input
-   * pipe for a given index.
+   * Gets the {@link PipeSelector} object corresponding to the processor's
+   * input or output pipe for a given index.
    * <p>
    * Java programmers probably won't use this method, but users of the Groovy
    * language can benefit from its operator overloading conventions, which map
@@ -1034,16 +1036,29 @@ public abstract class Processor implements DuplicableProcessor,
    * }</pre>
    * @param index The input pipe index
    * @return The pushable object
-   * @since 0.10.9
+   * @since 0.11
+   * @see #positive()
+   * @see #negative()
    */
-  public Pushable getAt(int index)
+  /*@ pure non_null @*/ public PipeSelector getAt(int index)
   {
-  	return getPushableInput(index);
+  	return new PipeSelector(this, index);
+  }
+  
+  public Pushable rightShift(int index)
+  {
+    return getPushableInput(index);
+  }
+  
+  public Pullable leftShift(int index)
+  {
+    return getPullableInput(index);
   }
   
   /**
    * An object capturing the internal state of a processor,
    * including the current contents of its input and output queues.
+   * @since 0.10.8
    */
   public static class InternalProcessorState
   {
