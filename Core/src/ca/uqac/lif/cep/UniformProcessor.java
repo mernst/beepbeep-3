@@ -21,7 +21,6 @@ import ca.uqac.lif.cep.tmf.Passthrough;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.concurrent.Future;
 
 /**
  * Processor that produces exactly one output front for each input front
@@ -170,11 +169,12 @@ public abstract class UniformProcessor extends SynchronousProcessor
   public class UnaryPushable implements Pushable
   {
     @Override
-    public synchronized Pushable push(Object o)
+    public Pushable push(Object o)
     {
+    	boolean b = true;
       try
       {
-        compute(new Object[] { o }, m_outputArray);
+        b = compute(new Object[] { o }, m_outputArray);
       }
       catch (ProcessorException e)
       {
@@ -186,18 +186,15 @@ public abstract class UniformProcessor extends SynchronousProcessor
             "Output 0 of processor " + getProcessor() + " is connected to nothing");
       }
       m_outputPushables[0].push(m_outputArray[0]);
+      if (!b)
+      {
+      	m_outputPushables[0].notifyEndOfTrace();	
+      }
       return this;
     }
 
     @Override
-    public synchronized Future<Pushable> pushFast(Object o)
-    {
-      push(o);
-      return Pushable.NULL_FUTURE;
-    }
-
-    @Override
-    public synchronized void notifyEndOfTrace() throws PushableException
+    public void notifyEndOfTrace() throws PushableException
     {
       m_hasBeenNotifiedOfEndOfTrace[getPosition()] = true;
       if (!allNotifiedEndOfTrace())

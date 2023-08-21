@@ -26,7 +26,10 @@
   <name>BeepBeep 3</name>
   
   <!-- The project's version number -->
-  <version>0.10.8-alpha</version>
+  <version>0.11</version>
+
+  <!-- The project's package (with a trailing slash) -->
+  <package>ca/uqac/lif/cep/</package>  
   
   <!-- The project's author. Currently this only
   shows up in the footer of the Javadoc documentation. -->
@@ -57,7 +60,7 @@
   </jar>
   
   <!--
-    Write JAR dependencies here.l
+    Write JAR dependencies here.
   -->
   <dependencies>
    <dependency>
@@ -78,7 +81,7 @@
       <name>Azrael Core</name>
       <classname>ca.uqac.lif.azrael.ObjectPrinter</classname>
       <files>
-        <jar>https://github.com/sylvainhalle/Azrael/releases/download/v2.1.1/azrael-core.jar</jar>
+        <jar>https://github.com/sylvainhalle/Azrael/releases/download/v2.1.2/azrael-core-2.1.2.jar</jar>
       </files>
       <bundle>true</bundle>
     </dependency>
