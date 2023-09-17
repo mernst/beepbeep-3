@@ -45,7 +45,7 @@ import java.util.Set;
  */
 public class Sets
 {
-  private Sets()
+  protected Sets()
   {
     // Utility class
   }
