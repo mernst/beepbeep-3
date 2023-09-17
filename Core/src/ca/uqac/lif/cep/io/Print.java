@@ -197,7 +197,14 @@ public class Print extends Sink
 		}
 		beforeEvent(m_out);
 		m_out.print(m_prefix);
-		prettyPrint(m_out, inputs[0]);
+		if (inputs[0] instanceof byte[])
+		{
+		  m_out.print(new String((byte[]) inputs[0]));
+		}
+		else
+		{
+		  prettyPrint(m_out, inputs[0]);
+		}
 		m_out.print(m_suffix);
 		afterEvent(m_out);
 		return true;
@@ -317,9 +324,15 @@ public class Print extends Sink
 		}
 		m_out.print("]");
 	}
+	
+	@Override
+	public void stop()
+	{
+		m_out.close();
+	}
 
 	/**
-	 * Closes the underlying PrintStream
+	 * Closes the underlying PrintStream.
 	 */
 	public void close()
 	{
@@ -338,7 +351,7 @@ public class Print extends Sink
 	 * Copies the member fields of the current processor into that of another
 	 * {@link Print} processor.
 	 * @param print The other print processor
-	 * @param with_state {@code true} to make a stateful copy, {@link false}
+	 * @param with_state {@code true} to make a stateful copy, {@code false}
 	 * otherwise
 	 */
 	protected void copyInto(Print print, boolean with_state)
