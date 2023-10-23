@@ -110,6 +110,7 @@ public class QueueSource extends Source implements Stateful
    */
   public void setEvents(Collection<Object> queue)
   {
+  	m_events.clear();
     for (Object o : queue)
     {
       m_events.add(o);
@@ -126,6 +127,7 @@ public class QueueSource extends Source implements Stateful
    */
   public QueueSource setEvents(Object ... queue)
   {
+  	m_events.clear();
     for (Object o : queue)
     {
       m_events.add(o);
