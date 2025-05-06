@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2024 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -313,8 +313,8 @@ public class GroupProcessor extends Processor implements Stateful
 	}
 
 	/**
-	 * Declares that the first (i.e. 0-th) output of the group is linked to the
-	 * first (i.e. 0-th) output of processor {@code p}.
+	 * Declares that the first (i.e.<!-- --> 0-th) output of the group is linked
+	 * to the first (i.e. 0-th) output of processor {@code p}.
 	 * @param p The processor to connect to
 	 * @return A reference to the current group processor
 	 */
@@ -500,6 +500,95 @@ public class GroupProcessor extends Processor implements Stateful
 			group.associateOutput(output_number, clone_p, pa.m_ioNumber);
 		}
 	}
+	
+	/**
+	 * Sets a processor as the input 0 of the group. This method is similar to
+	 * {@link #associateInput(Processor)}, except that it also automatically adds
+	 * the argument to the group (something that the other method does not do).
+	 * <p>
+	 * This method has little interest when using BeepBeep from Java. However,
+	 * in Groovy, it makes it possible to create a pipeline in a group by
+	 * sparing the user from calling
+	 * {@link #addProcessor(Processor) addProcessor()} and
+	 * {@link #associateInput(Processor) associateInput()} separately. For
+	 * instance, one could write (assuming that P1, P2 and P3 are processor
+	 * instances):
+	 * <pre>
+	 * g = new GroupProcessor() {{
+	 *   in(P1) | P2 | out(P3)
+	 * }}
+	 * </pre>
+	 * The single line creates the pipeline, associates P1 as the input of the
+	 * group, P3 as its output, and automatically adds P1, P2 and P3 to the
+	 * group (that later task is taken care of by {@link #out(Processor)}.
+	 * 
+	 * @param p The processor to set as the input of the group
+	 * @return That processor
+	 * @since 0.11.3
+	 */
+	public Processor in(Processor p)
+	{
+		addProcessor(p);
+		associateInput(p);
+		return p;
+	}
+	
+	/**
+	 * Sets a processor as the output 0 of the group, and crawls the pipeline
+	 * backwards from that processor to add all other processors encountered
+	 * along the way.
+	 * <p>
+	 * This method has little interest when using BeepBeep from Java. However,
+	 * in Groovy, it makes it possible to create a pipeline in a group by
+	 * sparing the user from calling
+	 * {@link #addProcessor(Processor) addProcessor()} and
+	 * {@link #associateInput(Processor) associateOutput()} separately. For
+	 * instance, one could write (assuming that P1, P2 and P3 are processor
+	 * instances):
+	 * <pre>
+	 * g = new GroupProcessor() {{
+	 *   in(P1) | P2 | out(P3)
+	 * }}
+	 * </pre>
+	 * The single line creates the pipeline, associates P1 as the input of the
+	 * group, P3 as its output, and automatically adds P1, P2 and P3 to the
+	 * group.
+	 * <p>
+	 * The reason why this method returns a {@link CallAfterConnect} object,
+	 * instead of just a processor, comes from the fact that in the context of a
+	 * Groovy script, method {@code out} is called <em>before</em> the processor
+	 * is connected upstream to the rest of the chain (hence in the previous
+	 * example, before P3 is connected to P2). Therefore, trying to
+	 * harvest other processors in the group by working up the chain from
+	 * {@code p}, in the context of this method, would not return anything.
+	 * <p>
+	 * The workaround is therefore to pass this object, which will allow the
+	 * processor to be connected, and then for upstream processors to be
+	 * harvested by {@link #collectProcessors(Processor)} through the call to
+	 * {@link CallAfterConnect#call()}.
+	 * 
+	 * @param p The processor to set as the output of the group
+	 * @return A {@link CallAfterConnect} object, which allows the underlying
+	 * processor to be connected, and <em>then</em> for upstream processors to be
+	 * harvested by {@link #collectProcessors(Processor)}.
+	 * @since 0.11.3
+	 */
+	public CallAfterConnect out(Processor p)
+	{
+		addProcessor(p);
+		associateOutput(p);
+		return new OutputCallAfterConnect(p);
+	}
+	
+	/**
+	 * Crawls the network of processors and adds to {@link #m_processors} any
+	 * processor that is not already present in the list.
+	 * @param start The starting point of the collection
+	 */
+	protected void collectProcessors(Processor start)
+	{
+		new CollectCrawler().crawl(start);;
+	}
 
 	/**
 	 * Creates a copy of a processor.
@@ -596,6 +685,21 @@ public class GroupProcessor extends Processor implements Stateful
 						Connector.connect(m_tracker, new_p, i, new_target, j);
 					}
 				}
+			}
+		}
+	}
+	
+	/**
+	 * A crawler that adds to the group any processor it encounters.
+	 */
+	protected class CollectCrawler extends PipeCrawler
+	{
+		@Override
+		public void visit(Processor p)
+		{
+			if (!m_processors.contains(p))
+			{
+				m_processors.add(p);
 			}
 		}
 	}
@@ -1112,5 +1216,44 @@ public class GroupProcessor extends Processor implements Stateful
 			group_state.add(new InternalProcessorState(p));
 		}
 		return group_state;
+	}
+	
+	/**
+	 * A {@link CallAfterConnect} object that can be used to connect the
+	 * underlying processor of a {@link GroupProcessor}, and then to collect all
+	 * processors that are part of the group. Currently the only use of this
+	 * class is to be returned by the {@link #out(Processor)} method. (And in
+	 * turn, the only real use of this method is in Groovy scripts to save
+	 * a few keystrokes when creating a group.)
+	 * @since 0.11.4
+	 */
+	protected class OutputCallAfterConnect implements CallAfterConnect
+	{
+		/**
+		 * The processor to be connected.
+		 */
+		private final Processor m_processor;
+		
+		/**
+		 * Creates a new {@link OutputCallAfterConnect} object.
+		 * @param p The processor to be connected
+		 */
+		public OutputCallAfterConnect(Processor p)
+		{
+			super();
+			m_processor = p;
+		}
+
+		@Override
+		public Processor getProcessor()
+		{
+			return m_processor;
+		}
+
+		@Override
+		public void call()
+		{
+			collectProcessors(m_processor);
+		}
 	}
 }

@@ -94,26 +94,16 @@ public class Insert extends SynchronousProcessor implements Stateful
   {
     return new Insert(m_times, m_pad);
   }
-  
+
   /**
    * @since 0.11
    */
   @Override
   public Object getState()
   {
-  	return m_sentPad;
+    return m_sentPad;
   }
-  
-  @Override
-  public Pullable getPullableOutput(int index)
-  {
-  	if (m_outputPullables[index] == null)
-  	{
-  		m_outputPullables[index] = new InsertPullable(index);
-  	}
-  	return m_outputPullables[index];
-  }
-  
+
   /**
    * A {@link Pullable} object that does not pull events from upstream before
    * the events to insert have been emitted. This makes it possible to connect
@@ -124,27 +114,27 @@ public class Insert extends SynchronousProcessor implements Stateful
    */
   protected class InsertPullable extends OutputPullable
   {
-		public InsertPullable(int index)
-		{
-			super(index);
-		}
-		
-		@Override
-		public boolean hasNext()
-		{
-			if (!m_sentPad)
-			{
-				for (int i = 0; i < m_times; i++)
-				{
-					for (int j = 0; j < m_pad.length; j++)
-					{
-						m_outputQueues[j].add(m_pad[j]);
-					}
-				}
-				m_sentPad = true;
-				return true;
-			}
-			return super.hasNext();
-		}
+    public InsertPullable(int index)
+    {
+      super(index);
+    }
+
+    @Override
+    public boolean hasNext()
+    {
+      if (!m_sentPad)
+      {
+        for (int i = 0; i < m_times; i++)
+        {
+          for (int j = 0; j < m_pad.length; j++)
+          {
+            m_outputQueues[j].add(m_pad[j]);
+          }
+        }
+        m_sentPad = true;
+        return true;
+      }
+      return super.hasNext();
+    }
   }
 }
