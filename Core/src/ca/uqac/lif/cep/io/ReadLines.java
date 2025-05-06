@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2024 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -18,8 +18,11 @@
 package ca.uqac.lif.cep.io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Queue;
+import java.util.Scanner;
 
 /**
  * Source that reads text lines from a Java {@link InputStream}. It is represented
@@ -34,6 +37,11 @@ import java.io.InputStream;
 public class ReadLines extends ReadTokens
 {
 	/**
+	 * The scanner used to read lines from the file.
+	 */
+	protected final Scanner m_scanner;
+	
+	/**
 	 * Creates a new file reader from an input stream
 	 * 
 	 * @param is
@@ -41,7 +49,8 @@ public class ReadLines extends ReadTokens
 	 */
 	public ReadLines(InputStream is)
 	{
-		super(is, CRLF);
+		super(is, null);
+		m_scanner = new Scanner(is);
 	}
 
 	/**
@@ -52,20 +61,26 @@ public class ReadLines extends ReadTokens
 	 */
 	public ReadLines(File f) throws FileNotFoundException
 	{
-		super(f, CRLF);
+		this(new FileInputStream(f));
 	}
 
 	@Override
-	public ReadLines addCrlf(boolean b)
+	protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
 	{
-		super.addCrlf(b);
-		return this;
-	}
-
-	@Override
-	public ReadLines trim(boolean b)
-	{
-		super.trim(b);
-		return this;
+		if (m_scanner.hasNextLine())
+		{
+			String line = m_scanner.nextLine();
+			if (m_trim)
+			{
+				line = line.trim();
+			}
+			if (m_addCrlf)
+			{
+				line += ReadTokens.CRLF;
+			}
+			outputs.add(new Object[] {line});
+			return true;
+		}
+		return false;
 	}
 }

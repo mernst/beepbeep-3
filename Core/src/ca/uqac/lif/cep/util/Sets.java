@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2024 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -31,9 +31,11 @@ import java.util.Set;
  * two flavors:
  * <ul>
  * <li>The "plain" function takes as input a set object and returns the
- * <em>same</em> object, to which a modification has been applied
+ * <em>same</em> object, to which a modification has been applied. Note
+ * however that in this case, a call to {@link Processor#reset() reset()}
+ * still results in the instantiation of a <em>new</em> set instance.</li>
  * <li>The "new" function takes as input a set object, and returns a <em>new
- * copy</em> of the object with the modification made to it</li>
+ * copy</em> of the object with the modification made to it.</li>
  * </ul>
  * 
  * @author Sylvain Hallé
@@ -80,7 +82,7 @@ public class Sets
     public void reset()
     {
       super.reset();
-      m_set.clear();
+      m_set = new HashSet<Object>();
     }
 
     @Override
@@ -99,7 +101,7 @@ public class Sets
   }
 
   /**
-   * Updates a set.
+   * Updates a set by putting the elements it receives into the set.
    * @since 0.7
    */
   public static class PutInto extends SetUpdateProcessor
@@ -177,7 +179,7 @@ public class Sets
 		}
 
 		@Override
-		public Processor duplicate(boolean with_state)
+		public Intersect duplicate(boolean with_state)
 		{
 			Intersect inter = new Intersect();
 			if (with_state)
@@ -193,6 +195,49 @@ public class Sets
 		public String toString()
 		{
 			return "Intersect";
+		}
+  }
+  
+  /**
+   * Calculates the successive union of a stream of sets.
+   * @since 0.11.3
+   */
+  public static class Union extends SetUpdateProcessor
+  {
+  	/**
+     * Create a new instance of the processor
+     */
+  	public Union()
+  	{
+  		super();
+  	}
+
+		@Override
+		protected boolean compute(Object[] inputs, Object[] outputs)
+		{
+			m_set.addAll((Collection<?>) inputs[0]);
+			outputs[0] = m_set;
+			m_inputCount++;
+			return true;
+		}
+
+		@Override
+		public Union duplicate(boolean with_state)
+		{
+			Union inter = new Union();
+			if (with_state)
+			{
+				inter.m_inputCount = m_inputCount;
+				inter.m_outputCount = m_outputCount;
+				inter.m_set.addAll(m_set);
+			}
+			return inter;
+		}
+  	
+		@Override
+		public String toString()
+		{
+			return "Union";
 		}
   }
 
