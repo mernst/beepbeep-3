@@ -17,12 +17,11 @@
  */
 package ca.uqac.lif.cep.functions;
 
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.Context;
-import ca.uqac.lif.cep.EventTracker;
 import java.util.Set;
 
 /**
@@ -55,7 +54,7 @@ public class ApplyFunctionArgument extends Function
   }
 
   @Override
-  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context)
   {
     if (!(inputs[0] instanceof Function))
     {
@@ -65,7 +64,7 @@ public class ApplyFunctionArgument extends Function
     Object arg = inputs[1];
     Object[] in_args = new Object[] {arg};
     Object[] out_args = new Object[1];
-    f.evaluate(in_args, out_args, context, tracker);
+    f.evaluate(in_args, out_args, context);
     outputs[0] = out_args[0];
   }
 

@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2019 Sylvain Hallé
+    Copyright (C) 2008-2025 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,11 +17,10 @@
  */
 package ca.uqac.lif.cep.functions;
 
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Context;
-import ca.uqac.lif.cep.EventTracker;
 import java.util.Set;
 
 /**
@@ -61,13 +60,9 @@ public class Constant extends Function
   }
 
   @Override
-  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context, @Nullable EventTracker tracker)
+  public void evaluate(Object[] inputs, Object[] outputs, @Nullable Context context)
   {
     outputs[0] = m_value;
-    if (tracker != null)
-    {
-      tracker.associateToInput(-1, 0, 0, 0, 0);
-    }
   }
 
   @Override

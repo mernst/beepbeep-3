@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2022 Sylvain Hallé
+    Copyright (C) 2008-2025 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -23,6 +23,9 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.EventTracker;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -40,12 +43,18 @@ public class Trim extends SynchronousProcessor implements Stateful
   protected final int m_delay;
   
   /**
+	 * Number of output events produced so far.
+	 */
+  protected int m_inputCount;
+  
+  /**
    * No-args constructor. Useful only for deserialization.
    */
   private Trim()
   {
     super(1, 1);
     m_delay = 0;
+    m_inputCount = 0;
   }
 
   /**
@@ -66,15 +75,6 @@ public class Trim extends SynchronousProcessor implements Stateful
     if (m_inputCount >= getDelay())
     {
       outputs.add(inputs);
-      if (m_eventTracker != null)
-      {
-        EventTracker local_m_eventTracker = m_eventTracker; // in case the field m_eventTracker is nulled
-        for (int i = 0; i < inputs.length; i++)
-        {
-          local_m_eventTracker.associateToInput(getId(), i, m_inputCount, i, m_outputCount);
-        }
-      }
-      m_outputCount++;
     }
     m_inputCount++;
     return true;
@@ -88,7 +88,6 @@ public class Trim extends SynchronousProcessor implements Stateful
     if (with_state)
     {
       t.m_inputCount = m_inputCount;
-      t.m_outputCount = m_outputCount;
     }
     return t;
   }
@@ -108,17 +107,24 @@ public class Trim extends SynchronousProcessor implements Stateful
   @Override
   protected Object printState()
   {
-    return m_delay;
+    Map<String, Integer> state = new HashMap<>();
+    state.put("delay", m_delay);
+    state.put("inputCount", m_inputCount);
+    return state;
   }
   
   /**
    * @since 0.10.2
    */
-  @Override
+  @SuppressWarnings("unchecked")
+	@Override
   protected Trim readState(Object o)
   {
-    int delay = ((Number) o).intValue();
-    return new Trim(delay);
+  	Map<String, Number> state = (Map<String, Number>) o;
+  	int delay = state.get("delay").intValue();
+  	Trim t = new Trim(delay);
+  	t.m_inputCount = state.get("inputCount").intValue();
+  	return t;
   }
 
   /**
@@ -128,5 +134,12 @@ public class Trim extends SynchronousProcessor implements Stateful
 	public @Nullable Object getState()
 	{
 		return Math.max(0, m_delay - m_inputCount);
+	}
+	
+	@Override
+	public void reset()
+	{
+		super.reset();
+		m_inputCount = 0;
 	}
 }
