@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2024 Sylvain Hallé
+    Copyright (C) 2008-2025 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,27 +17,15 @@
  */
 package ca.uqac.lif.cep;
 
-import ca.uqac.lif.azrael.ObjectPrinter;
-import ca.uqac.lif.azrael.ObjectReader;
-import ca.uqac.lif.azrael.PrintException;
-import ca.uqac.lif.azrael.Printable;
-import ca.uqac.lif.azrael.ReadException;
-import ca.uqac.lif.azrael.Readable;
 import ca.uqac.lif.cep.Connector.PipeSelector;
 import ca.uqac.lif.cep.Connector.SelectedInputPipe;
 import ca.uqac.lif.cep.Connector.Variant;
 import ca.uqac.lif.cep.util.Equals;
 import ca.uqac.lif.cep.util.Lists.MathList;
 import ca.uqac.lif.cep.util.Maps.MathMap;
-import ca.uqac.lif.petitpoucet.NodeFunction;
-import ca.uqac.lif.petitpoucet.ProvenanceNode;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -65,8 +53,7 @@ import java.util.Set;
  * @since 0.1
  *
  */
-public abstract class Processor implements DuplicableProcessor, 
-Contextualizable, Printable, Readable
+public abstract class Processor implements DuplicableProcessor, Contextualizable
 {
 	/**
 	 * The processor's input arity, i.e. the number of input events it requires to
@@ -82,7 +69,7 @@ Contextualizable, Printable, Readable
 	/**
 	 * A string used to identify the program's version
 	 */
-	public static final transient String s_versionString = "0.11.2";
+	public static final transient String s_versionString = "3.13";
 
 	/**
 	 * An array of input event queues. This is where the input events will be stored
@@ -90,12 +77,6 @@ Contextualizable, Printable, Readable
 	 * input arity of the processor.
 	 */
 	protected transient Queue<Object>[] m_inputQueues;
-
-	/**
-	 * An object that keeps track of the relationship between input and output
-	 * events.
-	 */
-	protected transient EventTracker m_eventTracker = null;
 
 	/**
 	 * An array of output event queues. This is where the output events will be
@@ -115,16 +96,6 @@ Contextualizable, Printable, Readable
 	 * produces
 	 */
 	protected transient Pushable[] m_outputPushables;
-
-	/**
-	 * A counter incremented upon each input front processed
-	 */
-	protected int m_inputCount = 0;
-
-	/**
-	 * A counter incremented upon each output front processed
-	 */
-	protected int m_outputCount = 0;
 
 	/**
 	 * A static counter, to be incremented every time a new {@link Processor} is
@@ -361,8 +332,6 @@ Contextualizable, Printable, Readable
 			m_hasBeenNotifiedOfEndOfTrace[i] = false; 
 		}
 		m_notifiedEndOfTraceDownstream = false;
-		m_inputCount = 0;
-		m_outputCount = 0;
 	}
 
 	/**
@@ -525,7 +494,6 @@ Contextualizable, Printable, Readable
 	 */
 	public void duplicateInto(Processor p)
 	{
-		p.m_eventTracker = m_eventTracker;
 		p.setContext(m_context);
 		for (int i = 0; i < m_inputQueues.length; i++)
 		{
@@ -667,80 +635,6 @@ Contextualizable, Printable, Readable
 	}
 
 	/**
-	 * Gets the instance of event tracker associated to this processor
-	 * 
-	 * @return The event tracker, or {@code null} of no event tracker is associated
-	 *         to this processor
-	 */
-	public final /*@ null @*/ EventTracker getEventTracker()
-	{
-		return m_eventTracker;
-	}
-
-	/**
-	 * Associates an event tracker to this processor
-	 * 
-	 * @param tracker
-	 *          The event tracker, or {@code null} to remove the association to an
-	 *          existing tracker
-	 * @return This processor
-	 */
-	public Processor setEventTracker(/*@ null @*/ EventTracker tracker)
-	{
-		m_eventTracker = tracker;
-		return this;
-	}
-
-	/**
-	 * Associates an input event to an output event.
-	 * @param in_stream_index The index of the processor's input stream 
-	 * @param in_stream_pos The position of the event in the input stream
-	 * @param out_stream_index The index of the processor's output stream 
-	 * @param out_stream_pos The position of the event in the output stream
-	 */
-	public void associateToInput(int in_stream_index, int in_stream_pos, int out_stream_index,
-			int out_stream_pos)
-	{
-		if (m_eventTracker != null)
-		{
-			m_eventTracker.associateToInput(m_uniqueId, in_stream_index, in_stream_pos, out_stream_index,
-					out_stream_pos);
-		}
-	}
-
-	/**
-	 * Associates a node function to a particular event of processor's
-	 * output stream. 
-	 * @param f The node function
-	 * @param out_stream_index The index of the processor's output stream 
-	 * @param out_stream_pos The position of the event in the output stream
-	 */
-	public void associateTo(NodeFunction f, int out_stream_index, int out_stream_pos)
-	{
-		if (m_eventTracker != null)
-		{
-			m_eventTracker.associateTo(m_uniqueId, f, out_stream_index, out_stream_pos);
-		}
-	}
-
-	/**
-	 * Associates an input event to an output event.
-	 * @param in_stream_index The index of the processor's input stream 
-	 * @param in_stream_pos The position of the event in the input stream
-	 * @param out_stream_index The index of the processor's output stream 
-	 * @param out_stream_pos The position of the event in the output stream
-	 */
-	public void associateToOutput(int in_stream_index, int in_stream_pos, int out_stream_index,
-			int out_stream_pos)
-	{
-		if (m_eventTracker != null)
-		{
-			m_eventTracker.associateToOutput(m_uniqueId, in_stream_index, in_stream_pos, out_stream_index,
-					out_stream_pos);
-		}
-	}
-
-	/**
 	 * Allows to describe a specific behavior when the trace of input fronts has
 	 * reached its end. Called in "push mode" only. In "pull mode", implementing
 	 * such a behavior can be done by using {@link Pullable#hasNext()} or
@@ -762,61 +656,6 @@ Contextualizable, Printable, Readable
 	}
 
 	/**
-	 * Gets the number of event fronts received so far by this processor
-	 * @return The number of fronts
-	 */
-	public final int getInputCount()
-	{
-		return m_inputCount;
-	}
-
-	/**
-	 * Gets the number of event fronts produced so far by this processor
-	 * @return The number of fronts
-	 */
-	public final int getOutputCount()
-	{
-		return m_outputCount;
-	}
-
-	/**
-	 * Prints the contents of this processor into an object printer.
-	 * @param printer The printer to print this processor to
-	 * @return The printed processor
-	 * @since 0.10.2
-	 */
-	@Override
-	public final Object print(ObjectPrinter<?> printer) throws ProcessorException
-	{
-		Map<String,Object> contents = new HashMap<String,Object>();
-		contents.put("id", m_uniqueId);
-		contents.put("input-count", m_inputCount);
-		contents.put("output-count", m_outputCount);
-		contents.put("context", m_context);
-		List<Queue<Object>> in_queues = new ArrayList<Queue<Object>>(m_inputQueues.length);
-		for (Queue<Object> q : m_inputQueues)
-		{
-			in_queues.add(q);
-		}
-		contents.put("input-queues", in_queues);
-		List<Queue<Object>> out_queues = new ArrayList<Queue<Object>>(m_outputQueues.length);
-		for (Queue<Object> q : m_outputQueues)
-		{
-			out_queues.add(q);
-		}
-		contents.put("output-queues", out_queues);
-		contents.put("contents", printState());
-		try
-		{
-			return printer.print(contents);
-		}
-		catch (PrintException e)
-		{
-			throw new ProcessorException(e);
-		}
-	}
-
-	/**
 	 * Produces an object that represents the state of the current processor.
 	 * A concrete processor should override this method to add whatever state
 	 * information that needs to be preserved in the serialization process.
@@ -827,66 +666,6 @@ Contextualizable, Printable, Readable
 	protected Object printState()
 	{
 		return null;
-	}
-
-	/**
-	 * Reads the content of a processor from a serialized object.
-	 * @param reader An object reader
-	 * @param o The object to read from
-	 * @return The serialized processor
-	 * @throws ProcessorException If the read operation failed for some reason
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public final Processor read(ObjectReader<?> reader, Object o) throws ProcessorException
-	{
-		Map<String, Object> contents = null;
-		try
-		{
-			contents = (Map<String,Object>) reader.read(o);
-		}
-		catch (ReadException e)
-		{
-			throw new ProcessorException(e);
-		}
-		Processor p = null;
-		if (contents.containsKey("contents"))
-		{
-			Object o_contents = contents.get("contents");
-			try
-			{
-				p = readState(o_contents);
-			}
-			catch (UnsupportedOperationException e)
-			{
-				throw new ProcessorException(e);
-			}
-		}
-		if (p == null)
-		{
-			throw new ProcessorException("The processor returned null with being deserialized");
-		}
-		p.m_inputCount = ((Number) contents.get("input-count")).intValue();
-		p.m_outputCount = ((Number) contents.get("output-count")).intValue();
-		try
-		{
-			reader.setField(p, "m_uniqueId", ((Number) contents.get("id")).intValue());
-		}
-		catch (ReadException e)
-		{
-			throw new ProcessorException(e);
-		}
-		List<Queue<Object>> in_queues = (List<Queue<Object>>) contents.get("input-queues");
-		for (int i = 0; i < in_queues.size(); i++)
-		{
-			p.m_inputQueues[i] = in_queues.get(i);
-		}
-		List<Queue<Object>> out_queues = (List<Queue<Object>>) contents.get("output-queues");
-		for (int i = 0; i < out_queues.size(); i++)
-		{
-			p.m_outputQueues[i] = in_queues.get(i);
-		}
-		return p;
 	}
 
 	/**
@@ -930,43 +709,6 @@ Contextualizable, Printable, Readable
 
 	@Override
 	/*@ non_null @*/ public abstract Processor duplicate(boolean with_state);
-
-	/**
-	 * Gets the leaves of a provenance tree
-	 * @param root The root of the tree
-	 * @return A list of nodes that correspond to the leaves
-	 */
-	public static List<ProvenanceNode> getLeaves(ProvenanceNode root)
-	{
-		List<ProvenanceNode> leaves = new ArrayList<ProvenanceNode>();
-		getLeaves(root, leaves);
-		return leaves;
-	}
-
-	/**
-	 * Accumulates the leaves of a provenance tree in a list
-	 * @param root The current node in the tree
-	 * @param leaves The list of leaves
-	 */
-	protected static void getLeaves(ProvenanceNode root, List<ProvenanceNode> leaves)
-	{
-		if (root == null)
-		{
-			return;
-		}
-		List<ProvenanceNode> children = root.getChildren();
-		if (children.isEmpty())
-		{
-			leaves.add(root);
-		}
-		else
-		{
-			for (ProvenanceNode child : children)
-			{
-				getLeaves(child, leaves);
-			}
-		}
-	}
 
 	/**
 	 * Connects the first output pipe of this processor to the first input pipe
