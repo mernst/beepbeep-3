@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2018 Sylvain Hallé
+    Copyright (C) 2008-2025 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -86,14 +86,12 @@ public abstract class Decimate extends SynchronousProcessor
   @Override
   protected boolean compute(Object[] inputs, Queue<Object[]> outputs) throws ProcessorException
   {
-    m_inputCount++;
     if (shouldOutput())
     {
       Object[] outs = processInputs(inputs);
       outputs.add(outs);
       postOutput();
       m_lastProcessedInputs = outs;
-      updateEventTracker();
     }
     else if (m_shouldProcessLastInputs)
     {
@@ -112,20 +110,7 @@ public abstract class Decimate extends SynchronousProcessor
     }
     outputs.add(m_lastProcessedInputs);
     m_lastProcessedInputs = null;
-    updateEventTracker();
     return true;
-  }
-
-  private final void updateEventTracker()
-  {
-    m_outputCount++;
-    if (m_eventTracker != null)
-    {
-      for (int i = 0; i < getInputArity(); i++)
-      {
-        associateToInput(i, m_inputCount - 1, i, m_outputCount - 1);
-      }
-    }
   }
 
   /**
