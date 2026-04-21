@@ -142,7 +142,6 @@ public class Connector implements ca.uqac.lif.petitpoucet.circuit.Connector
 			// This is weird: you try to connect a processor to itself
 			throw new SelfLoopException(p1, i, p2, j);
 		}
-		// Pull
 		try
 		{
 			ca.uqac.lif.petitpoucet.circuit.ConnectableConnector.connect(p1, i, p2, j);

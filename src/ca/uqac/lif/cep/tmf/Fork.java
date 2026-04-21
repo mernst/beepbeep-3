@@ -68,6 +68,7 @@ public class Fork extends UniformProcessor
    */
   public void extendOutputArity(int out_arity)
   {
+  	super.extendOutputArity(out_arity);
   	m_delegate.extendOutputArity(out_arity);
     m_outputArray = new Object[out_arity];
     Pullable[] new_out_pullables = new Pullable[out_arity];

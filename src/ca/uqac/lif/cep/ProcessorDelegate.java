@@ -98,6 +98,16 @@ public class ProcessorDelegate
 		m_notifiedEndOfTraceDownstream = false;
 	}
 	
+	public int getInputArity()
+	{
+		return m_inputQueues.length;
+	}
+	
+	public int getOutputArity()
+	{
+		return m_outputQueues.length;
+	}
+	
 	public void addToInputQueue(int index, Collection<?> c)
 	{
 		m_inputQueues[index].addAll(c);

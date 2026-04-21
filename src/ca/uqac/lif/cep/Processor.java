@@ -60,6 +60,18 @@ public interface Processor extends Contextualizable, Duplicable, Connectable
 	 */
 	public void reset();
 	
+	@Override
+	public default int getInputArity()
+	{
+		return delegate().getInputArity();
+	}
+	
+	@Override
+	public default int getOutputArity()
+	{
+		return delegate().getOutputArity();
+	}
+	
 	/**
 	 * Returns the {@link Pushable} corresponding to the processor's <i>i</i>-th
 	 * input trace.
