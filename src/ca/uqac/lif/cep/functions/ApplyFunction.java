@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2025 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -66,7 +66,7 @@ public class ApplyFunction extends UniformProcessor implements Stateful
   {
     try
     {
-      m_function.evaluate(inputs, outputs, m_context);
+      m_function.evaluate(inputs, outputs, getContext());
     }
     catch (FunctionException e)
     {
@@ -79,7 +79,7 @@ public class ApplyFunction extends UniformProcessor implements Stateful
   public synchronized ApplyFunction duplicate(boolean with_state)
   {
     ApplyFunction out = new ApplyFunction(m_function.duplicate(with_state));
-    duplicateInto(out);
+    duplicate(out, false);
     return out;
   }
 
@@ -115,7 +115,7 @@ public class ApplyFunction extends UniformProcessor implements Stateful
 
   public void cloneInto(ApplyFunction af, boolean with_state)
   {
-    super.duplicateInto(af);
+    super.duplicate(af, false);
     af.m_function = m_function.duplicate(with_state);
   }
 

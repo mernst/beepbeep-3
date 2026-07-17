@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,6 +20,8 @@ package ca.uqac.lif.cep.tmf;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
+import ca.uqac.lif.cep.SingleProcessor;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +54,7 @@ import java.util.List;
  * @author Sylvain Hallé
  * @since 0.10
  */
-public class Divert extends Processor
+public class Divert extends SingleProcessor
 {
   /**
    * The list of downstream {@link Pushable}s connected to this processor 
@@ -104,7 +106,7 @@ public class Divert extends Processor
   }
   
   @Override
-  public synchronized void setPushableOutput(int i, /*@ non_null @*/ Pushable p)
+  public void setPushableOutput(int i, /*@ non_null @*/ Pushable p)
   {
     m_downstreamPushables.add(p);
   }
@@ -188,31 +190,31 @@ public class Divert extends Processor
     @Override
     public Object pullSoft()
     {
-      return m_inputPullables[0].pullSoft();
+      return ((Pullable) m_ins.get(0)).pullSoft();
     }
 
     @Override
     public Object pull()
     {
-      return m_inputPullables[0].pull();
+      return ((Pullable) m_ins.get(0)).pull();
     }
 
     @Override
     public Object next()
     {
-      return m_inputPullables[0].next();
+      return ((Pullable) m_ins.get(0)).next();
     }
 
     @Override
     public NextStatus hasNextSoft()
     {
-      return m_inputPullables[0].hasNextSoft();
+      return ((Pullable) m_ins.get(0)).hasNextSoft();
     }
 
     @Override
     public boolean hasNext()
     {
-      return m_inputPullables[0].hasNext();
+      return ((Pullable) m_ins.get(0)).hasNext();
     }
 
     @Override

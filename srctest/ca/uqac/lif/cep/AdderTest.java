@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2025 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,6 +20,15 @@ package ca.uqac.lif.cep;
 import static org.junit.Assert.assertEquals;
 
 import ca.uqac.lif.cep.tmf.QueueSource;
+import ca.uqac.lif.petitpoucet.Assertions;
+import ca.uqac.lif.petitpoucet.CompositePart;
+import ca.uqac.lif.petitpoucet.Vertex;
+import ca.uqac.lif.petitpoucet.VertexFactory;
+import ca.uqac.lif.petitpoucet.circuit.Connectable.InputPart;
+import ca.uqac.lif.petitpoucet.circuit.Connectable.OutputPart;
+import ca.uqac.lif.petitpoucet.Explainable.ExplanationException;
+import ca.uqac.lif.petitpoucet.IdentityVertexFactory;
+
 import org.junit.Test;
 
 /**
@@ -41,5 +50,16 @@ public class AdderTest
     assertEquals(8, ((Integer) p.pull()).intValue());
     assertEquals(5, ((Integer) p.pull()).intValue());
     assertEquals(9, ((Integer) p.pull()).intValue());
+  }
+  
+  @Test
+  public void testExplain1() throws ExplanationException
+  {
+  	Adder add = new Adder();
+  	Vertex e = add.explain(CompositePart.compose(new EventAt(2), new OutputPart(0)));
+  	VertexFactory f = new IdentityVertexFactory();
+  	Assertions.assertEqualGraphs(e, f.and(
+  			f.getPart(CompositePart.compose(new EventAt(2), new InputPart(0)), add),
+  			f.getPart(CompositePart.compose(new EventAt(2), new InputPart(1)), add)));
   }
 }
