@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2025 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,10 +17,9 @@
  */
 package ca.uqac.lif.cep.util;
 
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
-import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.UniformProcessor;
 import ca.uqac.lif.cep.functions.BinaryFunction;
 import ca.uqac.lif.cep.functions.UnaryFunction;
@@ -117,7 +116,7 @@ public class Strings
 
     @Override
     @SideEffectFree
-    public Processor duplicate(boolean with_state)
+    public BuildString duplicate(boolean with_state)
     {
       BuildString bs = new BuildString();
       bs.m_separator = m_separator;

@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2017 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -51,4 +51,18 @@ public interface Contextualizable
    * @return The context
    */
   public /*@ non_null @*/ Context getContext();
+
+  /**
+   * Gets the value associated to a key in the processor's current
+   * context.
+   * @param key The key
+   * @return The value, or {@code null} if key not found
+   */
+	public Object getContext(String key);
+	
+	/**
+	 * Creates a new {@link Context} instance.
+	 * @return The context
+	 */
+	public /*@ non_null @*/ Context newContext();
 }

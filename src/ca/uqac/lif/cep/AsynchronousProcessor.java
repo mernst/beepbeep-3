@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -29,7 +29,7 @@ import java.util.Queue;
  * @author Sylvain Hallé
  * @since 0.9
  */
-public abstract class AsynchronousProcessor extends Processor 
+public abstract class AsynchronousProcessor extends SingleProcessor 
 {
   /**
    * A queue object that will be passed to the {@link #compute(Object[], Queue)}
@@ -85,9 +85,9 @@ public abstract class AsynchronousProcessor extends Processor
   public void reset()
   {
     super.reset();
-    m_outputPullables = new Pullable[m_outputArity];
+    m_outputPullables = new Pullable[m_outs.size()];
     m_inFrontsProcessed = 0;
-    m_inputEventsReceived = new int[m_inputArity];
+    m_inputEventsReceived = new int[m_ins.size()];
     m_hasBeenNotifiedOfEndOfTrace = false;
   }
 

@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2018 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,7 +20,6 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
-import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
 import java.util.Queue;
@@ -61,7 +60,7 @@ public class Stutter extends SynchronousProcessor implements Stateful
 
   @Override
   @SideEffectFree
-  public Processor duplicate(boolean with_state)
+  public Stutter duplicate(boolean with_state)
   {
     return new Stutter(m_numReps);
   }

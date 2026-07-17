@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2025 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -23,6 +23,16 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import ca.uqac.lif.cep.Context;
 import ca.uqac.lif.cep.EventTracker;
+import ca.uqac.lif.petitpoucet.CompositePart;
+import ca.uqac.lif.petitpoucet.Duplicable;
+import ca.uqac.lif.petitpoucet.Explainable;
+import ca.uqac.lif.petitpoucet.Part;
+import ca.uqac.lif.petitpoucet.Vertex;
+import ca.uqac.lif.petitpoucet.VertexFactory;
+import ca.uqac.lif.petitpoucet.circuit.Connectable.InputPart;
+import ca.uqac.lif.petitpoucet.circuit.Connectable.OutputPart;
+import ca.uqac.lif.petitpoucet.Vertex.AndVertex;
+
 import java.util.Set;
 
 /**
@@ -31,7 +41,7 @@ import java.util.Set;
  * @author Sylvain Hallé
  * @since 0.2.1
  */
-public abstract class Function implements DuplicableFunction
+public abstract class Function implements Duplicable, Explainable
 {
 	/**
 	 * The maximum input arity that a function can have
@@ -150,6 +160,54 @@ public abstract class Function implements DuplicableFunction
 	{
 		return evaluatePartial(inputs, outputs, null);
 	}
+	
+  @Override
+  public void hint(Part p)
+  {
+  	// Do nothing
+  }
+	
+	/**
+   * Default implementation of the explanation for a synchronous processor.
+   * It is assumed that whatever part of the output depends on all the inputs.
+   * @param p The part to explain
+   * @param f The factory to obtain new vertices
+   * @since 3.14
+   */
+  @Override
+  public Vertex explain(Part p, VertexFactory f) throws ExplanationException
+  {
+  	checkPart(p);
+  	if (getInputArity() == 1)
+  	{
+  		return f.getPart(new InputPart(0), this);
+  	}
+  	AndVertex a = f.getAnd();
+  	for (int i = 0; i < getInputArity(); i++)
+  	{
+  		a.addChild(f.getPart(new InputPart(i), this));
+  	}
+  	return a;
+  }
+  
+  /**
+   * Checks that an output part is valid for that function.
+   * @param p The part
+   * @throws ExplanationException Thrown if the part is not valid
+   */
+  protected void checkPart(Part p) throws ExplanationException
+  {
+  	Part head = CompositePart.head(p);
+  	if (!(head instanceof OutputPart))
+  	{
+  		throw new ExplanationException("Expected an output part");
+  	}
+  	OutputPart op = (OutputPart) head;
+  	if (op.getIndex() < 0 || op.getIndex() >= getOutputArity())
+  	{
+  		throw new ExplanationException("Output index out of bounds");
+  	}
+  }
 
 	/**
 	 * Gets the function's input arity, i.e. the number of arguments it takes.
@@ -234,4 +292,21 @@ public abstract class Function implements DuplicableFunction
 	{
 		throw new UnsupportedOperationException("This function does not support deserialization");
 	}
+	
+  /**
+   * Creates a new function that is the composition of this function and another
+   * function. This method overrides the "getAt" operation defined in Groovy,
+   * which makes it possible to write code such as:
+   * <pre>
+   * Function f3 = f1[f2]
+   * </pre>
+   * @param f The function to compose with
+   * @return A new function representing the composition of this function and
+   * {@code f}
+   * @since 3.14
+   */
+  public Function getAt(Function f)
+  {
+  	return new FunctionTree(this, f);
+  }
 }

@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2020 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,11 +17,17 @@
  */
 package ca.uqac.lif.cep;
 
-public interface EventNodeFunction
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
+import ca.uqac.lif.petitpoucet.Explainable;
+
+/**
+ * Extension of the {@link Explainable} interface signaling that the
+ * explanation is always the same, regardless of the input given to the object.
+ * @since 3.14
+ * @author Sylvain Hallé
+ */
+public interface InvariableExplainable extends Explainable
 {
-  public int getProcessorId();
-  
-  public int getStreamIndex();
-  
-  public int getStreamPosition();
+
 }

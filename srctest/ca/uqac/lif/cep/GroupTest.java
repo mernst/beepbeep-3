@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.junit.Test;
+
+import ca.uqac.lif.cep.GroupProcessor.ProxyPullable;
 import ca.uqac.lif.cep.functions.ApplyFunction;
 import ca.uqac.lif.cep.functions.UnaryFunction;
 import ca.uqac.lif.cep.util.Numbers;
@@ -604,6 +606,7 @@ public class GroupTest
 		QueueSource src = new QueueSource().setEvents(1);
 		Connector.connect(src, new_gp);
 		Pullable p = new_gp.getPullableOutput();
+		assertNotNull(p);
 		assertEquals(2f, p.pull());
 	}
 	
@@ -639,7 +642,9 @@ public class GroupTest
 		gp.associateInput(0, v, 0);
 		gp.associateOutput(0, v, 0);
 		Connector.connect(source, gp);
-		Pullable p = gp.getPullableOutput();
+		ProxyPullable p = (ProxyPullable) gp.getPullableOutput();
+		assertNotNull(p);
+		assertNotNull(p.m_pullable);
 		assertNotNull(p.pull());
 		boolean got_exception = false;
 		try
@@ -673,17 +678,17 @@ public class GroupTest
     Connector.connect(g, 1, qs2, 0);
     g.addProcessors(f, pt1, pt2);
     Pushable p = g.getPushableInput(0);
-    assertFalse(f.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertFalse(pt1.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertFalse(pt2.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertFalse(qs1.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertFalse(qs2.m_hasBeenNotifiedOfEndOfTrace[0]);
+    assertFalse(f.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertFalse(pt1.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertFalse(pt2.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertFalse(qs1.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertFalse(qs2.m_delegate.hasBeenNotifiedEndOfTrace(0));
     p.notifyEndOfTrace();
-    assertTrue(f.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertTrue(pt1.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertTrue(pt2.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertTrue(qs1.m_hasBeenNotifiedOfEndOfTrace[0]);
-    assertTrue(qs2.m_hasBeenNotifiedOfEndOfTrace[0]);
+    assertTrue(f.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertTrue(pt1.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertTrue(pt2.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertTrue(qs1.m_delegate.hasBeenNotifiedEndOfTrace(0));
+    assertTrue(qs2.m_delegate.hasBeenNotifiedEndOfTrace(0));
   }
   
   @Test
@@ -785,7 +790,7 @@ public class GroupTest
     }
 
     @Override
-    public Processor duplicate(boolean with_state)
+    public SingleProcessor duplicate(boolean with_state)
     {
       // TODO Auto-generated method stub
       return null;
@@ -847,7 +852,7 @@ public class GroupTest
 		public GroupIn duplicate(boolean with_state)
 		{
 			GroupIn in = new GroupIn(getInputArity(), getOutputArity());
-			super.cloneInto(in, with_state);
+			duplicate(in, with_state);
 			return in;
 		}
 	}

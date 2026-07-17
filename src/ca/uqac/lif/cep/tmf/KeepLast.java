@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -49,7 +49,7 @@ public class KeepLast extends SynchronousProcessor
   @SideEffectFree
   public KeepLast duplicate(boolean with_state)
   {
-    return new KeepLast(m_inputArity);
+    return new KeepLast(m_ins.size());
   }
 
   @Override
@@ -57,7 +57,7 @@ public class KeepLast extends SynchronousProcessor
   {
     if (m_lasts == null)
     {
-      m_lasts = new Object[m_inputArity];
+      m_lasts = new Object[m_ins.size()];
     }
     // Keep the last front of events
     for (int i = 0; i < inputs.length; i++)

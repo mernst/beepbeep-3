@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -65,7 +65,7 @@ public class TurnInto extends UniformProcessor implements Stateful
   public synchronized TurnInto duplicate(boolean with_state)
   {
     TurnInto out = new TurnInto(m_event);
-    duplicateInto(out);
+    duplicate(out, false);
     return out;
   }
 

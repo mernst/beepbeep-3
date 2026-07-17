@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -23,6 +23,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
+import ca.uqac.lif.cep.SingleProcessor;
+
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -50,7 +52,7 @@ import java.util.Iterator;
  * @since 0.2.1
  */
 @SuppressWarnings("squid:S2160")
-public class Multiplex extends Processor
+public class Multiplex extends SingleProcessor
 {
   /**
    * Array containing for each PushableInput of the processor if it has been
@@ -124,21 +126,21 @@ public class Multiplex extends Processor
     @Override
     public @Nullable Object pullSoft()
     {
-      if (!m_outputQueues[0].isEmpty())
+      if (!m_delegate.getOutputQueue(0).isEmpty())
       {
-        return m_outputQueues[0].remove();
+        return m_delegate.getOutputQueue(0).remove();
       }
-      for (Pullable p : m_inputPullables)
+      for (UpstreamConnection p : m_ins)
       {
-        Object o = p.pullSoft();
+        Object o = ((Pullable) p).pullSoft();
         if (o != null)
         {
-          m_outputQueues[0].add(o);
+          m_delegate.getOutputQueue(0).add(o);
         }
       }
-      if (!m_outputQueues[0].isEmpty())
+      if (!m_delegate.getOutputQueue(0).isEmpty())
       {
-        return m_outputQueues[0].remove();
+        return m_delegate.getOutputQueue(0).remove();
       }
       return null;
     }
@@ -146,24 +148,25 @@ public class Multiplex extends Processor
     @Override
     public Object pull()
     {
-      if (!m_outputQueues[0].isEmpty())
+      if (!m_delegate.getOutputQueue(0).isEmpty())
       {
-        return m_outputQueues[0].remove();
+        return m_delegate.getOutputQueue(0).remove();
       }
-      for (Pullable p : m_inputPullables)
+      for (UpstreamConnection uc : m_ins)
       {
+      	Pullable p = (Pullable) uc;
         if (p.hasNext())
         {
           Object o = p.pull();
           if (o != null)
           {
-            m_outputQueues[0].add(o);
+            m_delegate.getOutputQueue(0).add(o);
           }
         }
       }
       // The next instruction may throw a NoSuchElementException.
       // That's OK
-      return m_outputQueues[0].remove();
+      return m_delegate.getOutputQueue(0).remove();
     }
 
     @Override
@@ -176,14 +179,15 @@ public class Multiplex extends Processor
     @Override
     public NextStatus hasNextSoft()
     {
-      if (!m_outputQueues[0].isEmpty())
+      if (!m_delegate.getOutputQueue(0).isEmpty())
       {
         return NextStatus.YES;
       }
       boolean all_no = true;
       NextStatus out = NextStatus.MAYBE;
-      for (Pullable p : m_inputPullables)
+      for (UpstreamConnection uc : m_ins)
       {
+      	Pullable p = (Pullable) uc;
         NextStatus ns = p.hasNextSoft();
         if (ns != NextStatus.NO)
         {
@@ -208,16 +212,17 @@ public class Multiplex extends Processor
     @Override
     public boolean hasNext()
     {
-      if (!m_outputQueues[0].isEmpty())
+      if (!m_delegate.getOutputQueue(0).isEmpty())
       {
         return true;
       }
       boolean all_no = true;
       NextStatus out = NextStatus.MAYBE;
-      for (int i = 0; i < Processor.MAX_PULL_RETRIES; i++)
+      for (int i = 0; i < MAX_PULL_RETRIES; i++)
       {
-        for (Pullable p : m_inputPullables)
+        for (UpstreamConnection uc : m_ins)
         {
+        	Pullable p = (Pullable) uc;
           boolean ns = p.hasNext();
           if (ns)
           {
@@ -284,7 +289,7 @@ public class Multiplex extends Processor
     @Override
     public Pushable push(Object o)
     {
-      m_outputPushables[0].push(o);
+      ((Pushable) m_outs.get(0)).push(o);
       return this;
     }
 
@@ -301,7 +306,7 @@ public class Multiplex extends Processor
         }
       }
 
-      m_outputPushables[0].notifyEndOfTrace();
+      ((Pushable) m_outs.get(0)).notifyEndOfTrace();
     }
 
     @Override

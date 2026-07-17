@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -24,6 +24,8 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
+import ca.uqac.lif.cep.SingleProcessor;
+
 import java.util.Iterator;
 
 /**
@@ -41,7 +43,7 @@ import java.util.Iterator;
  * @since 0.7
  */
 @SuppressWarnings("squid:S2160")
-public class Tank extends Processor
+public class Tank extends SingleProcessor
 {
   /**
    * A pushable
@@ -69,7 +71,7 @@ public class Tank extends Processor
     if (with_state)
     {
       // Put in the tank what is in the current tank
-      t.m_inputQueues[0].addAll(m_inputQueues[0]);
+      t.m_delegate.getInputQueue(0).addAll(m_delegate.getInputQueue(0));
     }
     return t;
   }
@@ -111,18 +113,18 @@ public class Tank extends Processor
     @Override
     public @Nullable Object pullSoft()
     {
-      synchronized (m_inputQueues[0])
+      synchronized (m_delegate.getInputQueue(0))
       {
-        return m_inputQueues[0].poll();
+        return m_delegate.getInputQueue(0).poll();
       }
     }
 
     @Override
     public Object pull()
     {
-      synchronized (m_inputQueues[0])
+      synchronized (m_delegate.getInputQueue(0))
       {
-        return m_inputQueues[0].remove();
+        return m_delegate.getInputQueue(0).remove();
       }
     }
 
@@ -136,9 +138,9 @@ public class Tank extends Processor
     @Override
     public NextStatus hasNextSoft()
     {
-      synchronized (m_inputQueues[0])
+      synchronized (m_delegate.getInputQueue(0))
       {
-        if (m_inputQueues[0].isEmpty())
+        if (m_delegate.getInputQueue(0).isEmpty())
         {
           return NextStatus.MAYBE;
         }
@@ -149,9 +151,9 @@ public class Tank extends Processor
     @Override
     public boolean hasNext()
     {
-      synchronized (m_inputQueues)
+      synchronized (m_delegate)
       {
-        return !m_inputQueues[0].isEmpty();
+        return !m_delegate.getInputQueue(0).isEmpty();
       }
     }
 
@@ -201,13 +203,13 @@ public class Tank extends Processor
     @Override
     public Pushable push(Object o)
     {
-      synchronized (m_inputQueues[0])
+      synchronized (m_delegate.getInputQueue(0))
       {
         if (m_singleObject)
         {
-          m_inputQueues[0].clear();
+          m_delegate.getInputQueue(0).clear();
         }
-        m_inputQueues[0].add(o);
+        m_delegate.getInputQueue(0).add(o);
       }
       return this;
     }
@@ -216,7 +218,7 @@ public class Tank extends Processor
     public void notifyEndOfTrace() throws PushableException
     {
       // TODO: to be verified
-      m_outputPushables[0].notifyEndOfTrace();
+      ((Pushable) m_outs.get(0)).notifyEndOfTrace();
     }
 
     @Override
@@ -236,9 +238,9 @@ public class Tank extends Processor
   public void reset()
   {
     super.reset();
-    synchronized (m_inputQueues[0])
+    synchronized (m_delegate.getInputQueue(0))
     {
-      m_inputQueues[0].clear();
+      m_delegate.getInputQueue(0).clear();
     }
   }
 }

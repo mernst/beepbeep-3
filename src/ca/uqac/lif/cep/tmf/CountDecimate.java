@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2025 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -23,7 +23,13 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.uqac.lif.cep.EventAt;
 import ca.uqac.lif.cep.Stateful;
+import ca.uqac.lif.petitpoucet.CompositePart;
+import ca.uqac.lif.petitpoucet.Explainable;
+import ca.uqac.lif.petitpoucet.Part;
+import ca.uqac.lif.petitpoucet.Vertex;
+import ca.uqac.lif.petitpoucet.VertexFactory;
 
 /**
  * Returns one input event and discards the next <i>n</i>-1. The value <i>n</i> is called
@@ -39,7 +45,7 @@ import ca.uqac.lif.cep.Stateful;
  * @since 0.2.1
  */
 @SuppressWarnings("squid:S2160")
-public class CountDecimate extends Decimate implements Stateful
+public class CountDecimate extends Decimate implements Stateful, Explainable
 {
   /**
    * The decimation interval
@@ -127,7 +133,7 @@ public class CountDecimate extends Decimate implements Stateful
    * @since 0.10.2
    */
   @Override
-  protected Object printState()
+  public Object printState()
   {
     Map<String,Object> map = new HashMap<String,Object>();
     map.put("interval", m_interval);
@@ -141,7 +147,7 @@ public class CountDecimate extends Decimate implements Stateful
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected CountDecimate readState(Object o)
+  public CountDecimate readState(Object o)
   {
     Map<String,Object> map = (Map<String,Object>) o;
     CountDecimate cd = new CountDecimate(((Number) map.get("interval")).intValue(), 
@@ -158,4 +164,18 @@ public class CountDecimate extends Decimate implements Stateful
   {
   	return m_current;
   }
+  
+  @Override
+	public Vertex explain(Part p, VertexFactory f) throws ExplanationException
+	{
+		long pos = checkPart(p);
+		Part stem = CompositePart.tail(CompositePart.tail(p));
+		return f.getPart(CompositePart.compose(stem, new EventAt(pos * m_interval), new InputPart(0)), this);
+	}
+
+	@Override
+	public void hint(Part p)
+	{
+		// Do nothing
+	}
 }

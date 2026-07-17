@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2025 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,9 +20,14 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
-import ca.uqac.lif.cep.EventTracker;
+import ca.uqac.lif.cep.EventAt;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.SynchronousProcessor;
+import ca.uqac.lif.petitpoucet.CompositePart;
+import ca.uqac.lif.petitpoucet.Explainable;
+import ca.uqac.lif.petitpoucet.Part;
+import ca.uqac.lif.petitpoucet.Vertex;
+import ca.uqac.lif.petitpoucet.VertexFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +40,7 @@ import java.util.Queue;
  * @since 0.2.1
  */
 @SuppressWarnings("squid:S2160")
-public class Trim extends SynchronousProcessor implements Stateful
+public class Trim extends SynchronousProcessor implements Stateful, Explainable
 {
   /**
    * How many events to ignore at the beginning of the trace
@@ -105,7 +110,7 @@ public class Trim extends SynchronousProcessor implements Stateful
    * @since 0.10.2
    */
   @Override
-  protected Object printState()
+  public Object printState()
   {
     Map<String, Integer> state = new HashMap<>();
     state.put("delay", m_delay);
@@ -118,7 +123,7 @@ public class Trim extends SynchronousProcessor implements Stateful
    */
   @SuppressWarnings("unchecked")
 	@Override
-  protected Trim readState(Object o)
+  public Trim readState(Object o)
   {
   	Map<String, Number> state = (Map<String, Number>) o;
   	int delay = state.get("delay").intValue();
@@ -141,5 +146,19 @@ public class Trim extends SynchronousProcessor implements Stateful
 	{
 		super.reset();
 		m_inputCount = 0;
+	}
+
+	@Override
+	public Vertex explain(Part p, VertexFactory f) throws ExplanationException
+	{
+		long pos = checkPart(p);
+		Part stem = CompositePart.tail(CompositePart.tail(p));
+		return f.getPart(CompositePart.compose(stem, new EventAt(pos + m_delay), new InputPart(0)), this);
+	}
+
+	@Override
+	public void hint(Part p)
+	{
+		// Do nothing
 	}
 }

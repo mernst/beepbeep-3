@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2022 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,10 +20,10 @@ package ca.uqac.lif.cep.tmf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
-import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.Stateful;
 import ca.uqac.lif.cep.Pullable;
 import ca.uqac.lif.cep.Pushable;
+import ca.uqac.lif.cep.SingleProcessor;
 
 /**
  * Processor that repeatedly pulls its input, and pushes the resulting events to
@@ -47,7 +47,7 @@ import ca.uqac.lif.cep.Pushable;
  * @since 0.6
  */
 @SuppressWarnings("squid:S2160")
-public class Pump extends Processor implements Runnable, Stateful
+public class Pump extends SingleProcessor implements Runnable, Stateful
 {
   /**
    * Semaphore used to stop the pump
@@ -102,6 +102,7 @@ public class Pump extends Processor implements Runnable, Stateful
         }
       }
     }
+    m_run = false;
     pushable.notifyEndOfTrace();
   }
 
