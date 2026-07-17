@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2019 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -16,8 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ca.uqac.lif.cep;
-
-import java.util.Queue;
 
 /**
  * A processor that doubles every number it is given.
@@ -43,7 +41,7 @@ import java.util.Queue;
  * @author Sylvain Hallé
  * @since 0.10.1
  */
-public class Doubler extends SynchronousProcessor
+public class Doubler extends UniformProcessor
 {
   /**
    * Creates a new adder processor. Since this processor is stateless, it would
@@ -60,14 +58,14 @@ public class Doubler extends SynchronousProcessor
   }
 
   @Override
-  protected boolean compute(Object[] inputs, Queue<Object[]> outputs)
+  protected boolean compute(Object[] inputs, Object[] outputs)
   {
-    outputs.add(new Object[] {2 * ((Number) inputs[0]).intValue()});
+    outputs[0] = 2 * ((Number) inputs[0]).intValue();
     return true;
   }
 
   @Override
-  public Processor duplicate(boolean with_state)
+  public Doubler duplicate(boolean with_state)
   {
     return new Doubler();
   }

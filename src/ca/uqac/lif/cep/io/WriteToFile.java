@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2018 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,7 +17,6 @@
  */
 package ca.uqac.lif.cep.io;
 
-import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.ProcessorException;
 import ca.uqac.lif.cep.tmf.Sink;
 import java.io.BufferedOutputStream;
@@ -114,7 +113,7 @@ public class WriteToFile extends Sink
   }
 
   @Override
-  public Processor duplicate(boolean with_state)
+  public WriteToFile duplicate(boolean with_state)
   {
     throw new UnsupportedOperationException();
   }

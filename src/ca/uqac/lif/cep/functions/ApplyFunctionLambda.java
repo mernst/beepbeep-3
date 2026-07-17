@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2019 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -17,7 +17,6 @@
  */
 package ca.uqac.lif.cep.functions;
 
-import ca.uqac.lif.cep.Processor;
 import ca.uqac.lif.cep.UniformProcessor;
 
 public class ApplyFunctionLambda extends UniformProcessor
@@ -58,7 +57,7 @@ public class ApplyFunctionLambda extends UniformProcessor
   }
 
   @Override
-  public Processor duplicate(boolean with_state)
+  public ApplyFunctionLambda duplicate(boolean with_state)
   {
     return this;
   }

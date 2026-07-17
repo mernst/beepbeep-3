@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2017 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -42,7 +42,7 @@ public class TankLast extends Tank
     if (with_state)
     {
       // Put in the tank what is in the current tank
-      t.m_inputQueues[0].addAll(m_inputQueues[0]);
+      t.m_delegate.getInputQueue(0).addAll(m_delegate.getInputQueue(0));
     }
     return t;
   }

@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2025 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -316,7 +316,7 @@ public abstract class AbstractSlice extends SynchronousProcessor implements Stat
   	as.m_explodeArrays = m_explodeArrays;
   	as.m_processor = m_processor.duplicate(with_state);
   	as.m_slicingFunction = m_slicingFunction.duplicate(with_state);
-    as.setContext(m_context);
+    as.setContext(getContext());
     for (Map.Entry<Object,Processor> e : m_slices.entrySet())
     {
     	Processor p_dup = e.getValue().duplicate(with_state);

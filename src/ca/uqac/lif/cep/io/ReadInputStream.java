@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2023 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -252,7 +252,7 @@ public class ReadInputStream extends Source
 			}
 			// If named pipe, wait until hasNextSoft has
 			// answered either YES or NO; otherwise loop forever
-			Queue<Object> out_queue = m_outputQueues[getPosition()];
+			Queue<Object> out_queue = m_delegate.getOutputQueue(getPosition());
 			// If an event is already waiting in the output queue,
 			// return it and don't pull anything from the input
 			if (!out_queue.isEmpty())
@@ -262,9 +262,9 @@ public class ReadInputStream extends Source
 			// Next line is different from OutputPullable, which has a bounded for loop
 			while (true)
 			{
-				for (int i = 0; i < m_inputArity; i++)
+				for (int i = 0; i < m_ins.size(); i++)
 				{
-					Pullable p = m_inputPullables[i];
+					Pullable p = (Pullable) m_ins.get(i);
 					if (p == null)
 					{
 						throw new PullableException("Input " + i + " of processor " + ReadInputStream.this
@@ -279,16 +279,16 @@ public class ReadInputStream extends Source
 						}
 						Queue<Object[]> last_queue = new ArrayDeque<Object[]>();
 						boolean b = onEndOfTrace(last_queue);
-						m_hasBeenNotifiedOfEndOfTrace[i] = true;
+						m_delegate.notifyEndOfTrace(i);
 						if (!b)
 						{
 							return false;
 						}
 						for (Object[] front : last_queue)
 						{
-							for (int j = 0; j < m_outputArity; j++)
+							for (int j = 0; j < m_outs.size(); j++)
 							{
-								m_outputQueues[j].add(front[j]);
+								m_delegate.getOutputQueue(j).add(front[j]);
 							}
 						}
 						return true;
@@ -296,10 +296,10 @@ public class ReadInputStream extends Source
 				}
 				// We are here only if every input pullable has answered YES
 				// Pull an event from each
-				Object[] inputs = new Object[m_inputArity];
-				for (int i = 0; i < m_inputArity; i++)
+				Object[] inputs = new Object[m_ins.size()];
+				for (int i = 0; i < m_ins.size(); i++)
 				{
-					Pullable p = m_inputPullables[i];
+					Pullable p = (Pullable) m_ins.get(i);
 					// Don't check for p == null, we did it above
 					Object o = p.pull();
 					inputs[i] = o;
@@ -329,9 +329,9 @@ public class ReadInputStream extends Source
 					{
 						if (evt != null)
 						{
-							for (int i = 0; i < m_outputArity; i++)
+							for (int i = 0; i < m_outs.size(); i++)
 							{
-								Queue<Object> queue = m_outputQueues[i];
+								Queue<Object> queue = m_delegate.getOutputQueue(i);
 								queue.add(evt[i]);
 							}
 							status_to_return = NextStatus.YES;
