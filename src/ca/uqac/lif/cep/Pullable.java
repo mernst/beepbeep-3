@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hallé
+    Copyright (C) 2008-2026 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -18,6 +18,8 @@
 package ca.uqac.lif.cep;
 
 import java.util.Iterator;
+
+import ca.uqac.lif.petitpoucet.circuit.Connectable.UpstreamConnection;
 
 /**
  * Queries events on one of a processor's outputs. For a processor with an
@@ -82,7 +84,7 @@ import java.util.Iterator;
  * @author Sylvain Hallé
  * @since 0.1
  */
-public interface Pullable extends Iterator<Object>, Iterable<Object>
+public interface Pullable extends Iterator<Object>, Iterable<Object>, UpstreamConnection
 {
   /**
    * Attempts to pull an event from the source. An event is returned if
@@ -161,6 +163,18 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
    * @return The processor
    */
   public Processor getProcessor();
+  
+  @Override
+  public default Processor getObject()
+  {
+  	return getProcessor();
+  }
+  
+  @Override
+  public default int getIndex()
+  {
+  	return getPosition();
+  }
 
   /**
    * Gets the position this Pullable is associated to: 0 is the first input (or
@@ -209,22 +223,40 @@ public interface Pullable extends Iterator<Object>, Iterable<Object>
      */
     protected final transient Processor m_processor;
 
+    /**
+     * Creates a new exception.
+     * @param t The cause of the exception
+     */
     public PullableException(Throwable t)
     {
       this(t, null);
     }
 
+    /**
+     * Creates a new exception.
+     * @param message The message of the exception
+     */
     public PullableException(String message)
     {
       this(message, null);
     }
 
+    /**
+     * Creates a new exception, associated to a processor.
+     * @param message The message of the exception
+     * @param p The processor that caused the exception
+     */
     public PullableException(String message, Processor p)
     {
       super(message);
       m_processor = p;
     }
 
+    /**
+		 * Creates a new exception, associated to a processor.
+		 * @param t The cause of the exception
+		 * @param p The processor that caused the exception
+		 */
     public PullableException(Throwable t, Processor p)
     {
       super(t);
